@@ -29,6 +29,16 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id: uuid.v4(),
+        first_name: 'Carlos',
+        last_name: 'Carlin',
+        email: 'carlos@academlo.com',
+        username: 'carlos@academlo.com',
+        password: hashPassword('1458'),
+        created_at: new Date(),
+        updated_at: new Date(),
+      }
     ]
 
     try {
@@ -45,7 +55,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
 
     const userNames = [
-      'lauthervalladares@academlo.com', 'laupadron1458@academlo.com'
+      'lauthervalladares@academlo.com', 'laupadron1458@academlo.com', 'carlos@academlo.com'
     ]
 
     try {

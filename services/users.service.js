@@ -65,7 +65,7 @@ class UsersService {
   }
 
   async getUser(id) {
-    let user = await models.Users.findByPk(id)
+    let user = await models.Users.findByPk(id, {attributes: {exclude: ['password', 'token']} })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
@@ -175,6 +175,45 @@ class UsersService {
     }
   }
 
+  async getAllUsersPaginated(limit, offset) {
+    const transaction = await models.sequelize.transaction()
+    try {
+      const users = await models.Users.findAndCountAll({
+        limit,
+        offset,
+        order: [['created_at', 'DESC']],
+        attributes: ['id', 'first_name', 'last_name', 'email', 'username']
+      })
+      await transaction.commit()
+      return users
+    } catch (error) {
+      await transaction.rollback()
+      throw error
+    }
+  }
+
+  async getFilteredUsersPaginated(key, keyValue, limit, offset){
+    const transaction = await models.sequelize.transaction()
+    try {
+      const users = await models.Users.findAndCountAll({
+        limit,
+        offset,
+        order: [['created_at', 'DESC']],
+        where: {
+          [Op.or]: [
+            { [key]: { [Op.iLike]: `%${keyValue}%` } }
+          ]
+        },
+        attributes: ['id', 'first_name', 'last_name', 'email', 'username']
+      })
+      await transaction.commit()
+      return users
+    } catch (error) {
+      await transaction.rollback()
+      throw error
+    }
+  }
 }
+
 
 module.exports = UsersService
