@@ -5,8 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Users extends Model {
     static associate(models) {
-      Users.belongsTo(models.Countries, { as: 'country', foreignKey: 'country_id' })
+      Users.belongsTo(models.Countries, { as: 'countries', foreignKey: 'country_id' })
       Users.hasMany(models.Profiles, { as: 'profiles', foreignKey: 'user_id' })
+      Users.hasMany(models.Publications,{as:'publications',foreignKey:'user_id'})
+      Users.belongsToMany(models.Publications,{through:'votes',as:'publications',foreignKey:'user_id'})
+      Users.belongsToMany(models.Tags,{through:'Users_tags',as:'tags',foreignKey:'user_id'})
     }
   }
   Users.init({
