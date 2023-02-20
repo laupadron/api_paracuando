@@ -1,12 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
+const cookieParser = require('cookie-parser');
 require('dotenv').config()
-
 
 const routerModels = require('./routes/models.router')
 const routerErrorHandler = require('./routes/errorhandler.router')
-
 
 
 const app = express()
@@ -54,6 +53,11 @@ app.get('/', ({ res }) => {
   })
 })
 
+/* 
+    For cookies
+*/
+app.use(cookieParser());
+
 /*
 Routes
 */
@@ -61,7 +65,5 @@ routerModels(app)
 routerErrorHandler(app)
 
 app.listen(PORT, () => {
-  console.log(`Server on PORT: ${PORT}`);
-  
+  console.log(`Server on PORT: ${PORT}`)
 })
-

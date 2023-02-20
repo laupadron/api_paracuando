@@ -9,9 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       Users.hasMany(models.Profiles, { as: 'profiles', foreignKey: 'user_id' })
     }
   }
-
- 
-
   Users.init({
     id: {
       type:DataTypes.UUID,

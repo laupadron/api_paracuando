@@ -13,9 +13,9 @@ module.exports = {
         id: uuid.v4(),
         first_name: 'Lauther',
         last_name: 'Valladares',
-        email: 'lauther@gmail.com',
-        username: 'lauther@gmail.com',
-        password: hashPassword('1234'),
+        email: 'lauthervalladares@academlo.com',
+        username: 'lauthervalladares@academlo.com',
+        password: hashPassword('2023'),
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -38,16 +38,6 @@ module.exports = {
         password: hashPassword('1458'),
         created_at: new Date(),
         updated_at: new Date(),
-      },
-      {
-        id: uuid.v4(),
-        first_name: 'Chisa',
-        last_name: 'Boo',
-        email: 'chisa@peek.com',
-        username: 'chisa@peek.com',
-        password: hashPassword('1234'),
-        created_at: new Date(),
-        updated_at: new Date(),
       }
     ]
 
@@ -65,7 +55,7 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
 
     const userNames = [
-      'lauther@gmail.com', 'laupadron1458@academlo.com', 'carlos@academlo.com', 'chisa@peek.com'
+      'lauthervalladares@academlo.com', 'laupadron1458@academlo.com', 'carlos@academlo.com'
     ]
 
     try {
