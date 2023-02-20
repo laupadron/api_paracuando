@@ -1,17 +1,17 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+// /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) =>{
     const transaction = await queryInterface.sequelize.transaction()
 
     try {
       await queryInterface.createTable('votes', {
-        profiles_id: {
+        user_id: {
           allowNull: false,
-          type: Sequelize.BIGINT,
+          type: Sequelize.UUID,
           foreignKey: true,
           references: {
-            model: 'profiles',
+            model: 'users',
             key: 'id'
           },
           onUpdate: 'CASCADE',

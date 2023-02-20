@@ -5,10 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Publications extends Model {
     static associate(models) {
-      Publications.belongsTo(models.Profiles, { as: 'profile', foreignKey: 'profiles_id' })
-      Publications.belongsTo(models.Cities, { as: 'city', foreignKey: 'cities_id' })
-      Publications.belongsTo(models.Publications_types, { as: 'publication_type', foreignKey: 'publications_types_id' })
-      Publications.hasMany(models.Votes, { as: 'votes', foreignKey: 'publications_id' })
+      Publications.belongsTo(models.Users, { as: 'users', foreignKey: 'user_id' })
+      Publications.belongsTo(models.Cities, { as: 'cities', foreignKey: 'cities_id' })
+      Publications.belongsTo(models.Publications_types, { as: 'publications_types', foreignKey: 'publications_types_id' })
+      Publications.hasMany(models.Publications_images, { as: 'publications_images', foreignKey: 'publication_id' })
+      Publications.belongsToMany(models.Users,{through:'votes',as:'votes', foreignKey:'publication_id'})
+      Publications.belongsToMany(models.Tagns,{through:'publications_tags',as:'publications_tags',foreignKey:'publication_id'})
     }
   }
   Publications.init({
@@ -21,10 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
     content: DataTypes.STRING,
-    picture: DataTypes.STRING,
-    image_url: DataTypes.STRING,
     cities_id: DataTypes.BIGINT,
-    profiles_id: DataTypes.BIGINT,
+    user_id: DataTypes.UUID,
     publications_types_id: DataTypes.BIGINT
   }, {
     sequelize,

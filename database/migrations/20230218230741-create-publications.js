@@ -1,7 +1,7 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
+// /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize)=> {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.createTable('publications', {
@@ -22,13 +22,7 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING
         },
-        picture: {
-          type: Sequelize.STRING
-        },
-        image_url: {
-          type: Sequelize.STRING
-        },
-        cities_id: {
+       cities_id: {
           allowNull: false,
           type: Sequelize.BIGINT,
           references: {
@@ -38,11 +32,11 @@ module.exports = {
           onUpdate: 'CASCADE',
           onDelete: 'RESTRICT'
         },
-        profiles_id: {
+        user_id: {
           allowNull: false,
-          type: Sequelize.BIGINT,
+          type: Sequelize.UUID,
           references: {
-            model: 'profiles',
+            model: 'users',
             key: 'id'
           },
           onUpdate: 'CASCADE',

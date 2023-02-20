@@ -5,12 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Votes extends Model {
     static associate(models) {
-      Votes.belongsTo(models.Profiles, { as: 'profile', foreignKey: 'profiles_id' })
-      Votes.belongsTo(models.Publications, { as: 'publication', foreignKey: 'publications_id' })
+      Votes.belongsTo(models.Users, { as: 'users', foreignKey: 'user_id' })
+      Votes.belongsTo(models.Publications, { as: 'publications', foreignKey: 'publications_id' })
     }
   }
   Votes.init({
-    profiles_id: DataTypes.BIGINT,
+    user_id: DataTypes.UUID,
     publications_id: DataTypes.UUID
   }, {
     sequelize,
