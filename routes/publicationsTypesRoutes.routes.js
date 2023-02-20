@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('../libs/passport');
 const router = express.Router()
-const { getPublicationTypeById } = require('../controllers/publicationsTypes.controller')
+const {checkRole, checkAdmin} = require('../middlewares/checkers.middleware');
+const { getPublicationTypeById,updatePublicationTypeById } = require('../controllers/publicationsTypes.controller')
 
 router.get('/',
   passport.authenticate('jwt', { session: false }), 
@@ -14,9 +15,11 @@ router.get('/:id',
   getPublicationTypeById 
 )
 
-router.put('/:id',
+router.post('/:id',
   passport.authenticate('jwt', { session: false }),
-  getPublicationTypeById 
+  checkRole,
+  checkAdmin,
+  updatePublicationTypeById
 )
 
 
