@@ -9,21 +9,20 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Publications_images.init({
-    publication_id:{
-      type: DataTypes.UUID,
-      allowNull:false
-    },
-    image_url: {
-      allowNull: true,
-      type: DataTypes.STRING
-    },
+    publication_id: DataTypes.UUID,
+     
+    image_url: 
+    DataTypes.STRING,
     order: {
       allowNull: true,
       type: DataTypes.INTEGER
     },
   }, {
     sequelize,
-    modelName: 'publications_images',
+    modelName: 'Publications_images',
+    tableName: 'publications_images',
+    underscored: true,
+    timestamps: true,
   });
   return Publications_images;
 };

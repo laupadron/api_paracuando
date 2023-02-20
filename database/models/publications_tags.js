@@ -10,17 +10,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Publications_tags.init({
-    tag_id: {
-      allowNull: false,
-      type: DataTypes.BIGINT
-    },
-    publication_id: {
-      allowNull: false,
-      type: DataTypes.UUID
-    },
+    tag_id: DataTypes.BIGINT,
+    
+    publication_id:  DataTypes.UUID
+    
   }, {
     sequelize,
     modelName: 'Publications_tags',
+    tableName: 'publications_tags',
+    underscored: true,
+    timestamps: true,
   });
   return Publications_tags;
 };
