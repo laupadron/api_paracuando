@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       Profiles.hasMany(models.Publications, { as: 'publications', foreignKey: 'profiles_id' })
     }
   }
+
+  
   Profiles.init({
     id: {
       type: DataTypes.BIGINT,

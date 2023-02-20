@@ -9,6 +9,8 @@ const { signupSchema,forgetPasswordSchema,restorePasswordSchema } = require('../
 const { signUp, logIn,forgetPassword,restorePassword,userToken } = require('../controllers/auth.controller')
 
 
+
+
 router.post('/login', logIn) 
 
 router.post('/sign-up', verifySchema(signupSchema, 'body'), signUp) 
