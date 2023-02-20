@@ -7,8 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Profiles.belongsTo(models.Users, { as: 'user', foreignKey: 'user_id' })
       Profiles.belongsTo(models.Roles, { as: 'role', foreignKey: 'role_id' })
-      Profiles.hasMany(models.Votes, { as: 'votes', foreignKey: 'profiles_id' })
-      Profiles.hasMany(models.Publications, { as: 'publications', foreignKey: 'profiles_id' })
     }
   }
   Profiles.init({

@@ -65,7 +65,7 @@ class UsersService {
   }
 
   async getUser(id) {
-    let user = await models.Users.findByPk(id, {attributes: {exclude: ['password', 'token']} })
+    let user = await models.Users.scope('view_same_user').findByPk(id)
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
@@ -178,11 +178,10 @@ class UsersService {
   async getAllUsersPaginated(limit, offset) {
     const transaction = await models.sequelize.transaction()
     try {
-      const users = await models.Users.findAndCountAll({
+      const users = await models.Users.scope('view_public').findAndCountAll({
         limit,
         offset,
-        order: [['created_at', 'DESC']],
-        attributes: ['id', 'first_name', 'last_name', 'email', 'username']
+        order: [['created_at', 'DESC']]
       })
       await transaction.commit()
       return users
