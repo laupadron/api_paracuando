@@ -7,6 +7,7 @@ const routesAuth = require('./auth.routes')
 const usersRoutes = require('./users.routes')
 const publicationsTypesRoutes = require('./publicationsTypesRoutes.routes')
 const countriesRoutes = require('./countries.routes')
+const statesRoutes = require('./states.routes')
 
 function routerModels(app) {
   const router = express.Router()
@@ -16,6 +17,7 @@ function routerModels(app) {
   router.use('/users', usersRoutes)
   router.use('/publications-types', publicationsTypesRoutes)
   router.use('/countries', countriesRoutes)
+  router.use('/states', statesRoutes)
 }
 
 module.exports = routerModels
