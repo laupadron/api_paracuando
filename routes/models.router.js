@@ -10,6 +10,7 @@ const countriesRoutes = require('./countries.routes')
 const statesRoutes = require('./states.routes')
 const citiesRoutes = require('./cities.routes')
 const rolesRoutes = require('./roles.routes')
+const tagsRoutes = require('./tags.routes')
 
 function routerModels(app) {
   const router = express.Router()
@@ -22,6 +23,7 @@ function routerModels(app) {
   router.use('/states', statesRoutes)
   router.use('/cities', citiesRoutes)
   router.use('/roles', rolesRoutes)
+  router.use('/tags', tagsRoutes)
 }
 
 module.exports = routerModels
