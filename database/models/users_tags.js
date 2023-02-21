@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     Users_tags.belongsTo(models.Users,{as:'users',foreignKey:'user_id'})
     }
   }
-  users_tags.init({
+  Users_tags.init({
     tag_id:DataTypes.BIGINT,
   
     user_id: DataTypes.UUID

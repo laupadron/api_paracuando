@@ -11,11 +11,9 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()    
     try {
-      const adminUser = await usersService.findUserByEmailOr404('lauther@gmail.com')
+      const adminUser = await usersService.findUserByEmailOr404('lauthervalladares@academlo.com')
       const adminUser2 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
       const publicUser = await usersService.findUserByEmailOr404('carlos@academlo.com')
-      const publicUser2 = await usersService.findUserByEmailOr404('chisa@peek.com')
-
       const adminRole = await rolesService.findRoleByName('admin')
       const publicRole = await rolesService.findRoleByName('public')
       const profiles = [
@@ -36,12 +34,6 @@ module.exports = {
           role_id: publicRole.id,
           created_at: new Date(),
           updated_at: new Date(),
-        },
-        {
-          user_id: publicUser2.id,
-          role_id: publicRole.id,
-          created_at: new Date(),
-          updated_at: new Date(),
         }
       ]
       
@@ -57,13 +49,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
 
     try {
-      const adminUser = await usersService.findUserByEmailOr404('lauther@gmail.com')
-      const adminUser2 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
-      const publicUser = await usersService.findUserByEmailOr404('carlos@academlo.com')
-      const publicUser2 = await usersService.findUserByEmailOr404('chisa@peek.com')
-      
+      const adminUser = await usersService.findUserByEmailOr404('example@academlo.com')
       const adminRole = await rolesService.findRoleByName('admin')
-      const publicRole = await rolesService.findRoleByName('public')
       
       await queryInterface.bulkDelete('profiles', {
         user_id: {

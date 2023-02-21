@@ -43,17 +43,18 @@ const getUsers = async (req, res, next) => {
 const getUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
-  const user = await authService.userToken(idFromParams) //This id comes from token
-  const role = Number(user.profiles[0].role_id)
+  const role = req.userRole
+  
   try {
     let result = await usersService.getUser(idFromParams)
     if (isSameUser || role === 2) {
       return res.status(200).json(result)
     } else {
-      const {first_name, last_name, image_url} = result
-      result = {}
-      result = {first_name, last_name, image_url}
-      return res.status(200).json(result)
+      return res.status(200).json({
+        first_name: result.first_name, 
+        last_name: result.last_name, 
+        image_url: result.image_url
+      })
     }
   } catch (error) {
     next(error)

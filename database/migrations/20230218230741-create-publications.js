@@ -22,7 +22,7 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING
         },
-       cities_id: {
+        cities_id: {
           allowNull: false,
           type: Sequelize.BIGINT,
           references: {
