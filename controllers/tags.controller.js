@@ -8,13 +8,14 @@ const getTags= async(req,res,next)=>{
 	const tagsPerPage = 10;
 	const page = 1;
 	const {limit, offset} = getPagination(page,tagsPerPage);
-	// const query = req.query;	
-   // const queryKeys = Object.keys(query);
+	const {name} = req.query;	
+
+
 	try {
 				// const keysTags = ['name','description','image_url'];
 				// queryKeys.forEach(async (key) => {
 				// 	if (keysTags.includes(key)) {
-					  const tags = await tagsService.getFilteredTags( limit, offset )
+					  const tags = await tagsService.getFilteredTags( {name,limit, offset} )
 					 return res.status(200).json(tags)
 					  
 					}

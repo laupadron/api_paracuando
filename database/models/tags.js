@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       type:DataTypes.BIGINT,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true
     },
     name: {
       allowNull: true,

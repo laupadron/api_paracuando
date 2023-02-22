@@ -28,6 +28,8 @@ class TagsService {
 	  if (name) {
 		 options.where.name = { [Op.iLike]: `%${name}%` }
 	  }
+
+	
  
 	  //Necesario para el findAndCountAll de Sequelize
 	  options.distinct = true
