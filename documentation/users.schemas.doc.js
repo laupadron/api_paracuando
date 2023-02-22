@@ -68,4 +68,30 @@
    *           example: lauthvalladares@gmail.com
    *         image_url:
    *           type: null
+   *     updateUser:
+   *       type:
+   *         object
+   *       properties:
+   *         first_name:
+   *           type: string
+   *           example: Lauther
+   *         last_name:
+   *           type: string
+   *           example: Valladares
+   *         code_phone:
+   *           type: integer
+   *           example: +549345
+   *         phone:
+   *           type: integer
+   *           example: 4181695
+   *         country_id:
+   *           type: integer
+   *           example: 3
+   *         image_url:
+   *           type: null
+   *   securitySchemes:
+   *       bearerAuth:
+   *         type: http
+   *         scheme: bearer
+   *         bearerFormat: JWT
    */

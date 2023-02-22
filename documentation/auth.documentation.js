@@ -18,7 +18,7 @@
  *         content: 
  *           application/json:
  *             schema:
- *               $ref: '#components/schema/loginResponse'
+ *               $ref: '#/components/schema/loginResponse'
  *       404:
  *         description: Not found
  *         content:
@@ -52,6 +52,16 @@
  *                 message:
  *                   type: string
  *                   example: Success Sign Up
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  * /api/v1/auth/forget-password:
  *   post:
  *     summary: Reset user password
@@ -75,6 +85,16 @@
  *                 message:
  *                   type: string
  *                   example: Email sended!, check your inbox
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  * /api/v1/auth/change-password/{token}:
  *   post:
  *     summary: Change user password
@@ -106,8 +126,20 @@
  *                 message:
  *                   type: string
  *                   example: Succes Update
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  * /api/v1/auth/me:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: get the profiles associated with the user's account
  *     tags:
  *       - [Auth]
@@ -131,4 +163,14 @@
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schema/profilesMe'
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
 */
