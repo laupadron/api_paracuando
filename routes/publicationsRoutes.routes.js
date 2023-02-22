@@ -4,7 +4,6 @@ const passport = require('../libs/passport');
 const router = express.Router()
 
 router.get('/',
-  passport.authenticate('jwt', { session: false }), 
   getPublications
 );
 
