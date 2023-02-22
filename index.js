@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 require('dotenv').config()
 
 const routerModels = require('./routes/models.router')
@@ -56,7 +56,7 @@ app.get('/', ({ res }) => {
 /* 
     For cookies
 */
-app.use(cookieParser());
+// app.use(cookieParser());
 
 /*
 Routes

@@ -17,18 +17,18 @@ module.exports = {
       const adminRole = await rolesService.findRoleByName('admin')
       const publicRole = await rolesService.findRoleByName('public')
       const profiles = [
-        {
-          user_id: adminUser.id,
-          role_id: adminRole.id,
-          created_at: new Date(),
-          updated_at: new Date(),
-        } ,
-        {
-          user_id: adminUser2.id,
-          role_id: adminRole.id,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
+        // {
+        //   user_id: adminUser.id,
+        //   role_id: adminRole.id,
+        //   created_at: new Date(),
+        //   updated_at: new Date(),
+        // } ,
+        // {
+        //   user_id: adminUser2.id,
+        //   role_id: adminRole.id,
+        //   created_at: new Date(),
+        //   updated_at: new Date(),
+        // },
         {
           user_id: publicUser.id,
           role_id: publicRole.id,
