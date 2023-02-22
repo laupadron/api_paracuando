@@ -298,10 +298,10 @@
  *                   type: string
  *                   example: not found / something wrong
  * /api/v1/users/{id}/remove-interest:
- *   post:
+ *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: Add interest to user
+ *     summary: Delete user interest
  *     tags:
  *       - [Users]
  *     parameters:
@@ -310,7 +310,7 @@
  *         type: integer
  *         required: true
  *     requestBody:
- *       description: Field required to add a tag
+ *       description: Field required to delete a tag
  *       required: true
  *       content:
  *         application/json:
