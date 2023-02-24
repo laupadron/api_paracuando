@@ -23,6 +23,7 @@ const getUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
   const role = req.userRole
+  console.log(role)
 
   try {
     let result = await usersService.getUser(idFromParams)

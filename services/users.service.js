@@ -81,6 +81,7 @@ class UsersService {
 
   async getUser(id) {
     let user = await models.Users.scope('view_same_user').findByPk(id)
+    
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
@@ -96,6 +97,7 @@ class UsersService {
     const transaction = await models.sequelize.transaction()
     try {
       let user = await models.Users.findByPk(id)
+      
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       let updatedUser = await user.update(obj, { transaction })
       await transaction.commit()
@@ -105,11 +107,12 @@ class UsersService {
       throw error
     }
   }
-
+  
   async removeUser(id) {
     const transaction = await models.sequelize.transaction()
     try {
-      let user = await models.Users.findByPk(id)
+      let user = await models.Users.scope('view_same_user').findByPk(id,{ raw: true })
+      
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       await user.destroy({ transaction })
       await transaction.commit()

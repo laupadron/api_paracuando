@@ -73,6 +73,7 @@ class TagsService {
     const transaction = await models.sequelize.transaction()
     try {
       const tag = await models.Tags.findByPk(id)
+      console.log(tag)
       if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
       const deletedTag = await tag.destroy()
       await transaction.commit()
