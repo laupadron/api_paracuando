@@ -25,27 +25,24 @@ const { id } = query
 const publications = await models.Publications.scope('auth_flow').findAndCountAll(options)
 return publications
 }
-async getVotes(query) {
-	const options = {
-	  where: {},
-	}
-const { id } = query
- if (id) {
-	options.where.id = id
- }
- const { tag_id } = query
- if (tag_id) {
-	options.where.tag_id = { [Op.iLike]: `%${tag_id}%` }
- }
- const { publication_id } = query
- if (publication_id) {
-	options.where.publication_id = { [Op.iLike]: `%${publication_id}%` }
- }
- options.distinct = true
+// async getVotes(query) {
+// 	const options = {
+// 	  where: {},
+// 	}
 
-const votes = await models.Votes.scope('auth_flow').findAndCountAll(options)
-return votes
-}
+//  const { user_id } = query
+//  if (user_id) {
+// 	options.where.user_id = { [Op.iLike]: `%${user_id}%` }
+//  }
+//  const { publications_id } = query
+//  if (publications_id) {
+// 	options.where.publications_id = { [Op.iLike]: `%${publications_id}%` }
+//  }
+//  options.distinct = true
+
+// const votes = await models.Votes.scope('auth_flow').findAndCountAll(options)
+// return votes
+// }
 
 	async delete (id){
 		const transaction = await models.sequelize.transaction();
@@ -62,18 +59,33 @@ return votes
 		}
 	};
 
-	async addAndDelete (idParams,{tag_id,publication_id}){
+	async addAndDelete (publicationId,userId,publications_id){
 		const transaction = await models.sequelize.transaction();
-		const idFromToken = req.user.id
 		try {
-			const publication = await models.Publications.findByPk(id)
-			if(!publication) {
-				const addVote = await models.Votes.create({id: uuid4(),tag_id:idFromToken,publication_id:idParams});
+			const publication = await models.Publications.findByPk(publicationId)
+			
+			if(publication) {
+				const votes = await models.Votes.findByPk(publications_id)
+				console.log(votes)
+				if(publications_id === publicationId){
+					const deleteVote = await votes.delete()
+					await transaction.commit()
+					return deleteVote
+					
+				}
 				
-				return addVote
+				
+		
+				//hacer otro if para que si encuentra la public en votes la borre o la agregue
+				// const addVote = await models.Votes.create({id: uuid4(),tag_id:idFromToken,publication_id:idParams});
+				
+				// return addVote
 				
 			}else{
-
+			 const newVote = await models.Votes.create({ user_id: userId, publications_id: publicationId}, {transaction})
+					console.log(newVote)
+					await transaction.commit()
+				
 			}
 		} catch (error) {
 			await transaction.rollback()

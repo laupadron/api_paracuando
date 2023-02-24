@@ -7,7 +7,7 @@ const {deletePublication,addVote} = require('../controllers/publications.control
 router.delete('/:id',
 passport.authenticate('jwt', {session:false}),
 checkSameUser,
-// checkRole,
+checkRole,
 deletePublication);
 
 router.post('/:id/vote',

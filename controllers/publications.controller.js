@@ -10,7 +10,7 @@ const deletePublication = async (req,res,next) =>{
 	
 	const isSameUser = req.isSameUser;
 	console.log(isSameUser)
-	const role = req.authservice.userRole;
+	const role = req.userRole;
 	console.log(role)
 	const  id  = req.params.id;
 	
@@ -29,11 +29,13 @@ const deletePublication = async (req,res,next) =>{
 
 const addVote = async (req,res,next) =>{
 	const isSameUser = req.isSameUser;
-	const  idParams  = req.params.id;
+	const  publicationId  = req.params.id;
+	
+	const userId = req.user.id
 	
 	try {
-		if(isSameUser){
-			await PublicationsService.addAndDelete(idParams);
+		if(!isSameUser){
+			await publicationsService.addAndDelete(publicationId,userId);
 			res.json({message: 'Add-delete Vote'});
 	} else {
 		throw new CustomError('Not authorized user', 401, 'Unauthorized');
