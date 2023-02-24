@@ -6,14 +6,15 @@ module.exports = (sequelize, DataTypes) => {
   class Tags extends Model {
     static associate(models) {
       Tags.hasMany(models.Publications_tags,{as:'publications_tags',foreignKey:'tag_id'})
-      Tags.hasMany(models.Tags,{as:'tags',foreignKey:'tag_id'})
+      Tags.hasMany(models.Users_tags,{as:'users_tags',foreignKey:'tag_id'})
     }
   }
   Tags.init({
     id: {
       type:DataTypes.BIGINT,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      autoIncrement: true
     },
     name: {
       allowNull: true,
