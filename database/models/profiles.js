@@ -5,12 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Profiles extends Model {
     static associate(models) {
-      Profiles.belongsTo(models.Users, { as: 'user', foreignKey: 'user_id' })
-      Profiles.belongsTo(models.Roles, { as: 'role', foreignKey: 'role_id' })
+      Profiles.belongsTo(models.Users, { as: 'users', foreignKey: 'user_id' })
+      Profiles.belongsTo(models.Roles, { as: 'roles', foreignKey: 'role_id' })
+      
     }
   }
-
-  
   Profiles.init({
     id: {
       type: DataTypes.BIGINT,

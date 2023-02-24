@@ -13,17 +13,25 @@ module.exports = {
     try {
       const adminUser = await usersService.findUserByEmailOr404('lauthervalladares@academlo.com')
       const adminUser2 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
+      const publicUser = await usersService.findUserByEmailOr404('carlos@academlo.com')
       const adminRole = await rolesService.findRoleByName('admin')
+      const publicRole = await rolesService.findRoleByName('public')
       const profiles = [
+        // {
+        //   user_id: adminUser.id,
+        //   role_id: adminRole.id,
+        //   created_at: new Date(),
+        //   updated_at: new Date(),
+        // } ,
+        // {
+        //   user_id: adminUser2.id,
+        //   role_id: adminRole.id,
+        //   created_at: new Date(),
+        //   updated_at: new Date(),
+        // },
         {
-          user_id: adminUser.id,
-          role_id: adminRole.id,
-          created_at: new Date(),
-          updated_at: new Date(),
-        } ,
-        {
-          user_id: adminUser2.id,
-          role_id: adminRole.id,
+          user_id: publicUser.id,
+          role_id: publicRole.id,
           created_at: new Date(),
           updated_at: new Date(),
         }
