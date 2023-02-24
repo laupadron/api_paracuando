@@ -32,4 +32,27 @@
  *         updated_at:
  *           type: date-time
  *           example: 2023-02-17 05:56:07.362+01
+ *     updatePublicationType:
+ *       type:
+ *         object
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: Historias
+ *         description:
+ *           type: string
+ *           example: Publicacion de historias en tu feed
+ *     createPublication:
+ *       type:
+ *         object
+ *       properties:
+ *         title:
+ *           type: string
+ *           example: Noticias
+ *         description:
+ *           type: string
+ *           example: sobre noticias
+ *         content:
+ *           type: string
+ *           example: Noticias sobre deportes
  */

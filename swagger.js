@@ -4,7 +4,8 @@ require('dotenv').config();
 
 const options = {
 apis: ['./documentation/auth.documentation.js', './documentation/users.schemas.doc.js', './documentation/profiles.schemas.doc.js','./documentation/users.documentation.js','./documentation/tags.schemas.doc.js','./documentation/votes.schemas.doc.js',
-'./documentation/publications.schemas.doc.js','./documentation/publications_types.documentation.js','./documentation/publications_types.schemas.doc.js'],
+'./documentation/publications.schemas.doc.js','./documentation/publications_types.documentation.js','./documentation/publications_types.schema.doc.js','./documentation/publications.documentation.js','./documentation/tags.documentation.js',
+'./documentation/countries.documentation.js','./documentation/countries.schemas.doc.js','./documentation/states.documentation.js','./documentation/states.schemas.doc.js','./documentation/roles.documentations.js','./documentation/roles.schemas.doc.js'],
 definition:{
 	openapi: "3.0.0",
 	info : {

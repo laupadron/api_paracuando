@@ -216,7 +216,6 @@
  *                 message:
  *                   type: string
  *                   example: not found / something wrong
- * /api/v1/userss/{id}:
  *   put:
  *     security:
  *       - bearerAuth: []
@@ -234,7 +233,7 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/updateUser' 
+ *             $ref: '#/components/schema/updateUser'
  *     responses:
  *       201:
  *         description: OK
