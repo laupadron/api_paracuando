@@ -25,15 +25,30 @@ class UsersService {
       options.where.id = id
     }
 
-    const { name } = query
-    if (name) {
-      options.where.name = { [Op.iLike]: `%${name}%` }
+    const { first_name } = query
+    if (first_name) {
+      options.where.first_name = { [Op.iLike]: `%${first_name}%` }
+    }
+
+    const { last_name } = query
+    if (last_name) {
+      options.where.last_name = { [Op.iLike]: `%${last_name}%` }
+    }
+
+    const { email } = query
+    if (email) {
+      options.where.email = { [Op.iLike]: `%${email}%` }
+    }
+
+    const { username } = query
+    if (username) {
+      options.where.username = { [Op.iLike]: `%${username}%` }
     }
 
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
 
-    const users = await models.Users.findAndCountAll(options)
+    const users = await models.Users.scope('auth_flow').findAndCountAll(options)
     return users
   }
 
