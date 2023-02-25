@@ -12,6 +12,18 @@ const getPublicationTypeById = async(request, response, next) => {
   }
 }
 
+const updatePublicationTypeById = async (request, response, next) => {
+  const id = request.params.id;
+  const obj = request.body;
+  try {
+    await publicationsTypesService.updatePublicationTypeById(id, obj)
+    return response.json({message: 'Success Update'});
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
-  getPublicationTypeById
+  getPublicationTypeById,
+  updatePublicationTypeById
 }
