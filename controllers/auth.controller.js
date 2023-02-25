@@ -107,7 +107,6 @@ const userToken = async (request, response, next) => {
   }
 }
 
-
 module.exports = {
   logIn,
   signUp,
