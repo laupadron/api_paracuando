@@ -10,29 +10,29 @@ module.exports = {
         id: '1',
         name: 'Historias',
         description: 'Publicacion de historias en tu feed',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       },
       {
         id: '2',
         name: 'Memes',
         description: 'Compartir algunos memes divertidos con tu comunidad',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       },
       {
         id: '3',
         name: 'Reels',
         description: 'Videos cortos para compartir momentos',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       },
       {
         id: '4',
         name: 'Noticias',
         description: 'Relatos sobre algun hecho importante',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        created_at: new Date(),
+        updated_at: new Date()
       }
     ]
 
