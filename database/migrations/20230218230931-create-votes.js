@@ -22,6 +22,7 @@ module.exports = {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.UUID,
+          primaryKey: true,
           foreignKey: true,
           references: {
             model: 'publications',
