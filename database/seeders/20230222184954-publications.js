@@ -11,8 +11,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     const user1 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
     const user2 = await usersService.findUserByEmailOr404('chisa@peek.com')
-    
 
+    
     const publicationsSeed = [
       {
         id: uuid.v4(),

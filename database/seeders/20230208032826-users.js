@@ -38,6 +38,16 @@ module.exports = {
         password: hashPassword('1458'),
         created_at: new Date(),
         updated_at: new Date(),
+      },
+      {
+        id: uuid.v4(),
+        first_name: 'chisa',
+        last_name: 'peek',
+        email: 'chisa@peek.com',
+        username: 'chisa@peek.com',
+        password: hashPassword('1234'),
+        created_at: new Date(),
+        updated_at: new Date(),
       }
     ]
 

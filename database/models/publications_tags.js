@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Publications_tags.init({
-    tag_id: DataTypes.BIGINT,
+    tag_id: {type: DataTypes.BIGINT, primaryKey: true},
 
-    publication_id:  DataTypes.UUID
+    publication_id:  {type: DataTypes.UUID, primaryKey: true},
     
   }, {
     sequelize,
