@@ -1,10 +1,30 @@
-const AuthService = require('../services/auth.service');
-const PublicationsService = require('../services/publications.service')
-const { CustomError } = require('../utils/helpers');
+const PublicationsService = require('../services/publications.service');
+const { getPagination, CustomError } = require('../utils/helpers');
+
+const publicationsService = new PublicationsService
 
 
-const publicationsService = new PublicationsService()
-const authService = new AuthService()
+const getPublications = async (req, res, next) => {
+  const query = req.query
+  const {publicationsPerPage, currentPage} = {publicationsPerPage: 10, currentPage:1};
+  const { limit, offset } = getPagination(currentPage, publicationsPerPage);
+  query.limit = limit
+  query.offset = offset
+
+  try {
+    const publications = await publicationsService.findAndCount(query)
+    console.log(publications);
+    res.json(publications);
+    
+  } catch (error) {
+    next(error)
+  }
+}
+// el tag es un numero 1,2,3,4,
+
+
+
+
 
 const deletePublication = async (req,res,next) =>{
 	
@@ -49,5 +69,6 @@ const addVote = async (req,res,next) =>{
 
 module.exports = {
 	deletePublication,
-	addVote
+	addVote,
+	getPublications
 }

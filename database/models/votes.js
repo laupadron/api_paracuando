@@ -10,14 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Votes.init({
-    user_id:{
-      type:  DataTypes.UUID,
-      primaryKey: true
-    },
-    publications_id: {
-      type: DataTypes.UUID,
-      primaryKey: true
-    }
+    user_id: {type: DataTypes.UUID, primaryKey: true},
+    publications_id: {type: DataTypes.UUID, primaryKey: true},
   }, {
     sequelize,
     modelName: 'Votes',
@@ -25,12 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     timestamps: true,
     scopes: {
-      view_public: {
-        attributes: ['publications_id','user_id','created_at', 'updated_at']
-      },
-     
       no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } },
-      allvotes:{attributes:{exclude:['id']}}
+      allvotes: {attributes: { exclude: ['id'] } }
     }
   });
   return Votes;

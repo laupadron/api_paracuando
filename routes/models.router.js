@@ -11,7 +11,7 @@ const statesRoutes = require('./states.routes')
 const citiesRoutes = require('./cities.routes')
 const rolesRoutes = require('./roles.routes')
 const tagsRoutes = require('./tags.routes')
-const publicationsRoutes = require('./publications.routes');
+const publicationsRoutes = require('./publicationsRoutes.routes')
 
 function routerModels(app) {
   const router = express.Router()

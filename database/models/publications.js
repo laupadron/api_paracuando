@@ -5,12 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Publications extends Model {
     static associate(models) {
-      Publications.belongsTo(models.Users, { as: 'users', foreignKey: 'user_id' })
-      Publications.belongsTo(models.Cities, { as: 'cities', foreignKey: 'cities_id' })
+      Publications.belongsTo(models.Users, { as: 'user', foreignKey: 'user_id' })
+      Publications.belongsTo(models.Cities, { as: 'citie', foreignKey: 'cities_id' })
       Publications.belongsTo(models.Publications_types, { as: 'publications_types', foreignKey: 'publications_types_id' })
       Publications.hasMany(models.Publications_images, { as: 'publications_images', foreignKey: 'publication_id' })
-      Publications.hasMany(models.Votes,{as:'votes', foreignKey:'publications_id'})
-      Publications.hasMany(models.Publications_tags,{as:'publication_tags', foreignKey:'publication_id'})
+      Publications.hasMany(models.Votes, { as: 'votes', foreignKey: 'publications_id' })
+      Publications.hasMany(models.Publications_tags, { as: 'publication_tags', foreignKey: 'publication_id' })
     }
   }
   Publications.init({
