@@ -1,5 +1,6 @@
 'use strict';
 
+
 /** @type {import('sequelize-cli').Migration} */
 const uuid = require('uuid')
 const { Op } = require('sequelize')
@@ -96,4 +97,5 @@ async down (queryInterface, Sequelize) {
   }
 }
 }
+
 
