@@ -1,111 +1,101 @@
 'use strict';
 
-const uuid = require('uuid')
-const UsersServices = require('../../services/users.service')
-
-const usersService = new UsersServices()
 
 /** @type {import('sequelize-cli').Migration} */
+const uuid = require('uuid')
+const { Op } = require('sequelize')
+const { hashPassword } = require('../../libs/bcrypt')
+const rolesServices = require('../../services/roles.service')
+const usersServices = require('../../services/users.service')
+
+const rolesService = new rolesServices()
+const usersService = new usersServices()
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
-    const user1 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
-    const user2 = await usersService.findUserByEmailOr404('chisa@peek.com')
-    
-
-    const publicationsSeed = [
+    try {
+      const adminUser = await usersService.findUserByEmailOr404('lauthervalladares@academlo.com')
+      const adminUser2 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
+      const publicUser = await usersService.findUserByEmailOr404('carlos@academlo.com')
+      const adminRole = await rolesService.findRoleByName('admin')
+      const publicRole = await rolesService.findRoleByName('public')
+      
+    const publicationsSeeds =[
       {
         id: uuid.v4(),
-        title: 'publicacion 1',
-        description: 'descripcion 1',
-        content: 'content 1',
-        cities_id: 1,
-        user_id: user1.id,
-        publications_types_id: 1,
+        title:"El Deporte del siglo",
+        description:"todo sobreel fútbol",
+        content:"fulbol europeo",
+        cities_id:1,
+        user_id:adminUser.id,
+        publications_types_id:2,
         created_at: new Date(),
-        updated_at: new Date()
+          updated_at: new Date(),
       },
       {
         id: uuid.v4(),
-        title: 'publicacion 2',
-        description: 'descripcion 2',
-        content: 'content 2',
-        cities_id: 1,
-        user_id: user1.id,
-        publications_types_id: 2,
+        title:"Conciertos en Viena",
+        description:"música clásica",
+        content:"agenda de conciertos en viena",
+        cities_id:2,
+        user_id:adminUser.id,
+        publications_types_id:4,
         created_at: new Date(),
-        updated_at: new Date()
+          updated_at: new Date(),
       },
       {
         id: uuid.v4(),
-        title: 'publicacion 3',
-        description: 'descripcion 3',
-        content: 'content 3',
-        cities_id: 1,
-        user_id: user1.id,
-        publications_types_id: 2,
+        title:"Gran barata",
+        description:"liquidación al costo",
+        content:"ropa y accesorios",
+        cities_id:4,
+        user_id: publicUser.id,
+        publications_types_id:2,
         created_at: new Date(),
-        updated_at: new Date()
+          updated_at: new Date(),
       },
       {
         id: uuid.v4(),
-        title: 'publicacion 4',
-        description: 'descripcion 4',
-        content: 'content 4',
-        cities_id: 4,
-        user_id: user2.id,
-        publications_types_id: 3,
+        title:"abrigos",
+        description:"abrigos de temporada",
+        content:"ropa y accesorios",
+        cities_id:5,
+        user_id: publicUser.id,
+        publications_types_id:3,
         created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        id: uuid.v4(),
-        title: 'publicacion 5',
-        description: 'descripcion 5',
-        content: 'content 5',
-        cities_id: 4,
-        user_id: user2.id,
-        publications_types_id: 4,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        id: uuid.v4(),
-        title: 'publicacion 6',
-        description: 'descripcion 6',
-        content: 'content 6',
-        cities_id: 4,
-        user_id: user2.id,
-        publications_types_id: 2,
-        created_at: new Date(),
-        updated_at: new Date()
+          updated_at: new Date(),
       },
     ]
-
-    try {
-      await queryInterface.bulkInsert('publications', publicationsSeed)
-      await transaction.commit()
-    } catch (error) {
-      await transaction.rollback()
-      throw error
-    }
-  },
-
-  async down (queryInterface, Sequelize) {
-    const transaction = await queryInterface.sequelize.transaction()
-    const user1 = await usersService.findUserByEmailOr404('laupadron1458@academlo.com')
-    const user2 = await usersService.findUserByEmailOr404('chisa@peek.com')
-    const dataToDelete = [user1.id, user2.id]
-
-    try {
-      await queryInterface.bulkDelete('publications', { 
-        user_id: dataToDelete 
-      }, { transaction});
-
-      await transaction.commit()
-    } catch (error) {
-      await transaction.rollback()
-      throw error
-    }
+    await queryInterface.bulkInsert('publications', publicationsSeeds , {transaction})
+    await transaction.commit()
+  } catch (error) {
+    await transaction.rollback()
+    throw error
   }
-};
+},
+
+async down (queryInterface, Sequelize) {
+  const transaction = await queryInterface.sequelize.transaction()
+
+  try {
+    const adminUser = await usersService.findUserByEmailOr404('example@academlo.com')
+    const adminRole = await rolesService.findRoleByName('admin')
+    
+    await queryInterface.bulkDelete('publications', {
+      user_id: {
+        [Op.and]: [adminUser.id]
+      },
+      role_id:{
+        [Op.and]:[adminRole.id]
+      }
+    }, { transaction })
+    await transaction.commit()
+  } catch (error) {
+    await transaction.rollback()
+    throw error
+  }
+}
+}
+
+
