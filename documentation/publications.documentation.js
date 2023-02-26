@@ -8,33 +8,35 @@
  *     parameters:
  *       - name: publications_types_id
  *         in: query
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: publications_types_id
  *       - name: title
  *         in: query
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: Publication title
  *       - name: description
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: Publication description
  *       - name: tags
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: Publication tags
  *       - name: created_at
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1

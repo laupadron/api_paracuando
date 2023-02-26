@@ -75,7 +75,7 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: Get Detail Publications-types
+ *     summary: Update Publications-types
  *     tags:
  *       - [Publications-Types]
  *     parameters:
@@ -84,7 +84,7 @@
  *         type: string
  *         required: true
  *     requestBody:
- *       description: Fields required to search a publication_type
+ *       description: Fields required to update a publication_type (Available only for administrators)
  *       required: true
  *       content:
  *         application/json:

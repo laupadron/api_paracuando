@@ -11,13 +11,14 @@
  *       parameters:
  *         - name: name
  *           in: query
+ *           required: false
  *           schema:
  *             type: string
  *             minimun: 1
  *           description: Tag name
  *         - name: description
  *           in: query
- *           required: true
+ *           required: false
  *           schema:
  *             type: string
  *             minimun: 1
@@ -49,14 +50,9 @@
  *     post:
  *       security:
  *         - bearerAuth: []
- *       summary: Add a Tag
+ *       summary: Add a Tag (Available only for administrators)
  *       tags:
  *         - [Tags]
- *       parameters:
- *         - name: id
- *           in: query
- *           type: string
- *           required: true
  *       requestBody:
  *         description: Fields required to create a publication 
  *         required: true
@@ -93,7 +89,7 @@
  *       parameters:
  *         - name: id
  *           in: query
- *           type: string
+ *           type: integer
  *           required: true
  *       responses:
  *         200:
@@ -120,13 +116,13 @@
  *                     type: string
  *                     example: not found / something wrong
  *     put:
- *       summary: Update Tags
+ *       summary: Update Tags (Available only for administrators)
  *       tags:
  *         - [Tags]
  *       parameters:
  *         - name: id
  *           in: query
- *           type: string
+ *           type: integer
  *           required: true
  *       requestBody:
  *         description: Fields required to update a tag 
@@ -157,13 +153,13 @@
  *                     type: string
  *                     example: not found / something wrong
  *     delete:
- *       summary: Update Tags
+ *       summary: Update Tags (Available only for administrators)
  *       tags:
  *         - [Tags]
  *       parameters:
  *         - name: id
  *           in: query
- *           type: string
+ *           type: integer
  *           required: true
  *       responses:
  *         201:

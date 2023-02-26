@@ -10,61 +10,63 @@
  *     parameters:
  *       - name: first_name
  *         in: query
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: User first_name
  *       - name: last_name
  *         in: query
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
- *         description: User email
+ *         description: User User last_name
  *       - name: email
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: email
  *       - name: username
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: User username
  *       - name: password
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: password
  *       - name: token
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: User token
  *       - name: phone
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: User phone
  *       - name: country_id
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
  *         description: User country_id
  *       - name: created_at
  *         in: query
- *         required: true
+ *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
@@ -185,12 +187,12 @@
  *       - in: query
  *         name: title
  *         type: string
- *         required: true
+ *         required: false
 
  *       - in: query
  *         name: user_id
  *         type: string
- *         required: true
+ *         required: false
  *     responses:
  *       200:
  *         description: OK
@@ -266,6 +268,10 @@
  *       - in: query
  *         name: id
  *         type: integer
+ *         required: true
+ *       - in: header
+ *         name: token
+ *         type: string
  *         required: true
  *     requestBody:
  *       description: Field required to add a tag
