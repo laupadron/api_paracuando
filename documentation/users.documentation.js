@@ -4,7 +4,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get users (Available only for administrators)
+ *     summary: Get users
  *     tags:
  *       - [Users]
  *     parameters:

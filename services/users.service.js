@@ -230,7 +230,39 @@ class UsersService {
       throw error
     }
   }
-}
+
+  async addInterestUser (idFromParams,{tag_id}){
+    const transaction = await models.sequelize.transaction();
+    try {
+      const tag = await models.Users_tags.findOne({where:{user_id:idFromParams},tag_id:tag_id});
+      if(!tag){
+        const newTag = await models.Users_tags.create({ tag_id: tag_id, user_id: idFromParams}, {transaction});
+        await transaction.commit();
+
+        return newTag;
+      }
+    } catch (error) {
+      await transaction.rollback();
+			throw error;
+    }
+  }
+
+  async removeInterestUser(idFromParams,{tag_id}) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      const tag = await models.Users_tags.findOne({where:{user_id:idFromParams},tag_id:tag_id});
+      if(tag){
+        const deleteTag = await models.Users_tags.destroy({where: { tag_id: tag_id, user_id: idFromParams}}, {transaction});
+        await transaction.commit();
+        
+        return deleteTag;
+      };
+    } catch (error) {
+      await transaction.rollback();
+			throw error;
+    };
+  };
+};
 
 
 module.exports = UsersService

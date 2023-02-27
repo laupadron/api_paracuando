@@ -11,12 +11,10 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     const transaction = await queryInterface.sequelize.transaction()
     
-    const pub1 = await models.Publications.findOne({where: {title: 'publicacion 1'}})
-    const pub2 = await models.Publications.findOne({where: {title: 'publicacion 2'}})
-    const pub3 = await models.Publications.findOne({where: {title: 'publicacion 3'}})
-    const pub4 = await models.Publications.findOne({where: {title: 'publicacion 4'}})
-    const pub5 = await models.Publications.findOne({where: {title: 'publicacion 5'}})
-    const pub6 = await models.Publications.findOne({where: {title: 'publicacion 6'}})
+    const pub1 = await models.Publications.findOne({where: {title: 'El Deporte del siglo'}})
+    const pub2 = await models.Publications.findOne({where: {title: 'Conciertos en Viena'}})
+    const pub3 = await models.Publications.findOne({where: {title: 'Gran barata'}})
+    const pub4 = await models.Publications.findOne({where: {title: 'abrigos'}})
 
     const publicationsTagsSeed = [
       {
@@ -42,19 +40,7 @@ module.exports = {
         publication_id: pub4.id,
         created_at: new Date(),
         updated_at: new Date()
-      },
-      {
-        tag_id: 3,
-        publication_id: pub5.id,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        tag_id: 4,
-        publication_id: pub6.id,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
+      }
     ]
 
     try {

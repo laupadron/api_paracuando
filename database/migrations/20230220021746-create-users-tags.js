@@ -20,6 +20,7 @@ module.exports = {
         },
         user_id: {
           type: Sequelize.UUID,
+          primaryKey: true,
           allowNull: false,
           foreignKey: true,
           references: {
