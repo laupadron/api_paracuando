@@ -9,6 +9,7 @@ module.exports = {
       tag_id: {
         type: Sequelize.BIGINT,
         allowNull:false,
+        primaryKey: true,
         foreignKey: true,
         references: {
           model: 'tags',
@@ -19,6 +20,7 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.UUID,
+        primaryKey: true,
         allowNull:false,
         foreignKey: true,
         references: {

@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('../libs/passport');
 const router = express.Router()
-const { getUsers, getUserById, updateUserById } = require('../controllers/users.controller')
+const { getUsers, getUserById, updateUserById, addInterest,removeInterest} = require('../controllers/users.controller')
 const {checkRole, checkAdmin, checkSameUser} = require('../middlewares/checkers.middleware');
 
 router.get('/', 
@@ -23,6 +23,18 @@ router.post('/:id',
   checkSameUser,
   updateUserById
 );
+
+router.post('/:id/add-interest',
+passport.authenticate('jwt', { session: false }),
+  checkSameUser,
+  addInterest
+);
+
+router.delete('/:id/remove-interest',
+passport.authenticate('jwt', { session: false }),
+  checkSameUser,
+  removeInterest
+)
 
 
 module.exports = router
