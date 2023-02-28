@@ -19,14 +19,14 @@ class TagsService {
       options.offset = offset
     }
 
-    const { id } = query
-    if (id) {
-      options.where.id = id
-    }
-
     const { name } = query
     if (name) {
       options.where.name = { [Op.iLike]: `%${name}%` }
+    }
+
+    const { description } = query
+    if (description) {
+      options.where.description = { [Op.iLike]: `%${description}%` }
     }
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true

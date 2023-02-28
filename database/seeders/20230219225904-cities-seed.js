@@ -7,35 +7,30 @@ module.exports = {
 
     const citiesSeeds = [
       {
-        id: '1',
         name: 'Zarumilla',
         state_id: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '2',
         name: 'Sullana',
         state_id: '2',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '3',
         name: 'Trujillo',
         state_id: '3',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '4',
         name: 'San Miguel',
         state_id: '4',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '5',
         name: 'Pariñas',
         state_id: '2',
         created_at: new Date(),

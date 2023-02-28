@@ -17,7 +17,12 @@ router.post('/',
   addTags
 );
 
-router.post('/:id',
+router.get('/:id',
+  passport.authenticate('jwt',{session:false}),
+  detailTag
+);
+
+router.put('/:id',
   passport.authenticate('jwt', { session: false }), 
   checkRole,
   checkAdmin,

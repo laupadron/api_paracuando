@@ -55,31 +55,31 @@ const updateUserById = async (req, res, next) => {
   }
 }
 
-const addInterest = async (req,res,next) => {
+const addInterest = async (req, res, next) => {
   const isSameUser = req.isSameUser;
-  const idFromParams = req.params.id;
-  const {tag_id} = req.body;
-  
+  const user_id = req.params.id;
+  const { tag_id } = req.body;
+
   try {
     if (isSameUser) {
-      await usersService.addInterestUser(idFromParams,{tag_id});
-      return res.json({message:'InterestAdded'});
+      await usersService.addInterestUser(user_id, tag_id);
+      return res.json({ message: 'Interest Added' });
     } throw new CustomError('Not authorized user', 401, 'Unauthorized');
-    
+
   } catch (error) {
     next(error);
   }
 };
 
-const removeInterest = async (req,res,next) => {
+const removeInterest = async (req, res, next) => {
   const isSameUser = req.isSameUser;
-  const idFromParams = req.params.id;
-  const {tag_id} = req.body;
+  const user_id = req.params.id;
+  const { tag_id } = req.body;
 
   try {
     if (isSameUser) {
-      await usersService.removeInterestUser(idFromParams,{tag_id});
-      return res.json({message:'Interest removed'});
+      await usersService.removeInterestUser(user_id, tag_id);
+      return res.json({ message: 'Interest removed' });
     } throw new CustomError('Not authorized user', 401, 'Unauthorized');
   } catch (error) {
     next(error);

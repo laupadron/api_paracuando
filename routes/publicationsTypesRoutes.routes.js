@@ -15,7 +15,7 @@ router.get('/:id',
   getPublicationTypeById 
 )
 
-router.post('/:id',
+router.put('/:id',
   passport.authenticate('jwt', { session: false }),
   checkRole,
   checkAdmin,

@@ -7,28 +7,24 @@ module.exports = {
 
     const pubsTypesSeeds = [
       {
-        id: '1',
         name: 'Historias',
         description: 'Publicacion de historias en tu feed',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '2',
         name: 'Memes',
         description: 'Compartir algunos memes divertidos con tu comunidad',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '3',
         name: 'Reels',
         description: 'Videos cortos para compartir momentos',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '4',
         name: 'Noticias',
         description: 'Relatos sobre algun hecho importante',
         created_at: new Date(),

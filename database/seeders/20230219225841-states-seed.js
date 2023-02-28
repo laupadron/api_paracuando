@@ -7,35 +7,30 @@ module.exports = {
 
     const statesSeeds = [
       {
-        id: '1',
         name: 'Tumbes',
         country_id: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '2',
         name: 'Piura',
         country_id: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '3',
         name: 'La Libertad',
         country_id: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '4',
         name: 'Lima',
         country_id: '1',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '5',
         name: 'Cajamarca',
         country_id: '1',
         created_at: new Date(),

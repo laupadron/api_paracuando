@@ -116,7 +116,7 @@ class PublicationsService {
 
       data.tags.forEach(async tag => {
         await this.createPublicationTags(tag, result.id)
-        await this.userPublicationTags(tag, result.user_id)
+        //await this.userPublicationTags(tag, result.user_id)
       })
       await transaction.commit();
       return result
