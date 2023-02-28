@@ -81,14 +81,16 @@
  *                   message:
  *                     type: string
  *                     example: not found / something wrong
- *   api/v1/tags/{id}:
+ *   /api/v1/tags/{id}:
  *     get:
+ *       security:
+ *         - bearerAuth: []
  *       summary: Get Detail Tags
  *       tags:
  *         - [Tags]
  *       parameters:
  *         - name: id
- *           in: query
+ *           in: path
  *           type: integer
  *           required: true
  *       responses:
@@ -116,12 +118,14 @@
  *                     type: string
  *                     example: not found / something wrong
  *     put:
+ *       security:
+ *         - bearerAuth: []
  *       summary: Update Tags (Available only for administrators)
  *       tags:
  *         - [Tags]
  *       parameters:
  *         - name: id
- *           in: query
+ *           in: path
  *           type: integer
  *           required: true
  *       requestBody:
@@ -153,12 +157,14 @@
  *                     type: string
  *                     example: not found / something wrong
  *     delete:
+ *       security:
+ *         - bearerAuth: []
  *       summary: Update Tags (Available only for administrators)
  *       tags:
  *         - [Tags]
  *       parameters:
  *         - name: id
- *           in: query
+ *           in: path
  *           type: integer
  *           required: true
  *       responses:

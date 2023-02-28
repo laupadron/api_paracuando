@@ -48,7 +48,7 @@
  *       - [Publications-Types]
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         type: string
  *         required: true
  *     responses:
@@ -80,7 +80,7 @@
  *       - [Publications-Types]
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         type: string
  *         required: true
  *     requestBody:

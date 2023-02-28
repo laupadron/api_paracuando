@@ -95,14 +95,14 @@
  *                 message:
  *                   type: string
  *                   example: not found / something wrong
- * /api/v1/auth/change-password/{token}:
+ * /api/v1/auth/change-password:
  *   post:
  *     summary: Change user password
  *     tags:
  *       - [Auth]
  *     parameters:
  *       - name: token
- *         in: query
+ *         in: header
  *         required: true
  *         schema:
  *           type: string

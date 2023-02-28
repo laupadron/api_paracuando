@@ -109,7 +109,7 @@
  *       - [Publications]
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         type: string
  *         required: true
  *     responses:
@@ -145,7 +145,7 @@
  *       - [Publications]
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         type: string
  *         required: true
  *     responses:
@@ -176,7 +176,7 @@
  *       - [Publications]
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         type: string
  *         required: true
  *     responses:
