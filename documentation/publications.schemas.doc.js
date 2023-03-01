@@ -55,4 +55,13 @@
  *         content:
  *           type: string
  *           example: Noticias sobre deportes
+ *         cities_id:
+ *           type: integer
+ *           example: 1
+ *         publications_types_id:
+ *           type: integer
+ *           example: 2
+ *         tags:
+ *           type: array
+ *           example: {"id":1,"name":foodie,"description":"Para publicaciones relacionadas con comida, recetas, restaurantes, etc."}
  */

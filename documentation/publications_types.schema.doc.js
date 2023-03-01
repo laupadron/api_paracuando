@@ -8,7 +8,9 @@
  *       properties:
  *         name:
  *           type: string
- *           example: Artist & Concerts
+ *           example: Historias
+ *         description:
+ *           type: Publicacion de historias en tu feed
  *     publicationType:
  *       type:
  *         object

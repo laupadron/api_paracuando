@@ -11,7 +11,7 @@
  *           example: 1
  *         name:
  *           type: string
- *           example: sport
+ *           example: foodie
  *     tagsBody:
  *       type:
  *         object
@@ -21,20 +21,20 @@
  *           example: 1
  *         name:
  *           type: string
- *           example: sport
+ *           example: foodie
  *         description:
  *           type: string
- *           example: About Sports
+ *           example: About foodie
  *     tagsAdd:
  *       type:
  *         object
  *       properties:
  *         name:
  *           type: string
- *           example: sport
+ *           example: foodie
  *         description:
  *           type: string
- *           example: About Sports
+ *           example: About foodie
  *         image_url:
  *           type: string
  *           example: image

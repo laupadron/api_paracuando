@@ -27,13 +27,13 @@
  *           type: string
  *           minimun: 1
  *         description: Publication description
- *       - name: tags
+ *       - name: tags_id
  *         in: query
  *         required: false
  *         schema:
  *           type: string
  *           minimun: 1
- *         description: Publication tags
+ *         description: Publication tags_id
  *       - name: created_at
  *         in: query
  *         required: false
