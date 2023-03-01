@@ -103,12 +103,12 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: id
- *         in: query
+ *       - name: uuid
+ *         in: path
  *         required: true
  *         schema:
- *           type: integer
- *           minimun: 1
+ *           type: string
+ *           format: uuid
  *         description: User ID
  *     responses:
  *       201:
@@ -143,10 +143,13 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - in: query
- *         name: id
- *         type: string
+ *       - name: uuid
+ *         in: path
  *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
  *     responses:
  *       200:
  *         description: OK
@@ -180,10 +183,13 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - in: query
- *         name: id
- *         type: string
+ *       - name: uuid
+ *         in: path
  *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
  *       - in: query
  *         name: title
  *         type: string
@@ -265,10 +271,13 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - in: query
- *         name: id
- *         type: integer
+ *       - name: uuid
+ *         in: path
  *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
  *       - in: header
  *         name: token
  *         type: string
@@ -310,10 +319,13 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - in: query
- *         name: id
- *         type: integer
+ *       - name: uuid
+ *         in: path
  *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
  *     requestBody:
  *       description: Field required to delete a tag
  *       required: true
