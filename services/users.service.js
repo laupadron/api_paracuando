@@ -260,8 +260,10 @@ class UsersService {
   async addInterestUser(user_id, tag_id) {
     const transaction = await models.sequelize.transaction();
     try {
-      const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
-      if (tag) throw new CustomError('Interest already exists', 401, 'Create error');
+      const tag = await models.Tags.findByPk(tag_id);
+      if (!tag) throw new CustomError('Not valid interest', 404, 'Not Found');
+      const userTags = await models.Users_tags.findOne({ where: { user_id, tag_id } });
+      if (userTags) throw new CustomError('Interest already exists', 400, 'Bad Request');
       await models.Users_tags.create({ tag_id, user_id }, { transaction });
       await transaction.commit();
     } catch (error) {
@@ -273,8 +275,10 @@ class UsersService {
   async removeInterestUser(user_id, tag_id) {
     const transaction = await models.sequelize.transaction();
     try {
-      const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
-      if (!tag) throw new CustomError('Not found interest', 401, 'Delete error');
+      const tag = await models.Tags.findByPk(tag_id);
+      if (!tag) throw new CustomError('Not valid interest', 404, 'Not Found');
+      const userTags = await models.Users_tags.findOne({ where: { user_id, tag_id } });
+      if (!userTags) throw new CustomError('Not found interest', 400, 'Bad Request');
       const deleteTag = await models.Users_tags.destroy({ where: { tag_id, user_id } }, { transaction });
       await transaction.commit();
       return deleteTag;

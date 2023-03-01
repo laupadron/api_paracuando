@@ -75,7 +75,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: uuid
+ *       - name: id
  *         in: path
  *         required: true
  *         schema:
@@ -114,7 +114,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: uuid
+ *       - name: id
  *         in: path
  *         required: true
  *         schema:
@@ -153,7 +153,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: uuid
+ *       - name: id
  *         in: path
  *         required: true
  *         schema:
@@ -200,7 +200,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - in: query
+ *       - in: path
  *         name: id
  *         type: integer
  *         required: true
@@ -240,7 +240,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: uuid
+ *       - name: id
  *         in: path
  *         required: true
  *         schema:
@@ -283,7 +283,7 @@
  *     tags:
  *       - [Users]
  *     parameters:
- *       - name: uuid
+ *       - name: id
  *         in: path
  *         required: true
  *         schema:
