@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Users_tags extends Model {
     static associate(models) {
     Users_tags.belongsTo(models.Tags,{as:'tags',foreignKey:'tag_id'})
-    Users_tags.belongsTo(models.Users,{as:'users',foreignKey:'user_id'})
+    Users_tags.belongsTo(models.Users,{as:'interests',foreignKey:'user_id'})
     }
   }
   Users_tags.init({

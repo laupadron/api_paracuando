@@ -6,14 +6,19 @@ const usersService = new UsersService()
 const authService = new AuthService()
 
 const getUsers = async (req, res, next) => {
-  const query = req.query
-  const { limit, offset } = getPagination(1, 10);
-  query.limit = limit
-  query.offset = offset
+  const result = {
+    results:{}
+  }
+  const { usersPerPage, currentPage } = { usersPerPage: 4, currentPage: 1 };
+  const { limit, offset } = getPagination(currentPage, usersPerPage);
 
   try {
-    const users = await usersService.findAndCount(query)
-    return res.json(users)
+    const users = await usersService.findAndCount({ ...req.query, limit, offset })
+    result.results.count = users.count
+    result.results.totalPages = Math.ceil(users.count/usersPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = users.rows
+    return res.json(result)
   } catch (error) {
     next(error)
   }
@@ -23,7 +28,6 @@ const getUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
   const role = req.userRole
-  console.log(role)
 
   try {
     let result = await usersService.getUser(idFromParams)

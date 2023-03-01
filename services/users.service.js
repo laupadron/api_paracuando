@@ -80,8 +80,16 @@ class UsersService {
   }
 
   async getUser(id) {
-    let user = await models.Users.scope('view_same_user').findByPk(id)
-
+    let user = await models.Users.scope('view_same_user').findByPk(id, {
+      include: {
+        model: models.Users_tags,
+        as: 'interests',
+        include: {
+          model: models.Tags,
+          as : 'tags'
+        }
+      }
+    })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
