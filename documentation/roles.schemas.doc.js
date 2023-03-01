@@ -11,5 +11,5 @@
  *           example: 1
  *         name:
  *           type: string
- *           example: sport
+ *           example: public
  */

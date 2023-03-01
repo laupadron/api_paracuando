@@ -36,34 +36,6 @@
  *           type: string
  *           minimun: 1
  *         description: User username
- *       - name: password
- *         in: query
- *         required: false
- *         schema:
- *           type: string
- *           minimun: 1
- *         description: password
- *       - name: token
- *         in: query
- *         required: false
- *         schema:
- *           type: string
- *           minimun: 1
- *         description: User token
- *       - name: phone
- *         in: query
- *         required: false
- *         schema:
- *           type: string
- *           minimun: 1
- *         description: User phone
- *       - name: country_id
- *         in: query
- *         required: false
- *         schema:
- *           type: string
- *           minimun: 1
- *         description: User country_id
  *       - name: created_at
  *         in: query
  *         required: false
@@ -108,7 +80,6 @@
  *         required: true
  *         schema:
  *           type: string
- *           format: uuid
  *         description: User ID
  *     responses:
  *       201:
@@ -148,7 +119,6 @@
  *         required: true
  *         schema:
  *           type: string
- *           format: uuid
  *         description: User ID
  *     responses:
  *       200:
@@ -188,7 +158,6 @@
  *         required: true
  *         schema:
  *           type: string
- *           format: uuid
  *         description: User ID
  *       - in: query
  *         name: title
@@ -276,12 +245,7 @@
  *         required: true
  *         schema:
  *           type: string
- *           format: uuid
  *         description: User ID
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *     requestBody:
  *       description: Field required to add a tag
  *       required: true
@@ -324,7 +288,6 @@
  *         required: true
  *         schema:
  *           type: string
- *           format: uuid
  *         description: User ID
  *     requestBody:
  *       description: Field required to delete a tag
