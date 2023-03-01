@@ -19,14 +19,14 @@ class TagsService {
       options.offset = offset
     }
 
-    const { id } = query
-    if (id) {
-      options.where.id = id
-    }
-
     const { name } = query
     if (name) {
       options.where.name = { [Op.iLike]: `%${name}%` }
+    }
+
+    const { description } = query
+    if (description) {
+      options.where.description = { [Op.iLike]: `%${description}%` }
     }
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
@@ -73,6 +73,7 @@ class TagsService {
     const transaction = await models.sequelize.transaction()
     try {
       const tag = await models.Tags.findByPk(id)
+      console.log(tag)
       if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
       const deletedTag = await tag.destroy()
       await transaction.commit()

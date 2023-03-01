@@ -7,35 +7,30 @@ module.exports = {
 
     const tagsSeed = [
       {
-        id: '1',
         name: 'foodie',
         description: 'Para publicaciones relacionadas con comida, recetas, restaurantes, etc.',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '2',
         name: 'travel',
         description: 'Para publicaciones relacionadas con viajes, turismo, lugares turísticos, etc.',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '3',
         name: 'fitness',
         description: 'Para publicaciones relacionadas con ejercicio, deporte, vida saludable, etc.',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '4',
         name: 'fashion',
         description: 'Para publicaciones relacionadas con moda, ropa, accesorios, etc.',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        id: '5',
         name: 'throwback',
         description: 'Para publicaciones de recuerdos, momentos del pasado, nostalgia, etc.',
         created_at: new Date(),

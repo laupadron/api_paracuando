@@ -8,9 +8,9 @@ const getTags = async (req, res, next) => {
   const tagsPerPage = 10;
   const page = 1;
   const { limit, offset } = getPagination(page, tagsPerPage);
-  const { name } = req.query;
+  const query = req.query;
   try {
-    const tags = await tagsService.getFilteredTags({ name, limit, offset })
+    const tags = await tagsService.getFilteredTags({ ...query, limit, offset })
     return res.status(200).json(tags)
   }
   catch (error) {

@@ -1,7 +1,7 @@
-const {v4: uuid4} = require('uuid');
+const { v4: uuid4 } = require('uuid');
 const models = require('../database/models')
 const { Op } = require('sequelize')
-const  {CustomError}  = require('../utils/helpers');
+const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
 
 class UsersService {
@@ -58,11 +58,11 @@ class UsersService {
 
       obj.id = uuid4()
       obj.password = hashPassword(obj.password)
-      let newUser = await models.Users.create(obj, { transaction, fields: ['id','first_name', 'last_name', 'password', 'email', 'username'] })
-      
-      let publicRole = await models.Roles.findOne({where: {name:'public'}}, { raw: true })
+      let newUser = await models.Users.create(obj, { transaction, fields: ['id', 'first_name', 'last_name', 'password', 'email', 'username'] })
 
-      let newUserProfile = await models.Profiles.create({ user_id: newUser.id, role_id: publicRole.id}, {transaction})
+      let publicRole = await models.Roles.findOne({ where: { name: 'public' } }, { raw: true })
+
+      let newUserProfile = await models.Profiles.create({ user_id: newUser.id, role_id: publicRole.id }, { transaction })
 
       await transaction.commit()
       return newUser
@@ -71,8 +71,8 @@ class UsersService {
       throw error
     }
   }
-  
-  
+
+
   async getAuthUserOr404(id) {
     let user = await models.Users.scope('auth_flow').findByPk(id, { raw: true })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
@@ -81,13 +81,14 @@ class UsersService {
 
   async getUser(id) {
     let user = await models.Users.scope('view_same_user').findByPk(id)
+
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
 
   async findUserByEmailOr404(email) {
-    if(!email) throw new CustomError('Email not given', 400, 'Bad Request')
-    let user = await models.Users.findOne({where: {email}}, { raw: true })
+    if (!email) throw new CustomError('Email not given', 400, 'Bad Request')
+    let user = await models.Users.findOne({ where: { email } }, { raw: true })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
     return user
   }
@@ -96,6 +97,7 @@ class UsersService {
     const transaction = await models.sequelize.transaction()
     try {
       let user = await models.Users.findByPk(id)
+
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       let updatedUser = await user.update(obj, { transaction })
       await transaction.commit()
@@ -109,7 +111,8 @@ class UsersService {
   async removeUser(id) {
     const transaction = await models.sequelize.transaction()
     try {
-      let user = await models.Users.findByPk(id)
+      let user = await models.Users.scope('view_same_user').findByPk(id, { raw: true })
+
       if (!user) throw new CustomError('Not found user', 404, 'Not Found')
       await user.destroy({ transaction })
       await transaction.commit()
@@ -135,7 +138,7 @@ class UsersService {
     }
   }
 
-  
+
   async removeTokenUser(id) {
     const transaction = await models.sequelize.transaction()
     try {
@@ -148,7 +151,7 @@ class UsersService {
       throw error
     }
   }
-  
+
   async verifiedTokenUser(id, token, exp) {
     const transaction = await models.sequelize.transaction()
     try {
@@ -156,7 +159,7 @@ class UsersService {
       if (!id) throw new CustomError('Not ID provided', 400, 'Bad Request')
       if (!token) throw new CustomError('Not token provided', 400, 'Bad Request')
       if (!exp) throw new CustomError('Not exp exist', 400, 'Bad Request')
-      
+
 
       let user = await models.Users.findOne({
         where: {
@@ -206,7 +209,7 @@ class UsersService {
     }
   }
 
-  async getFilteredUsersPaginated(key, keyValue, limit, offset){
+  async getFilteredUsersPaginated(key, keyValue, limit, offset) {
     const transaction = await models.sequelize.transaction()
     try {
       const users = await models.Users.findAndCountAll({
@@ -225,6 +228,36 @@ class UsersService {
     } catch (error) {
       await transaction.rollback()
       throw error
+    }
+  }
+
+  async addInterestUser(user_id, tag_id) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
+      if (!tag) {
+        await models.Users_tags.create({ tag_id, user_id }, { transaction });
+        await transaction.commit();
+      }
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
+    }
+  }
+
+  async removeInterestUser(user_id, tag_id) {
+    const transaction = await models.sequelize.transaction();
+    try {
+      const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
+      if (tag) {
+        const deleteTag = await models.Users_tags.destroy({ where: { tag_id, user_id } }, { transaction });
+        await transaction.commit();
+
+        return deleteTag;
+      }
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
   }
 }
