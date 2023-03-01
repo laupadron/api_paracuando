@@ -34,16 +34,18 @@ class TagsService {
     const tags = await models.Tags.findAndCountAll(options)
     return tags;
   }
-  async createdTag(tag) {
+  
+  async createTag(tag) {
     const transaction = await models.sequelize.transaction()
     try {
-      const newTag = await models.Tags.create(tag);
-      return newTag
+      await models.Tags.create(tag, {transaction});
+      await transaction.commit()
     } catch (error) {
       await transaction.rollback()
       throw error
     }
   }
+
   async getDetailTag(id) {
     const transaction = await models.sequelize.transaction()
     try {

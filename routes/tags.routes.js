@@ -9,10 +9,7 @@ router.get('/',
   passport.authenticate('jwt',{session:false}),
   getTags
 );
-router.get('/:id',
-  passport.authenticate('jwt',{session:false}),
-  detailTag
-);
+
 router.post('/',
   passport.authenticate('jwt',{session:false}),
   checkRole,

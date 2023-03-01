@@ -5,13 +5,19 @@ const { getPagination, CustomError } = require('../utils/helpers');
 const tagsService = new TagsService
 
 const getTags = async (req, res, next) => {
-  const tagsPerPage = 10;
-  const page = 1;
-  const { limit, offset } = getPagination(page, tagsPerPage);
-  const query = req.query;
+  const result = {
+    results: {}
+  }
+  const {tagsPerPage, currentPage} = {tagsPerPage: 10, currentPage: 1};
+  const { limit, offset } = getPagination(currentPage, tagsPerPage);
+
   try {
-    const tags = await tagsService.getFilteredTags({ ...query, limit, offset })
-    return res.status(200).json(tags)
+    const tags = await tagsService.getFilteredTags({ ...req.query, limit, offset })
+    result.results.count = tags.count
+    result.results.totalPages = Math.ceil(tags.count / tagsPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = tags.rows
+    return res.status(200).json(result)
   }
   catch (error) {
     next(error)
@@ -21,8 +27,8 @@ const getTags = async (req, res, next) => {
 const addTags = async (req, res, next) => {
   try {
     const tag = req.body
-    const addTag = await tagsService.createdTag(tag)
-    return res.status(201).json(addTag)
+    await tagsService.createTag(tag)
+    return res.status(201).json({message: 'Tag Added'}  )
   } catch (error) {
     next(error)
   }
