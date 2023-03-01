@@ -94,6 +94,64 @@ class UsersService {
     return user
   }
 
+  async getUserVotes(userId, limit, offset){
+    const userVotes = await models.Votes.scope('no_timestamps').findAndCountAll({
+      limit,
+      offset,
+      where: {
+        user_id: userId
+      }
+    })
+    return userVotes
+  }
+
+  async getUserPublications(query){
+    let options = {
+      where: {},
+    }
+
+    const { limit, offset } = query
+    if (limit && offset) {
+      options.limit = limit
+      options.offset = offset
+    }
+
+    const { user_id } = query
+    if (user_id) {
+      options.where.user_id = user_id
+    }
+
+    const { title } = query
+    if (title) {
+      options.where.title = { [Op.iLike]: `%${title}%` }
+    }
+
+    const { description } = query
+    if (description) {
+      options.where.description = { [Op.iLike]: `%${description}%` }
+    }
+
+    const { content } = query
+    if (content) {
+      options.where.content = { [Op.iLike]: `%${content}%` }
+    }
+
+    const { cities_id } = query
+    if (cities_id) {
+      options.where.cities_id = { [Op.iLike]: `%${cities_id}%` }
+    }
+
+    const { publications_types_id } = query
+    if (publications_types_id) {
+      options.where.publications_types_id = { [Op.iLike]: `%${publications_types_id}%` }
+    }
+
+    //Necesario para el findAndCountAll de Sequelize
+    options.distinct = true
+    const userPublications = await models.Publications.findAndCountAll(options)
+    return userPublications
+  }
+
   async findUserByEmailOr404(email) {
     if (!email) throw new CustomError('Email not given', 400, 'Bad Request')
     let user = await models.Users.findOne({ where: { email } }, { raw: true })
@@ -131,7 +189,6 @@ class UsersService {
     }
   }
 
-
   async setTokenUser(id, token) {
     const transaction = await models.sequelize.transaction()
     try {
@@ -145,7 +202,6 @@ class UsersService {
       throw error
     }
   }
-
 
   async removeTokenUser(id) {
     const transaction = await models.sequelize.transaction()
@@ -201,52 +257,13 @@ class UsersService {
     }
   }
 
-  async getAllUsersPaginated(limit, offset) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const users = await models.Users.scope('view_public').findAndCountAll({
-        limit,
-        offset,
-        order: [['created_at', 'DESC']]
-      })
-      await transaction.commit()
-      return users
-    } catch (error) {
-      await transaction.rollback()
-      throw error
-    }
-  }
-
-  async getFilteredUsersPaginated(key, keyValue, limit, offset) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const users = await models.Users.findAndCountAll({
-        limit,
-        offset,
-        order: [['created_at', 'DESC']],
-        where: {
-          [Op.or]: [
-            { [key]: { [Op.iLike]: `%${keyValue}%` } }
-          ]
-        },
-        attributes: ['id', 'first_name', 'last_name', 'email', 'username']
-      })
-      await transaction.commit()
-      return users
-    } catch (error) {
-      await transaction.rollback()
-      throw error
-    }
-  }
-
   async addInterestUser(user_id, tag_id) {
     const transaction = await models.sequelize.transaction();
     try {
       const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
-      if (!tag) {
-        await models.Users_tags.create({ tag_id, user_id }, { transaction });
-        await transaction.commit();
-      }
+      if (tag) throw new CustomError('Interest already exists', 401, 'Create error');
+      await models.Users_tags.create({ tag_id, user_id }, { transaction });
+      await transaction.commit();
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -257,12 +274,10 @@ class UsersService {
     const transaction = await models.sequelize.transaction();
     try {
       const tag = await models.Users_tags.findOne({ where: { user_id, tag_id } });
-      if (tag) {
-        const deleteTag = await models.Users_tags.destroy({ where: { tag_id, user_id } }, { transaction });
-        await transaction.commit();
-
-        return deleteTag;
-      }
+      if (!tag) throw new CustomError('Not found interest', 401, 'Delete error');
+      const deleteTag = await models.Users_tags.destroy({ where: { tag_id, user_id } }, { transaction });
+      await transaction.commit();
+      return deleteTag;
     } catch (error) {
       await transaction.rollback();
       throw error;

@@ -7,7 +7,7 @@ const authService = new AuthService()
 
 const getUsers = async (req, res, next) => {
   const result = {
-    results:{}
+    results: {}
   }
   const { usersPerPage, currentPage } = { usersPerPage: 4, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, usersPerPage);
@@ -15,7 +15,7 @@ const getUsers = async (req, res, next) => {
   try {
     const users = await usersService.findAndCount({ ...req.query, limit, offset })
     result.results.count = users.count
-    result.results.totalPages = Math.ceil(users.count/usersPerPage)
+    result.results.totalPages = Math.ceil(users.count / usersPerPage)
     result.results.CurrentPage = currentPage
     result.results.results = users.rows
     return res.json(result)
@@ -45,6 +45,48 @@ const getUserById = async (req, res, next) => {
   }
 }
 
+const getUserVotes = async (req, res, next) => {
+  const result = {
+    results: {}
+  }
+  const userId = req.params.id
+  const { votesPerPage, currentPage } = { votesPerPage: 4, currentPage: 1 };
+  const { limit, offset } = getPagination(currentPage, votesPerPage);
+
+  try {
+    await usersService.getAuthUserOr404(userId);
+    const userVotes = await usersService.getUserVotes(userId, limit, offset)
+    result.results.count = userVotes.count
+    result.results.totalPages = Math.ceil(userVotes.count / votesPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = userVotes.rows
+    res.json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getUserPublications = async (req, res, next) => {
+  const result = {
+    results: {}
+  }
+  const user_id = req.params.id
+  
+  const { publicationsPerPage, currentPage } = { publicationsPerPage: 4, currentPage: 1 };
+  const { limit, offset } = getPagination(currentPage, publicationsPerPage);
+  try {
+    await usersService.getAuthUserOr404(user_id);
+    const userPublications = await usersService.getUserPublications({... req.query, user_id, limit, offset})
+    result.results.count = userPublications.count
+    result.results.totalPages = Math.ceil(userPublications.count / publicationsPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = userPublications.rows
+    res.json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
 const updateUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
@@ -52,7 +94,7 @@ const updateUserById = async (req, res, next) => {
   try {
     if (isSameUser) {
       await usersService.updateUser(idFromParams, { first_name, last_name })
-      return res.json({ message: 'Succes Update' });
+      return res.json({ message: 'Success Update' });
     } throw new CustomError('Not authorized user', 401, 'Unauthorized')
   } catch (error) {
     next(error)
@@ -95,5 +137,7 @@ module.exports = {
   getUserById,
   updateUserById,
   addInterest,
-  removeInterest
+  removeInterest,
+  getUserVotes,
+  getUserPublications
 }
