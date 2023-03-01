@@ -143,11 +143,6 @@
  *     summary: get the profiles associated with the user's account
  *     tags:
  *       - [Auth]
- *     parameters:
- *       - in: header
- *         name: token
- *         type: string
- *         required: true
  *     responses:
  *       200:
  *         description: OK

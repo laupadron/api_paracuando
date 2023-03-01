@@ -106,6 +106,45 @@
  *                 message:
  *                   type: string
  *                   example: not found / something wrong
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Edit user data
+ *     tags:
+ *       - [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         type: integer
+ *         required: true
+ *     requestBody:
+ *       description: Fields required to update a user 
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/updateUser'
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: {"message": "Succes Update"}
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  * /api/v1/users/{id}/votes:
  *   get:
  *     security:
@@ -183,45 +222,6 @@
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schema/publicationsUser'
- *       400:
- *         description: not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: not found / something wrong
- *   put:
- *     security:
- *       - bearerAuth: []
- *     summary: Edit user data
- *     tags:
- *       - [Users]
- *     parameters:
- *       - in: path
- *         name: id
- *         type: integer
- *         required: true
- *     requestBody:
- *       description: Fields required to update a user 
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/updateUser'
- *     responses:
- *       201:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: {"message": "Succes Update"}
  *       400:
  *         description: not found
  *         content:

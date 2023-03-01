@@ -63,5 +63,5 @@
  *           example: 2
  *         tags:
  *           type: array
- *           example: {"id":1,"name":foodie,"description":"Para publicaciones relacionadas con comida, recetas, restaurantes, etc."}
+ *           example: [1,2,3]
  */

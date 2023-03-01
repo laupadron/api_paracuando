@@ -7,13 +7,35 @@
  *     summary: get publications-types
  *     tags:
  *       - [Publications-Types]
- *     requestBody:
- *       description: Fields required to search a publication_type
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/searchPublicationType'
+ *     parameters:
+ *       - name: id
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimun: 1
+ *         description: Publication Type id
+ *       - name: name
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *           minimun: 1
+ *         description: Publication Type name
+ *       - name: description
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *           minimun: 1
+ *         description: Publication Type description
+ *       - name: created_at
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *           minimun: 1
+ *         description: Publication Type created_at
  *     responses:
  *       200:
  *         description: OK

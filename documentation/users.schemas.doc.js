@@ -8,10 +8,10 @@
    *       properties:
    *           email:
    *             type: string
-   *             example: laupadron1458@gmail.com
+   *             example: laupadron1458@academlo.com
    *           password:
    *             type: string
-   *             example: 1234
+   *             example: 1458
    *     loginResponse:
    *       type:
    *         object

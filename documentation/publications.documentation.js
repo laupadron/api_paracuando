@@ -41,6 +41,13 @@
  *           type: string
  *           minimun: 1
  *         description: Publication created_at
+ *       - name: votes_count
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           minimun: 1
+ *         description: Publication votes_count
  *     responses:
  *       200:
  *         description: OK
@@ -141,6 +148,8 @@
  *                   example: not found / something wrong
  *   delete:
  *     summary: Delet a publication
+ *     security:
+ *       - bearerAuth: []
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -171,6 +180,8 @@
  *                   example: not found / something wrong
  * /api/v1/publications/{id}/vote:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Add/Delete a vote in Publication
  *     tags:
  *       - [Publications]
