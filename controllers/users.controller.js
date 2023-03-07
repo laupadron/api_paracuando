@@ -130,7 +130,8 @@ const removeInterest = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+
 
 module.exports = {
   getUsers,
@@ -139,5 +140,6 @@ module.exports = {
   addInterest,
   removeInterest,
   getUserVotes,
-  getUserPublications
+  getUserPublications,
+  
 }

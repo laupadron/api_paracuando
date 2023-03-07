@@ -3,6 +3,11 @@ const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
+//images
+const { v4: uuid } = require('uuid')
+const sharp = require('sharp')
+const { uploadFile } = require('../libs/s3') // Importamos la función para subir archivos a AWS S3
+const { unlink } = require('fs/promises')
 
 class UsersService {
 
@@ -287,6 +292,9 @@ class UsersService {
       throw error;
     }
   }
+  
+ 
+  
 }
 
 
