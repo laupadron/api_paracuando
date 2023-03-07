@@ -24,7 +24,7 @@ class ImagesPublicationsService {
 		const transaction = await models.sequelize.transaction()
 		try {
 			
-			let addImage= await models.Publications_images.create({id:1,publication_id:idPublication,image_url:fileKey,order:1}, { transaction })
+			let addImage= await models.Publications_images.create( { transaction })
 			await transaction.commit();
 			return addImage	
 		} catch (error) {
