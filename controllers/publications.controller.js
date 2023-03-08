@@ -2,6 +2,7 @@ const PublicationsService = require('../services/publications.service');
 const uuid = require('uuid')
 const { getPagination, CustomError } = require('../utils/helpers');
 
+
 const publicationsService = new PublicationsService
 
 
@@ -89,10 +90,12 @@ const addVote = async (req, res, next) => {
 
 
 
+
 module.exports = {
   deletePublication,
   addVote,
   getPublications,
   createPublication,
-  getPublicationById
+  getPublicationById,
+  
 }
