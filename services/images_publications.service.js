@@ -19,7 +19,7 @@ class ImagesPublicationsService {
 		if (imagesKeys.length > 3) {
 			throw new CustomError('Too many files', 400, 'Bad Request');
 		 }
-		 console.log(files)
+		 
 		}catch (error) {
 			await transaction.rollback();
       throw error;
@@ -80,6 +80,20 @@ class ImagesPublicationsService {
 		} catch (error) {
 			await transaction.rollback();
       throw error;
+		}
+	}
+
+	async changeOrderImage(actual_order,next_order){
+		const transaction = await models.sequelize.transaction();
+		try {
+			const image = await models.Publications_images.findOne({ where: { order: actual_order }}, { transaction });
+			const nextImage = await models.Publications_images.findOne({ where: { order: next_order }}, { transaction });
+			await image.update({ order: next_order }, { transaction });
+			await nextImage.update({ order: actual_order }, { transaction });
+			await transaction.commit();
+		} catch (error) {
+			await transaction.rollback();
+    		throw error;
 		}
 	}
 }
