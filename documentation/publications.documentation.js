@@ -211,4 +211,85 @@
  *                 message:
  *                   type: string
  *                   example: not found / something wrong
+ * /api/v1/publications/{id}/add-image:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Add an image in Publication
+ *     tags:
+ *       - [Publications]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *         required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               imagen:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: {"message": "image added"}
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
+ * /api/v1/publications/{id}/remove-image/{order}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: delete an image in Publication
+ *     tags:
+ *       - [Publications]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *         required: true
+ *       - name: order
+ *         in: path
+ *         type: integer
+ *         description: de order's image
+ *         required: true
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: {"message": "image Remove"}
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  */
