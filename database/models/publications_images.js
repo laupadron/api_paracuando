@@ -9,13 +9,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Publications_images.init({
-    publication_id: DataTypes.UUID,
-     
-    image_url: 
-    DataTypes.STRING,
+    
+    publication_id: {
+      type: DataTypes.UUID,
+      primaryKey:true
+    },
+    image_url: {
+    type:DataTypes.UUID,
+    primaryKey:true
+    },
     order: {
       allowNull: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      validate: {
+        min: 1,
+        max: 3
+      }
     },
   }, {
     sequelize,

@@ -3,7 +3,7 @@ const passport = require('../libs/passport');
 const router = express.Router();
 const { checkRole, checkAdmin, checkSameUser } = require('../middlewares/checkers.middleware');
 const { getPublications, getPublicationById,createPublication, deletePublication, addVote } = require('../controllers/publications.controller');
-const{uploadImagePublication}=require('../controllers/publications_images.controllers')
+const{uploadImagePublication,destroyImageByPublication}=require('../controllers/publications_images.controllers')
 const { multerPublicationsPhotos } = require('../middlewares/multer.middleware')
 router.get('/',
   getPublications
@@ -28,6 +28,7 @@ router.post('/:id/vote',
   passport.authenticate('jwt', { session: false }),
   checkSameUser,
   addVote,
+  
 );
 
 // router.route('/:idPublication/images')
@@ -43,7 +44,15 @@ router.post('/:id/add-image',
 passport.authenticate('jwt', { session: false }),
 checkSameUser,
 checkRole,
-multerPublicationsPhotos.array('image', 3), 
+multerPublicationsPhotos.array('image'), 
 uploadImagePublication
+)
+
+router.delete('/:id/remove-image/:order',
+passport.authenticate('jwt', { session: false }),
+checkSameUser,
+checkRole,
+
+destroyImageByPublication
 )
 module.exports = router;

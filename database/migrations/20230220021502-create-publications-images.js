@@ -5,14 +5,11 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try{
       await queryInterface.createTable('publications_images',{
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.BIGINT
-      },
+      
+      
       publication_id: {
         type: Sequelize.UUID,
+        primaryKey: true,
         allowNull: false,
         foreignKey: true,
         references: {
@@ -23,12 +20,19 @@ module.exports = {
         onDelete: 'RESTRICT'
       },
       image_url: {
-        type: Sequelize.STRING,
+        type: Sequelize.UUID,
+        primaryKey: true,
+        
         allowNull: false
       },
       order: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true,
+        validate: {
+          min: 1,
+          max: 3
+        }
       },
       created_at: {
         allowNull: false,
