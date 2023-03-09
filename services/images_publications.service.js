@@ -83,11 +83,14 @@ class ImagesPublicationsService {
 		}
 	}
 
-	async changeOrderImage(actual_order,next_order){
+	async changeOrderImage({actual_order,next_order},idPublication){
+		
 		const transaction = await models.sequelize.transaction();
 		try {
-			const image = await models.Publications_images.findOne({ where: { order: actual_order }}, { transaction });
-			const nextImage = await models.Publications_images.findOne({ where: { order: next_order }}, { transaction });
+			const image = await models.Publications_images.findOne({ where: { publication_id:idPublication,order: actual_order }}, { transaction });
+			
+			const nextImage = await models.Publications_images.findOne({ where: {publication_id:idPublication, order: next_order }}, { transaction });
+			
 			await image.update({ order: next_order }, { transaction });
 			await nextImage.update({ order: actual_order }, { transaction });
 			await transaction.commit();

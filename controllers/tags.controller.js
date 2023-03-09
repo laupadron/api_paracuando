@@ -1,4 +1,6 @@
 const TagsService = require('../services/tags.service');
+const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
+const sharp = require('sharp')
 
 
 const { getPagination, CustomError } = require('../utils/helpers');
@@ -65,10 +67,14 @@ const deleteTagById = async (req, res, next) => {
   }
 }
 
+ 
+
+
 module.exports = {
   getTags,
   addTags,
   detailTag,
   updateTagById,
-  deleteTagById
+  deleteTagById,
+  
 }

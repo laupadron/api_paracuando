@@ -2,8 +2,9 @@ const express =require('express');
 const passport = require('../libs/passport');
 const router = express.Router();
 const {checkRole, checkAdmin}=require('../middlewares/checkers.middleware');
-const {getTags,addTags,detailTag,updateTagById, deleteTagById }=require('../controllers/tags.controller');
+const {getTags,addTags,detailTag,updateTagById, deleteTagById,addImageTag }=require('../controllers/tags.controller');
 const { addAbortSignal } = require('stream');
+const { multerPublicationsPhotos } = require('../middlewares/multer.middleware')
 
 router.get('/',
   passport.authenticate('jwt',{session:false}),
@@ -35,5 +36,6 @@ router.delete('/:id',
   checkAdmin,
   deleteTagById
 );
+
 
 module.exports = router
