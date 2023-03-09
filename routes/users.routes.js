@@ -4,7 +4,7 @@ const router = express.Router()
 const { getUsers, getUserById, updateUserById, getUserVotes, getUserPublications, addInterest, removeInterest,addImageUser } = require('../controllers/users.controller')
 const { checkRole, checkAdmin, checkSameUser } = require('../middlewares/checkers.middleware');
 const { multerUserssPhotos } = require('../middlewares/multer.middleware') 
-const {uploadImageUsers} = require('../controllers/users_images.controller')
+const {uploadImageUsers, destroyUserImage} = require('../controllers/users_images.controller')
 
 router.get('/',
   passport.authenticate('jwt', { session: false }),
@@ -53,6 +53,13 @@ router.post('/:id/add-image',
   checkSameUser,
   multerUserssPhotos.single('image'),
   uploadImageUsers
+)
+
+router.delete('/:id/remove-image',
+  passport.authenticate('jwt', { session: false }),
+  checkSameUser,
+  checkRole,
+  destroyUserImage
 )
 
 

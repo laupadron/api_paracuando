@@ -30,13 +30,10 @@ const checkSameUser = async (req, res, next) => {
   const idFromToken = req.user.id
   if (idFromParams === idFromToken) {
     req.isSameUser = true
-    console.log(req.isSameUser);
     next();
   }else{
     req.isSameUser = false
-    console.log(req.isSameUser);
-    const error = new CustomError('User not authorized', 401, 'Unauthorized')
-    next(error);
+    next();
   }
 }
 
