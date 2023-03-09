@@ -8,10 +8,7 @@ const sharp = require('sharp')
 const { CustomError } = require('../utils/helpers')
 const unlinkFile = util.promisify(fs.unlink)
 
-
-const imagesUsersService = new ImagesUsersService();
 const userService = new UsersService();
-
 
 const uploadImageUsers = async (request, response, next) => {
   const userId = request.params.id
