@@ -1,12 +1,7 @@
-const { v4: uuid4 } = require('uuid');
 const models = require('../database/models')
 const { CustomError } = require('../utils/helpers');
-const { hashPassword } = require('../libs/bcrypt');
-const sharp = require('sharp')
-const { uploadFile } = require('../libs/s3') // Importamos la función para subir archivos a AWS S3
-const { unlink } = require('fs/promises')
 
-class ImagesPublicationsService {
+class ImagesUsersService {
 
   async publicationExistAndQuantity(idPublication, imagesKeys) {
     const transaction = await models.sequelize.transaction()
@@ -25,7 +20,6 @@ class ImagesPublicationsService {
       throw error;
     }
   }
-
 
   async createImage(idPublication, fileKey) {
     const transaction = await models.sequelize.transaction()
@@ -48,40 +42,7 @@ class ImagesPublicationsService {
       await transaction.rollback();
       throw error;
     }
-
-  }
-  async getImageOr404(idPublication, order) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const publicationImages = await models.Publications_images.findByPk(idPublication, {
-        where: { order: order },
-        transaction,
-      });
-
-      if (!publicationImages) throw new CustomError('Not found publication', 404, 'Not Found');
-      else return publicationImages
-
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
-  }
-  async removeImage(idPublication, order) {
-    const transaction = await models.sequelize.transaction()
-    try {
-
-      const deleteImages = await models.Publications_images.destroy({
-        where: { publication_id: idPublication, order: order },
-        transaction,
-      });
-      await transaction.commit();
-
-      return deleteImages;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
   }
 }
 
-module.exports = ImagesPublicationsService
+module.exports = ImagesUsersService

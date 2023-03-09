@@ -86,10 +86,29 @@ const destroyImageByPublication = async (request, response, next) => {
   }
 }
 
+const changeImageOrder = async (req, res, next) => {
+  const isSameUser = req.isSameUser;
+  const role = req.userRole;
+  const idPublication = req.params.id;
+  const { actual_order, next_order } = req.body;
+  console.log(actual_order)
+
+
+  try {
+    if (isSameUser || role === 2) {
+      let changeOrder = await imagesPublicationsService.changeOrderImage(actual_order, next_order)
+      return res.status(200).json({ message: 'Order Change' })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 
 
 module.exports = {
   uploadImagePublication,
   destroyImageByPublication,
-
+  changeImageOrder
 }
