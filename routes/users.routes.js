@@ -3,7 +3,8 @@ const passport = require('../libs/passport');
 const router = express.Router()
 const { getUsers, getUserById, updateUserById, getUserVotes, getUserPublications, addInterest, removeInterest,addImageUser } = require('../controllers/users.controller')
 const { checkRole, checkAdmin, checkSameUser } = require('../middlewares/checkers.middleware');
-const { multerPublicationsPhotos } = require('../middlewares/multer.middleware') 
+const { multerUserssPhotos } = require('../middlewares/multer.middleware') 
+const {uploadImageUsers, destroyUserImage} = require('../controllers/users_images.controller')
 
 router.get('/',
   passport.authenticate('jwt', { session: false }),
@@ -46,13 +47,21 @@ router.delete('/:id/remove-interest',
   checkSameUser,
   removeInterest
 );
-// router.post('/:id/add-image',
-// passport.authenticate('jwt', { session: false }),
-// checkSameUser,
-// checkRole,
-// multerPublicationsPhotos.array('image_url', 3),
-// addImageUser
-// )
+
+router.post('/:id/add-image',
+  passport.authenticate('jwt', { session: false }),
+  checkSameUser,
+  multerUserssPhotos.single('image'),
+  uploadImageUsers
+)
+
+router.delete('/:id/remove-image',
+  passport.authenticate('jwt', { session: false }),
+  checkSameUser,
+  checkRole,
+  destroyUserImage
+)
+
 
 
 module.exports = router
