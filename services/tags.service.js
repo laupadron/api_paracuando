@@ -71,9 +71,11 @@ class TagsService {
     const transaction = await models.sequelize.transaction()
     try {
       const tag = await models.Tags.findByPk(id)
-      const imageKey = tag.image_url.split('/').pop().split('?')[0]
-      await deleteFile(imageKey)
       if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
+      if (tag.image_url) {
+        const imageKey = tag.image_url.split('/').pop().split('?')[0]
+        await deleteFile(imageKey)
+      }
       const deletedTag = await tag.destroy()
       await transaction.commit()
       return deletedTag

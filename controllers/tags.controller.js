@@ -75,7 +75,8 @@ const uploadTagImage = async (request, response, next) => {
   const file = request.file
   try {
     if (file) {
-      await tagsService.getDetailTag(tagId)
+      const { image_url } = await tagsService.getDetailTag(tagId)
+      if (image_url) throw new CustomError('There is an image already in this tag', 400, 'Bad request')
       const idImage = uuid.v4()
       const fileResize = await sharp(file.path)
         .resize({ height: 1080, width: 1440, fit: 'contain' })
