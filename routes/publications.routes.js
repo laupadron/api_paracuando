@@ -45,7 +45,6 @@ router.delete('/:id/remove-image/:order',
   passport.authenticate('jwt', { session: false }),
   checkSameUser,
   checkRole,
-
   destroyImageByPublication
 )
 module.exports = router;

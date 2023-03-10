@@ -118,7 +118,7 @@ class PublicationsService {
         user_id: data.user_id,
         publications_types_id: data.publications_types_id
       }, { transaction })
-      
+
       data.tags.forEach(async tag => {
         await this.createPublicationTags(tag, result.id)
         //await this.userPublicationTags(tag, result.user_id)
@@ -134,7 +134,7 @@ class PublicationsService {
 
   async createPublicationTags(tag_id, publication_id) {
     const tag = models.Tags.findByPk(tag_id)
-    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request'); 
+    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
     const transaction = await models.sequelize.transaction();
     try {
       await models.Publications_tags.create({ tag_id, publication_id }, { transaction })
