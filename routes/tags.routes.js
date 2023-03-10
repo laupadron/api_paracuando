@@ -1,9 +1,10 @@
 const express =require('express');
 const passport = require('../libs/passport');
 const router = express.Router();
-const {checkRole, checkAdmin}=require('../middlewares/checkers.middleware');
-const {getTags,addTags,detailTag,updateTagById, deleteTagById }=require('../controllers/tags.controller');
+const {checkRole, checkAdmin, checkSameUser}=require('../middlewares/checkers.middleware');
+const {getTags,addTags,detailTag,updateTagById, deleteTagById, uploadTagImage }=require('../controllers/tags.controller');
 const { addAbortSignal } = require('stream');
+const { multerTagsPhotos } = require('../middlewares/multer.middleware');
 
 router.get('/',
   passport.authenticate('jwt',{session:false}),
@@ -36,4 +37,11 @@ router.delete('/:id',
   deleteTagById
 );
 
+router.post('/:id/add-image',
+  passport.authenticate('jwt', { session: false }),
+  checkRole,
+  checkAdmin,
+  multerTagsPhotos.single('image'),
+  uploadTagImage
+)
 module.exports = router
