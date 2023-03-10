@@ -74,36 +74,32 @@ class PublicationsService {
   }
 
   async findById(id) {
-    try {
-      const result = await models.Publications.scope('no_timestamps').findByPk(id, {
-        include: [
-          {
-            model: models.Users.scope('view_public'),
-            as: 'user'
-          },
-          {
-            model: models.Cities.scope('no_timestamps'),
-            as: 'city'
-          },
-          {
-            model: models.Publications_types.scope('no_timestamps'),
-            as: 'publications_type'
-          }
-        ],
-        attributes: {
-          include: [
-            [cast(literal(
-              `(SELECT COUNT(*) FROM "votes" 
-              WHERE "votes"."publications_id" = "Publications"."id")`
-            ), 'integer'), 'votes_count']
-          ]
+    const result = await models.Publications.scope('no_timestamps').findByPk(id, {
+      include: [
+        {
+          model: models.Users.scope('view_public'),
+          as: 'user'
+        },
+        {
+          model: models.Cities.scope('no_timestamps'),
+          as: 'city'
+        },
+        {
+          model: models.Publications_types.scope('no_timestamps'),
+          as: 'publications_type'
         }
-      })
-      if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
-      return result
-    } catch (error) {
-      throw error;
-    }
+      ],
+      attributes: {
+        include: [
+          [cast(literal(
+            `(SELECT COUNT(*) FROM "votes" 
+              WHERE "votes"."publications_id" = "Publications"."id")`
+          ), 'integer'), 'votes_count']
+        ]
+      }
+    })
+    if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
+    return result
   }
 
   async createPublication(data) {
@@ -115,10 +111,11 @@ class PublicationsService {
         description: data.description,
         content: data.content,
         cities_id: data.cities_id,
+        reference_link: data.reference_link,
         user_id: data.user_id,
         publications_types_id: data.publications_types_id
       }, { transaction })
-      
+
       data.tags.forEach(async tag => {
         await this.createPublicationTags(tag, result.id)
         //await this.userPublicationTags(tag, result.user_id)
@@ -134,7 +131,7 @@ class PublicationsService {
 
   async createPublicationTags(tag_id, publication_id) {
     const tag = models.Tags.findByPk(tag_id)
-    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request'); 
+    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
     const transaction = await models.sequelize.transaction();
     try {
       await models.Publications_tags.create({ tag_id, publication_id }, { transaction })

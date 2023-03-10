@@ -8,17 +8,22 @@ const { unlink } = require('fs/promises')
 
 class ImagesPublicationsService {
 
-  async publicationExistAndQuantity(idPublication, imagesKeys) {
+  async publicationExistAndQuantity(publication_id, imagesKeys) {
     const transaction = await models.sequelize.transaction()
     try {
-      const publicationImages = await models.Publications.findByPk(idPublication);
-
-      if (!publicationImages) {
+      const publication = await models.Publications.findByPk(publication_id);
+      if (!publication) {
         throw new CustomError('Not found publication', 404, 'Not Found');
       }
       if (imagesKeys.length > 3) {
         throw new CustomError('Too many files', 400, 'Bad Request');
       }
+
+      const publicationImages = await models.Publications_images.findAll({where: {publication_id}});
+      if (publicationImages.length >= 3) {
+        throw new CustomError('Already 3 files in the publication', 400, 'Bad Request');
+      }
+
 
     } catch (error) {
       await transaction.rollback();
@@ -50,34 +55,26 @@ class ImagesPublicationsService {
     }
 
   }
-  async getImageOr404(idPublication, order) {
+  async getImageOr404(publication_id, order) {
     const transaction = await models.sequelize.transaction()
     try {
-      const publicationImages = await models.Publications_images.findByPk(idPublication, {
-        where: { order: order },
-        transaction,
-      });
-      console.log(publicationImages)
-
-      if (!publicationImages) throw new CustomError('Not found publication', 404, 'Not Found');
-      else return publicationImages
-
+      const publicationImage = await models.Publications_images.findOne({ where: { publication_id, order }}, {transaction});
+      if (!publicationImage) throw new CustomError('Not image founded', 404, 'Not Found');
+      return publicationImage
     } catch (error) {
       await transaction.rollback();
       throw error;
     }
   }
-  async removeImage(idPublication, order) {
+
+  async removeImage(publication_id, order) {
     const transaction = await models.sequelize.transaction()
     try {
-
-      const deleteImages = await models.Publications_images.destroy({
-        where: { publication_id: idPublication, order: order },
+      await models.Publications_images.destroy({
+        where: { publication_id, order },
         transaction,
       });
       await transaction.commit();
-
-      return deleteImages;
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -90,12 +87,25 @@ class ImagesPublicationsService {
 
     const transaction = await models.sequelize.transaction();
     try {
-      const image = await models.Publications_images.findOne({ where: { publication_id: idPublication, order: actual_order } }, { transaction });
+      const currentImage = await models.Publications_images.findOne({ where: { 
+        publication_id: idPublication, 
+        order: actual_order 
+      } }, { transaction });
 
-      const nextImage = await models.Publications_images.findOne({ where: { publication_id: idPublication, order: next_order } }, { transaction });
+      const nextImage = await models.Publications_images.findOne({ where: { 
+        publication_id: idPublication, 
+        order: next_order 
+      } }, { transaction });
 
-      await image.update({ order: next_order }, { transaction });
-      await nextImage.update({ order: actual_order }, { transaction });
+      if (currentImage && nextImage) {
+        await currentImage.update({ order: next_order }, { transaction });
+        await nextImage.update({ order: actual_order }, { transaction });        
+      } else if (currentImage && !nextImage){
+        await currentImage.update({ order: next_order }, { transaction });
+      }else if (!currentImage){
+        throw new CustomError('No current image found for this order/publication', 404, 'Not Found')
+      }
+
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();

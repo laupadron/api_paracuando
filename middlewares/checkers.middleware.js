@@ -1,10 +1,11 @@
 const AuthService = require('../services/auth.service')
-const UsersService = require('../services/users.service')
+const PublicationsService = require('../services/publications.service')
 const { CustomError } = require('../utils/helpers')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 const authService = new AuthService;
+const publicationsService = new PublicationsService;
 
 const checkRole = async (req, res, next) => {
   const id = req.user.id
@@ -14,7 +15,7 @@ const checkRole = async (req, res, next) => {
   next()
 }
 
-const checkAdmin = async (req, res, next) =>{
+const checkAdmin = async (req, res, next) => {
   //console.log(req.userRole);
   if (req.userRole === 2) {
     next()
@@ -26,13 +27,28 @@ const checkAdmin = async (req, res, next) =>{
 
 const checkSameUser = async (req, res, next) => {
   const idFromParams = req.params.id
-  
+
   const idFromToken = req.user.id
   if (idFromParams === idFromToken) {
     req.isSameUser = true
     next();
-  }else{
+  } else {
     req.isSameUser = false
+    next();
+  }
+}
+
+const checkPublicationOwner = async (req, res, next) => {
+  const publicationID = req.params.id
+  const idFromToken = req.user.id
+
+  const { user } = await publicationsService.findById(publicationID)
+
+  if (user.id === idFromToken) {
+    req.publicationOwner = true
+    next();
+  } else {
+    req.publicationOwner = false
     next();
   }
 }
@@ -40,5 +56,6 @@ const checkSameUser = async (req, res, next) => {
 module.exports = {
   checkRole,
   checkAdmin,
-  checkSameUser
+  checkSameUser,
+  checkPublicationOwner
 }
