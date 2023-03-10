@@ -7,7 +7,7 @@ const { addAbortSignal } = require('stream');
 const { multerTagsPhotos } = require('../middlewares/multer.middleware');
 
 router.get('/',
-  passport.authenticate('jwt',{session:false}),
+  
   getTags
 );
 
@@ -37,7 +37,6 @@ router.delete('/:id',
   deleteTagById
 );
 
-
 router.post('/:id/add-image',
   passport.authenticate('jwt', { session: false }),
   checkRole,
@@ -45,4 +44,5 @@ router.post('/:id/add-image',
   multerTagsPhotos.single('image'),
   uploadTagImage
 )
+
 module.exports = router

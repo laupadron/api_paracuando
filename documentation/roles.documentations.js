@@ -4,7 +4,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: Get Filtered Roles
+ *       summary: Get Filtered Roles/ Logged in user only
  *       tags:
  *         - [Roles]
  *       responses:

@@ -2,9 +2,7 @@
  * @openapi
  * /api/v1/publications-types:
  *   get:
- *     security:
- *       - bearerAuth: []
- *     summary: get publications-types
+ *     summary: Get publications-types / You can filter the types of publications based on their fields
  *     tags:
  *       - [Publications-Types]
  *     parameters:
@@ -65,7 +63,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get Detail Publications-types
+ *     summary: Get Detail Publications-types / Login required
  *     tags:
  *       - [Publications-Types]
  *     parameters:
@@ -97,7 +95,7 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: Update Publications-types
+ *     summary: Update Publications-types/ Only user with Administrator role
  *     tags:
  *       - [Publications-Types]
  *     parameters:

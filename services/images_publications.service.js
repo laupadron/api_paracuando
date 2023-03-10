@@ -27,7 +27,7 @@ class ImagesPublicationsService {
   }
 
 
-  async createImage(idPublication, fileKey) {
+  async createImage(idPublication,fileKey) {
     const transaction = await models.sequelize.transaction()
     try {
       let order;
@@ -57,6 +57,7 @@ class ImagesPublicationsService {
         where: { order: order },
         transaction,
       });
+      console.log(publicationImages)
 
       if (!publicationImages) throw new CustomError('Not found publication', 404, 'Not Found');
       else return publicationImages
@@ -82,6 +83,8 @@ class ImagesPublicationsService {
       throw error;
     }
   }
+
+
 
   async changeOrderImage({ actual_order, next_order }, idPublication) {
 

@@ -1,6 +1,8 @@
 const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/helpers');
+const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
+
 
 // get
 
@@ -69,7 +71,8 @@ class TagsService {
     const transaction = await models.sequelize.transaction()
     try {
       const tag = await models.Tags.findByPk(id)
-      console.log(tag)
+      const imageKey = tag.image_url.split('/').pop().split('?')[0]
+      await deleteFile(imageKey)
       if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
       const deletedTag = await tag.destroy()
       await transaction.commit()

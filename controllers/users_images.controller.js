@@ -19,11 +19,12 @@ const uploadImageUsers = async (request, response, next) => {
       await userService.getUser(userId)
       const idImage = uuid.v4()
       const fileResize = await sharp(file.path)
-        .resize({ height: 1920, width: 1080, fit: 'contain' })
+        .resize({ height: 1080, width: 1440, fit: 'contain' })
         .toBuffer()
       let fileKey = `user-image-${userId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      let result = await userService.updateUser(userId, { image_url: fileKey })
+      const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await userService.updateUser(userId, { image_url: imageURL })
       await unlinkFile(file.path)
       return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
     } else {
@@ -45,7 +46,8 @@ const destroyUserImage = async (request, response, next) => {
       if (request.role !== 2) throw new CustomError('Not authorized User', 401, 'Unauthorized')
     } 
     const { image_url } = await userService.getUser(userId)
-    await deleteFile(image_url)
+    const imageKey = image_url.split('/').pop().split('?')[0]
+    await deleteFile(imageKey)
     await userService.updateUser(userId, { image_url: null })
     response.status(200).json({message: 'Image Removed'})
   } catch (error) {
