@@ -60,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     country_id: DataTypes.INTEGER,
     image_url: {
-      type: DataTypes.STRING 
+      type: DataTypes.TEXT 
     },
   }, {
     sequelize,

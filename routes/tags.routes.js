@@ -37,5 +37,12 @@ router.delete('/:id',
   deleteTagById
 );
 
+router.post('/:id/add-image',
+  passport.authenticate('jwt', { session: false }),
+  checkRole,
+  checkAdmin,
+  multerTagsPhotos.single('image'),
+  uploadTagImage
+)
 
 module.exports = router

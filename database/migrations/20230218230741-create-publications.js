@@ -24,7 +24,7 @@ module.exports = {
         },
         reference_link:{
           allowNull:false,
-          type: Sequelize.STRING
+          type: Sequelize.TEXT
         },
         cities_id: {
           allowNull: false,

@@ -13,7 +13,7 @@ const getTags = async (req, res, next) => {
   const result = {
     results: {}
   }
-  const {tagsPerPage, currentPage} = {tagsPerPage: 10, currentPage: 1};
+  const { tagsPerPage, currentPage } = { tagsPerPage: 10, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, tagsPerPage);
 
   try {
@@ -33,7 +33,7 @@ const addTags = async (req, res, next) => {
   try {
     const tag = req.body
     await tagsService.createTag(tag)
-    return res.status(201).json({message: 'Tag Added'}  )
+    return res.status(201).json({ message: 'Tag Added' })
   } catch (error) {
     next(error)
   }
@@ -54,7 +54,7 @@ const updateTagById = async (req, res, next) => {
   const obj = req.body
   try {
     await tagsService.updateTagById(id, obj)
-    res.json({message: 'Successfully updated'});
+    res.json({ message: 'Successfully updated' });
   } catch (error) {
     next(error)
   }
@@ -64,7 +64,7 @@ const deleteTagById = async (req, res, next) => {
   const id = req.params.id
   try {
     await tagsService.deleteTagById(id)
-    res.json({message: 'Tag removed'});
+    res.json({ message: 'Tag removed' });
   } catch (error) {
     next(error)
   }
@@ -78,11 +78,12 @@ const uploadTagImage = async (request, response, next) => {
       await tagsService.getDetailTag(tagId)
       const idImage = uuid.v4()
       const fileResize = await sharp(file.path)
-        .resize({ height: 1920, width: 1080, fit: 'contain' })
+        .resize({ height: 1080, width: 1440, fit: 'contain' })
         .toBuffer()
       let fileKey = `tag-image-${tagId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      let result = await tagsService.updateTagById(tagId, { image_url: fileKey })
+      const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await tagsService.updateTagById(tagId, { image_url: imageURL })
       await unlinkFile(file.path)
       return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
     } else {
