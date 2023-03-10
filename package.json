@@ -1,8 +1,10 @@
 {
   "name": "academlo-auth-api-starter",
   "version": "1.0.1",
-  "description": "",
-  "bin": "./bin/cli.js",
+  "description": "Este proyecto es un ejemplo de autenticación usando sequelize como ORM y un esquema básico y sencillo como DB",
+  "bin": {
+    "academlo-auth-api-starter": "bin/cli.js"
+  },
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -27,8 +29,8 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.9.0",
-    "sequelize": "^6.23.2",
-    "sequelize-cli": "^6.5.2",
+    "sequelize": "^6.29.2",
+    "sequelize-cli": "^6.6.0",
     "sharp": "^0.31.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.0",
@@ -37,5 +39,6 @@
   "devDependencies": {
     "eslint": "^8.31.0",
     "nodemon": "^2.0.20"
-  }
+  },
+  "keywords": []
 }

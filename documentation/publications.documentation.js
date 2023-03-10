@@ -230,7 +230,7 @@
  *           schema:
  *             type: object
  *             properties:
- *               imagen:
+ *               image:
  *                 type: string
  *                 format: binary
  *     responses:
@@ -272,7 +272,7 @@
  *         description: de order's image
  *         required: true
  *     responses:
- *       201:
+ *       200:
  *         description: OK
  *         content:
  *           application/json:
@@ -282,6 +282,47 @@
  *                 message:
  *                   type: string
  *                   example: {"message": "image Remove"}
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
+ * /api/v1/publications/{id}/image-order:
+ *   put:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: change order in Publication
+ *     tags:
+ *       - [Publications]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *         required: true
+ *     requestBody:
+ *       description: Field required to change order's image
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             example: {"actual_order":1,"next_order":2}
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: {"message": "change order"}
  *       400:
  *         description: not found
  *         content:

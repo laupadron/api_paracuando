@@ -37,6 +37,7 @@ router.delete('/:id',
   deleteTagById
 );
 
+
 router.post('/:id/add-image',
   passport.authenticate('jwt', { session: false }),
   checkRole,

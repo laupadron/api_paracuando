@@ -188,4 +188,47 @@
  *                   message:
  *                     type: string
  *                     example: not found / something wrong
+ * /api/v1/tags/{id}/add-image:
+ *   post:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Add an image in Tags
+ *     tags:
+ *       - [Tags]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         type: string
+ *         required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: {"message": "image added"}
+ *       400:
+ *         description: not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: not found / something wrong
  */ 
