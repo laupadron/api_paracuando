@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users_tags',
     underscored: true,
     timestamps: true,
+    scopes: {
+      no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } }
+    }
   });
   return Users_tags;
 };
