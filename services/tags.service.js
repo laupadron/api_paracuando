@@ -34,11 +34,11 @@ class TagsService {
     const tags = await models.Tags.findAndCountAll(options)
     return tags;
   }
-  
+
   async createTag(tag) {
     const transaction = await models.sequelize.transaction()
     try {
-      await models.Tags.create(tag, {transaction});
+      await models.Tags.create(tag, { transaction });
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()
@@ -47,21 +47,15 @@ class TagsService {
   }
 
   async getDetailTag(id) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const tagDetail = await models.Tags.findByPk(id)
-      return tagDetail
-    } catch (error) {
-      await transaction.rollback()
-      throw error
-    }
+    const tagDetail = await models.Tags.findByPk(id)
+    if (!tagDetail) throw new CustomError('Not found Tag', 404, 'Not Found')
+    return tagDetail
   }
 
-  async updateTagById(id, obj){
+  async updateTagById(id, obj) {
     const transaction = await models.sequelize.transaction()
     try {
-      const tag = await models.Tags.findByPk(id)
-      if (!tag) throw new CustomError('Not found Tag', 404, 'Not Found')
+      const tag = await this.getDetailTag(id)
       const updatedTag = await tag.update(obj, { transaction })
       await transaction.commit()
       return updatedTag
@@ -71,7 +65,7 @@ class TagsService {
     }
   }
 
-  async deleteTagById(id){
+  async deleteTagById(id) {
     const transaction = await models.sequelize.transaction()
     try {
       const tag = await models.Tags.findByPk(id)

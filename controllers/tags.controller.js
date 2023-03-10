@@ -1,9 +1,12 @@
 const TagsService = require('../services/tags.service');
+const fs = require('fs')
+const util = require('util')
+const uuid = require('uuid')
 const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
 const sharp = require('sharp')
-
-
+const unlinkFile = util.promisify(fs.unlink)
 const { getPagination, CustomError } = require('../utils/helpers');
+
 const tagsService = new TagsService
 
 const getTags = async (req, res, next) => {
@@ -67,7 +70,31 @@ const deleteTagById = async (req, res, next) => {
   }
 }
 
- 
+const uploadTagImage = async (request, response, next) => {
+  const tagId = request.params.id
+  const file = request.file
+  try {
+    if (file) {
+      await tagsService.getDetailTag(tagId)
+      const idImage = uuid.v4()
+      const fileResize = await sharp(file.path)
+        .resize({ height: 1920, width: 1080, fit: 'contain' })
+        .toBuffer()
+      let fileKey = `tag-image-${tagId}-${idImage}`
+      await uploadFile(fileResize, fileKey, file.mimetype)
+      let result = await tagsService.updateTagById(tagId, { image_url: fileKey })
+      await unlinkFile(file.path)
+      return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
+    } else {
+      throw new CustomError('Image were not received', 400, 'Bad request')
+    }
+  } catch (error) {
+    if (file) {
+      await unlinkFile(file.path)
+    }
+    next(error)
+  }
+}
 
 
 module.exports = {
@@ -76,5 +103,5 @@ module.exports = {
   detailTag,
   updateTagById,
   deleteTagById,
-  
+  uploadTagImage
 }

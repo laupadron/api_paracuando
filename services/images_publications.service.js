@@ -80,8 +80,10 @@ class ImagesPublicationsService {
     } catch (error) {
       await transaction.rollback();
       throw error;
-		}
-	}
+    }
+  }
+		
+	
 
 	async changeOrderImage({actual_order,next_order},idPublication){
 		

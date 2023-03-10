@@ -1,4 +1,3 @@
-const ImagesUsersService = require('../services/images_users.service')
 const UsersService = require('../services/users.service')
 const fs = require('fs')
 const util = require('util')

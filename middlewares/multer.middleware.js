@@ -1,4 +1,5 @@
 const multer = require('multer')
+const { CustomError } = require('../utils/helpers');
 
 const multerPublicationsPhotos = multer({
   dest: 'uploads/publications/photos/',
@@ -44,7 +45,30 @@ const multerUserssPhotos = multer({
   }
 })
 
+const multerTagsPhotos = multer({
+  dest: 'uploads/tags/photos/',
+  limits: {
+    fileSize: 5242880, // 5 Mb
+  },
+  fileFilter: (request, file, cb) => {
+    request.on('aborted', () => {
+      file.stream.on('end', () => {
+        cb(new Error('Cancel Photo Upload'), false)
+      })
+      file.stream.emit('end')
+    })
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      cb(null, true)
+    } else {
+      cb(null, false)
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'))
+    }
+  }
+})
+
+
 module.exports = {
   multerPublicationsPhotos,
-  multerUserssPhotos
+  multerUserssPhotos,
+  multerTagsPhotos
 }

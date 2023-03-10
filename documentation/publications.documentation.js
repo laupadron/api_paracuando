@@ -230,7 +230,7 @@
  *           schema:
  *             type: object
  *             properties:
- *               imagen:
+ *               image:
  *                 type: string
  *                 format: binary
  *     responses:
