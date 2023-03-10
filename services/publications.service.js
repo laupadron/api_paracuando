@@ -157,13 +157,21 @@ class PublicationsService {
     const transaction = await models.sequelize.transaction();
     try {
       const publication = await models.Publications.findByPk(id);
-
       if (!publication) throw new CustomError('Not found publication', 404, 'Not Found');
-      const deletePublication = await publication.destroy({ transaction });
+      try {
+        await models.Publications_tags.destroy({ where: { publication_id: id } }, { transaction })
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
+      try {
+        await models.Votes.destroy({ where: { publications_id: id } }, { transaction })
+      } catch (error) {
+        await transaction.rollback();
+        throw error;
+      }
+      await publication.destroy({ transaction });
       await transaction.commit();
-
-      return deletePublication;
-
     } catch (error) {
       await transaction.rollback();
       throw error;

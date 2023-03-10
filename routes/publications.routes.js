@@ -23,7 +23,8 @@ router.delete('/:id',
   passport.authenticate('jwt', { session: false }),
   checkSameUser,
   checkRole,
-  deletePublication);
+  deletePublication
+);
 
 router.post('/:id/vote',
   passport.authenticate('jwt', { session: false }),

@@ -54,9 +54,7 @@ const getPublicationById = async (req, res, next) => {
 
 const deletePublication = async (req, res, next) => {
   const isSameUser = req.isSameUser;
-  console.log(isSameUser)
   const role = req.userRole;
-  console.log(role)
   const id = req.params.id;
 
   try {
