@@ -76,7 +76,7 @@ const destroyImageByPublication = async (request, response, next) => {
 
       let imagePublication = await imagesPublicationsService.getImageOr404(idPublication, order)
       console.log(imagePublication)
-      // await deleteFile(imagePublication.key_s3) POR QUE NO BORRA EN AWS??
+      await deleteFile(imagePublication.key_s3) 
 
       await imagesPublicationsService.removeImage(idPublication, order)
       return response.status(200).json({ message: 'Image Removed' })
@@ -86,7 +86,7 @@ const destroyImageByPublication = async (request, response, next) => {
   }
 }
 
-<<<<<<< HEAD
+
   const changeImageOrder = async (req,res,next)=> {
     const isSameUser = req.isSameUser;
     const role = req.userRole;
@@ -103,25 +103,9 @@ const destroyImageByPublication = async (request, response, next) => {
       }
     } catch (error) {
       next(error)
-=======
-const changeImageOrder = async (req, res, next) => {
-  const isSameUser = req.isSameUser;
-  const role = req.userRole;
-  const idPublication = req.params.id;
-  const { actual_order, next_order } = req.body;
-  console.log(actual_order)
-
-
-  try {
-    if (isSameUser || role === 2) {
-      let changeOrder = await imagesPublicationsService.changeOrderImage(actual_order, next_order)
-      return res.status(200).json({ message: 'Order Change' })
->>>>>>> 6ee5e773a79ac04d9f58777a3b77eb18998c7399
     }
-  } catch (error) {
-    next(error)
   }
-}
+
 
 
 

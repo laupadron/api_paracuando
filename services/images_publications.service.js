@@ -80,7 +80,6 @@ class ImagesPublicationsService {
     } catch (error) {
       await transaction.rollback();
       throw error;
-<<<<<<< HEAD
 		}
 	}
 
@@ -100,10 +99,6 @@ class ImagesPublicationsService {
     		throw error;
 		}
 	}
-=======
-    }
-  }
->>>>>>> 6ee5e773a79ac04d9f58777a3b77eb18998c7399
 }
 
 module.exports = ImagesPublicationsService
