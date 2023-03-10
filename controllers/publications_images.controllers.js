@@ -30,7 +30,7 @@ const uploadImagePublication = async (request, response, next) => {
           const fileResize = await sharp(file.path)
             .resize({ height: 1080, width: 1440, fit: 'contain' })
             .toBuffer()
-          let fileKey = `lauther-${idImage}`
+          let fileKey = `${idImage}`
           await uploadFile(fileResize, fileKey, file.mimetype)
           const imageURL = await getObjectSignedUrl(fileKey)
           let newImagePublication = await imagesPublicationsService.createImage(idPublication, imageURL)
