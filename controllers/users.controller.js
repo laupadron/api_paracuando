@@ -90,10 +90,9 @@ const getUserPublications = async (req, res, next) => {
 const updateUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
-  const { first_name, last_name } = req.body
   try {
     if (isSameUser) {
-      await usersService.updateUser(idFromParams, { first_name, last_name })
+      await usersService.updateUser(idFromParams, req.body)
       return res.json({ message: 'Success Update' });
     } throw new CustomError('Not authorized user', 401, 'Unauthorized')
   } catch (error) {

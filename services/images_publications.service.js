@@ -20,7 +20,7 @@ class ImagesPublicationsService {
       }
 
       const publicationImages = await models.Publications_images.findAll({where: {publication_id}});
-      if (publicationImages.length >= 3) {
+      if (publicationImages.length + imagesKeys > 3) {
         throw new CustomError('Already 3 files in the publication', 400, 'Bad Request');
       }
 

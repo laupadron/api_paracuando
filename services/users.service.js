@@ -87,10 +87,10 @@ class UsersService {
   async getUser(id) {
     let user = await models.Users.scope('view_same_user').findByPk(id, {
       include: {
-        model: models.Users_tags,
+        model: models.Users_tags.scope('no_timestamps'),
         as: 'interests',
         include: {
-          model: models.Tags,
+          model: models.Tags.scope('no_timestamps'),
           as : 'tags'
         }
       }
