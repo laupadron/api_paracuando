@@ -230,7 +230,13 @@
  *           schema:
  *             type: object
  *             properties:
- *               image:
+ *               file1:
+ *                 type: string
+ *                 format: binary
+ *               file2:
+ *                 type: string
+ *                 format: binary
+ *               file3:
  *                 type: string
  *                 format: binary
  *     responses:

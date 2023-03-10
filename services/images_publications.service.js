@@ -27,7 +27,7 @@ class ImagesPublicationsService {
   }
 
 
-  async createImage(idPublication, fileKey) {
+  async createImage(idPublication,fileKey) {
     const transaction = await models.sequelize.transaction()
     try {
       let order;

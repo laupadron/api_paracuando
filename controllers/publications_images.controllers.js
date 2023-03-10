@@ -26,7 +26,7 @@ const uploadImagePublication = async (request, response, next) => {
 
       if (files.length) {
         let imagesKeys = []
-        await imagesPublicationsService.publicationImagesExist(idPublication)
+        await imagesPublicationsService.publicationExistAndQuantity(idPublication,imagesKeys)
         console.log(idPublication)
 
         await Promise.all(files.map(async (file) => {
@@ -35,10 +35,10 @@ const uploadImagePublication = async (request, response, next) => {
           const fileResize = await sharp(file.path)
             .resize({ height: 1920, width: 1080, fit: 'contain' })
             .toBuffer()
-          let fileKey = `publications-images-${idPublication}-${idImage}`
+          let fileKey = `${idImage}`
           await uploadFile(fileResize, fileKey, file.mimetype)
 
-          let newImagePublication = await imagesPublicationsService.createImage(idImage, fileKey, idPublication)
+          let newImagePublication = await imagesPublicationsService.createImage(idPublication,fileKey)
 
           imagesKeys.push(newImagePublication.image_url)
         }))

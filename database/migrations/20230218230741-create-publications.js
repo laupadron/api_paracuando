@@ -23,7 +23,7 @@ module.exports = {
           type: Sequelize.STRING
         },
         reference_link:{
-          allowNull:false,
+          
           type: Sequelize.STRING
         },
         cities_id: {
