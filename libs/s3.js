@@ -54,7 +54,7 @@ const getObjectSignedUrl = async (key) => {
     } 
     // https://aws.amazon.com/blogs/developer/generate-presigned-url-modular-aws-sdk-javascript/
     const command = new GetObjectCommand(params)
-    const seconds = 600 
+    const seconds = 518400 // 6 dias
     const url = await getSignedUrl(s3Client, command, { expiresIn: seconds })
     // const url = await getSignedUrl(s3Client, command); // SIN EXPIRACION
     return url

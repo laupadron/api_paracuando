@@ -4,7 +4,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: Get Filtered States
+ *       summary: Get Filtered States/ Logged in user only
  *       tags:
  *         - [States]
  *       responses:

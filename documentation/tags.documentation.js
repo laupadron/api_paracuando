@@ -3,8 +3,6 @@
  * paths:
  *   /api/v1/tags:
  *     get:
- *       security:
- *         - bearerAuth: []
  *       summary: Get Filtered Tags
  *       tags:
  *         - [Tags]
@@ -85,7 +83,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: Get Detail Tags
+ *       summary: Get Detail Tags/ Logged in user only
  *       tags:
  *         - [Tags]
  *       parameters:
@@ -192,7 +190,7 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in Tags
+ *     summary: Add an image in Tags /Available only for administrators
  *     tags:
  *       - [Tags]
  *     parameters:

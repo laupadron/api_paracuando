@@ -4,7 +4,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get users
+ *     summary: Get users / Only for users with the Administrator role/ You can filter users based on their fields
  *     tags:
  *       - [Users]
  *     parameters:
@@ -71,7 +71,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get public information of user
+ *     summary: Get public information about user/ If the user looks at their own profile, they will be shown more complete fields
  *     tags:
  *       - [Users]
  *     parameters:
@@ -109,7 +109,7 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: Edit user data
+ *     summary: The user will be able to edit their data/ Only the same user can change their profile
  *     tags:
  *       - [Users]
  *     parameters:
@@ -149,7 +149,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get the votes of user
+ *     summary: Shows the votes made by the users
  *     tags:
  *       - [Users]
  *     parameters:
@@ -188,7 +188,7 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get the publications of user
+ *     summary: You can see the publications made by users/ It has options to filter by publication fields
  *     tags:
  *       - [Users]
  *     parameters:
@@ -236,7 +236,7 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add interest to user
+ *     summary: Add interest to user /The user will send the tag_id that will be used to mark their interest/ Only the same user can do it
  *     tags:
  *       - [Users]
  *     parameters:
@@ -279,7 +279,7 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: Delete user interest
+ *     summary: Delete user interest/ The user will send the tag_id that will be used to remove their interest/Only the same user can do it
  *     tags:
  *       - [Users]
  *     parameters:
@@ -322,7 +322,7 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in users
+ *     summary: Add an image in users /The user will send an image that will be saved in their profile / Only the same user can do it
  *     tags:
  *       - [Users]
  *     parameters:
@@ -365,7 +365,7 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: delete an image in users
+ *     summary: Delete an image in users/The user will have the option to delete the image of his profile / Administrator and the user himself can do it
  *     tags:
  *       - [Users]
  *     parameters:

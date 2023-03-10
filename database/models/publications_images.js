@@ -5,18 +5,18 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Publications_images extends Model {
     static associate(models) {
-      Publications_images.belongsTo(models.Publications,{as:'publications',foreignKey:'publication_id'})
+      Publications_images.belongsTo(models.Publications, { as: 'publications', foreignKey: 'publication_id' })
     }
   }
   Publications_images.init({
-    
+
     publication_id: {
       type: DataTypes.UUID,
-      primaryKey:true
+      primaryKey: true
     },
     image_url: {
-    type:DataTypes.UUID,
-    primaryKey:true
+      type: DataTypes.TEXT,
+      primaryKey: true
     },
     order: {
       allowNull: true,

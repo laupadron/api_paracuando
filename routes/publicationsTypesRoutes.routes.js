@@ -5,7 +5,7 @@ const {checkRole, checkAdmin} = require('../middlewares/checkers.middleware');
 const { getPublicationTypeById,updatePublicationTypeById,getFilteredPublicationType } = require('../controllers/publicationsTypes.controller')
 
 router.get('/',
-  passport.authenticate('jwt', { session: false }), 
+  
  getFilteredPublicationType
 );
 
