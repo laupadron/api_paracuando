@@ -7,26 +7,20 @@ module.exports = {
 
     const pubsTypesSeeds = [
       {
-        name: 'Historias',
-        description: 'Publicacion de historias en tu feed',
+        name: 'Marcas y Tiendas',
+        description: 'empresas y tiendas que ofrecen productos y servicios de una amplia variedad de marcas reconocidas en el mercado',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'Memes',
-        description: 'Compartir algunos memes divertidos con tu comunidad',
+        name: 'Artistas y Conciertos',
+        description: 'industria del entretenimiento en general',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'Reels',
-        description: 'Videos cortos para compartir momentos',
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        name: 'Noticias',
-        description: 'Relatos sobre algun hecho importante',
+        name: 'Torneos',
+        description: 'Eventos competitivos',
         created_at: new Date(),
         updated_at: new Date()
       }

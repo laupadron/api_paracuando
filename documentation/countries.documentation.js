@@ -4,7 +4,7 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: Get Filtered Countries
+ *       summary: Get Filtered Countries /Logged in user only
  *       tags:
  *         - [Countries]
  *       responses:

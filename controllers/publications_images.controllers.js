@@ -40,7 +40,7 @@ const uploadImagePublication = async (request, response, next) => {
 
           let newImagePublication = await imagesPublicationsService.createImage(idImage, fileKey, idPublication)
 
-          imagesKeys.push(newImagePublication.key_s3)
+          imagesKeys.push(newImagePublication.image_url)
         }))
         await Promise.all(files.map(async (file) => {
           await unlinkFile(file.path)
@@ -76,7 +76,7 @@ const destroyImageByPublication = async (request, response, next) => {
 
       let imagePublication = await imagesPublicationsService.getImageOr404(idPublication, order)
       console.log(imagePublication)
-      await deleteFile(imagePublication.key_s3) 
+      await deleteFile(imagePublication.image_url) 
 
       await imagesPublicationsService.removeImage(idPublication, order)
       return response.status(200).json({ message: 'Image Removed' })

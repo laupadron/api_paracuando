@@ -7,32 +7,56 @@ module.exports = {
 
     const tagsSeed = [
       {
-        name: 'foodie',
-        description: 'Para publicaciones relacionadas con comida, recetas, restaurantes, etc.',
+        name: 'Ropa y Accesorios',
+        description: 'productos relacionados con la moda y el estilo personal',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'travel',
-        description: 'Para publicaciones relacionadas con viajes, turismo, lugares turísticos, etc.',
+        name: 'Deportes',
+        description: 'actividades físicas competitivas o recreativas',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'fitness',
-        description: 'Para publicaciones relacionadas con ejercicio, deporte, vida saludable, etc.',
+        name: 'Conciertos',
+        description: 'eventos musicales en vivo',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'fashion',
-        description: 'Para publicaciones relacionadas con moda, ropa, accesorios, etc.',
+        name: 'Meet and Greet',
+        description: 'Eventos para fans, tienen la oportunidad de conocer y saludar a sus artistas, celebridades o personajes públicos favoritos en persona',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        name: 'throwback',
-        description: 'Para publicaciones de recuerdos, momentos del pasado, nostalgia, etc.',
+        name: 'E-Sport',
+        description: 'deportes electrónicos',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        name: 'Pop/Rock',
+        description: 'música popular que combina elementos de pop y rock',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        name: 'Tecnologia',
+        description: 'abarca una amplia variedad de campos, desde la informática y la electrónica hasta la inteligencia artificial, la robótica y la biotecnología',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        name: 'Hogar y Decoracion',
+        description: 'desde ideas de diseño y tendencias de decoración hasta consejos sobre cómo organizar y limpiar el hogar.',
+        created_at: new Date(),
+        updated_at: new Date()
+      },
+      {
+        name: 'Abastecimiento',
+        description: 'todo lo relacionado con la gestión de la cadena de suministro de una empresa o negocio',
         created_at: new Date(),
         updated_at: new Date()
       }

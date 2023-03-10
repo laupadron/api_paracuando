@@ -7,7 +7,7 @@ const { addAbortSignal } = require('stream');
 const { multerTagsPhotos } = require('../middlewares/multer.middleware');
 
 router.get('/',
-  passport.authenticate('jwt',{session:false}),
+  
   getTags
 );
 

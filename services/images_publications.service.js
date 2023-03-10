@@ -57,6 +57,7 @@ class ImagesPublicationsService {
         where: { order: order },
         transaction,
       });
+      console.log(publicationImages)
 
       if (!publicationImages) throw new CustomError('Not found publication', 404, 'Not Found');
       else return publicationImages

@@ -2,7 +2,7 @@
  * @openapi
  * /api/v1/publications:
  *   get:
- *     summary: Get Filtered Publications
+ *     summary: Get Publications/ Publications can be filtered based on all their fields, their associated Tags and/or their votes
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -78,12 +78,12 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add Publication
+ *     summary: Create a Publication/ A vote is assigned automatically and also the tags associated with the publication / Only for logged in users
  *     tags:
  *       - [Publications]
  *     requestBody:
  *       description: Fields required to create a publication 
- *       required: true
+ *       required: true 
  *       content:
  *         application/json:
  *           schema:
@@ -182,7 +182,7 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add/Delete a vote in Publication
+ *     summary: Can vote on a publication or remove the vote from the publication / Only logged in user
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -215,7 +215,7 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in Publication
+ *     summary: Add an image in Publication/ Up to three images with a maximum weight of 524288 | 0.5 Mb/ Administrator and logged in user only
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -258,7 +258,7 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: delete an image in Publication
+ *     summary: Delete an image in Publication/ The id of the publication and the order number of the image must be sent / Only user logged in or with administrator role
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -296,7 +296,7 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: change order in Publication
+ *     summary: change order in Publication/ The image with the actual_order (if it exists) selected will change places with the next_order image (if it exists) / Only user logged in or with administrator role
  *     tags:
  *       - [Publications]
  *     parameters:
