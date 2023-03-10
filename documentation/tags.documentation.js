@@ -3,7 +3,8 @@
  * paths:
  *   /api/v1/tags:
  *     get:
- *       summary: Get Filtered Tags
+ *       summary: Get all or filtered Filtered Tags
+ *       description: Get all or filtered Filtered Tags. No login required.
  *       tags:
  *         - [Tags]
  *       parameters:
@@ -48,7 +49,8 @@
  *     post:
  *       security:
  *         - bearerAuth: []
- *       summary: Add a Tag (Available only for administrators)
+ *       summary: Add a Tag
+ *       description: Add a Tag. Only administrators. Login required.
  *       tags:
  *         - [Tags]
  *       requestBody:
@@ -83,7 +85,8 @@
  *     get:
  *       security:
  *         - bearerAuth: []
- *       summary: Get Detail Tags/ Logged in user only
+ *       summary: Get tag by id
+ *       description: Get Detail Tags. Logged in user only.
  *       tags:
  *         - [Tags]
  *       parameters:
@@ -118,7 +121,8 @@
  *     put:
  *       security:
  *         - bearerAuth: []
- *       summary: Update Tags (Available only for administrators)
+ *       summary: Update Tags 
+ *       description: Updates Tags by its id. Available only for administrators.
  *       tags:
  *         - [Tags]
  *       parameters:
@@ -157,7 +161,8 @@
  *     delete:
  *       security:
  *         - bearerAuth: []
- *       summary: Update Tags (Available only for administrators)
+ *       summary: Delete Tags 
+ *       description: Deletes Tags by its id. Available only for administrators.
  *       tags:
  *         - [Tags]
  *       parameters:
@@ -190,7 +195,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in Tags /Available only for administrators
+ *     summary: Add an image in Tags
+ *     description: Adds an image in Tags. Available only for administrators
  *     tags:
  *       - [Tags]
  *     parameters:
@@ -218,7 +224,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "image added"}
+ *                   example: {"message": "image added", "image": "https://paracuando.s3.sa-east-1.amazonaws.com/tag-image-9-71f5e94e-b035-46d6-a7e3-1cbc0481cd84?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZPEQWT3PYDA672WW%2F20230310%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230310T232812Z&X-Amz-Expires=518400&X-Amz-Signature=04ab7ddd2ed9b5c9bcf78e342d671429ee00b2ae4208b25f7d86b8ffd07e73bd&X-Amz-SignedHeaders=host&x-id=GetObject"}
  *       400:
  *         description: not found
  *         content:

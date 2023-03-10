@@ -54,7 +54,10 @@
  *           example: sobre noticias
  *         content:
  *           type: string
- *           example: Noticias sobre deportes
+ *           example: Noticias sobre deportes 
+ *         reference_link:
+ *           type: text
+ *           example: www.facebook.com/123
  *         cities_id:
  *           type: integer
  *           example: 1

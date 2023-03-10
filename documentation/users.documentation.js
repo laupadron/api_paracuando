@@ -4,7 +4,8 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get users / Only for users with the Administrator role/ You can filter users based on their fields
+ *     summary: Get all or filtered users
+ *     description: Only for users Admins role, you can filter users based on their fields. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -71,7 +72,8 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Get public information about user/ If the user looks at their own profile, they will be shown more complete fields
+ *     summary: Get user by ID
+ *     description: Get public information from a user, if the user looks at its own profile, they will be shown more complete fields. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -109,7 +111,8 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: The user will be able to edit their data/ Only the same user can change their profile
+ *     summary: Update user
+ *     description: The user will be able to edit their data. Only the same user can change their profile. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -149,7 +152,8 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: Shows the votes made by the users
+ *     summary: Get user votes
+ *     description: It shows the votes made by a specific user with its ID. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -188,7 +192,8 @@
  *   get:
  *     security:
  *       - bearerAuth: []
- *     summary: You can see the publications made by users/ It has options to filter by publication fields
+ *     summary: Get a list of publications for a user
+ *     description: You can see the publications made by users. Also it has options to filter by publication fields. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -236,7 +241,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add interest to user /The user will send the tag_id that will be used to mark their interest/ Only the same user can do it
+ *     summary: Add interest to user 
+ *     description: The user will send the tag_id that will be used to mark their interest. Only the same user can do it. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -279,7 +285,8 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: Delete user interest/ The user will send the tag_id that will be used to remove their interest/Only the same user can do it
+ *     summary: Delete user interest
+ *     description: The user will send the tag_id that is used to remove their interest. Only the same user is able to do it. Need to be logged.
  *     tags:
  *       - [Users]
  *     parameters:
@@ -322,7 +329,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in users /The user will send an image that will be saved in their profile / Only the same user can do it
+ *     summary: Add an image for a user
+ *     description: The user will upload an image (5mb max) to their profile using the user ID in path . Only the same user and admin can do it. Need to be logged. 
  *     tags:
  *       - [Users]
  *     parameters:
@@ -365,7 +373,8 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: Delete an image in users/The user will have the option to delete the image of his profile / Administrator and the user himself can do it
+ *     summary: Delete an image in users
+ *     description: The user will have the option to delete the image of its profile. Administrator and the user himself can do it. Need to be logged. 
  *     tags:
  *       - [Users]
  *     parameters:

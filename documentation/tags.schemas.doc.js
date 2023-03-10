@@ -35,7 +35,4 @@
  *         description:
  *           type: string
  *           example: About foodie
- *         image_url:
- *           type: string
- *           example: image
  */

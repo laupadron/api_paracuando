@@ -2,7 +2,8 @@
  * @openapi
  * /api/v1/publications:
  *   get:
- *     summary: Get Publications/ Publications can be filtered based on all their fields, their associated Tags and/or their votes
+ *     summary: Get all or filtered Publications
+ *     description: Publications can be filtered based on all their fields, their associated Tags and/or their votes. Not login required.
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -78,7 +79,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Create a Publication/ A vote is assigned automatically and also the tags associated with the publication / Only for logged in users
+ *     summary: Create a Publication
+ *     description: Creates a Publication. Vote is assigned automatically and also the tags associated with the publication. Login required.
  *     tags:
  *       - [Publications]
  *     requestBody:
@@ -111,7 +113,8 @@
  *                   example: not found / something wrong
  * /api/v1/publications/{id}:
  *   get:
- *     summary: Get Detail Publications
+ *     summary: Get Detail Publication by id
+ *     description: Get Detail Publications. Need id publication on path. Not login required. 
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -147,7 +150,8 @@
  *                   type: string
  *                   example: not found / something wrong
  *   delete:
- *     summary: Delet a publication
+ *     summary: Delete a publication
+ *     description: Deletes a publication with its id on path.
  *     security:
  *       - bearerAuth: []
  *     tags:
@@ -182,7 +186,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Can vote on a publication or remove the vote from the publication / Only logged in user
+ *     summary: Add / remove a vote
+ *     description: Can add a vote on a publication or remove it. Only logged in users.
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -215,7 +220,8 @@
  *   post:
  *     security:
  *       - bearerAuth: []
- *     summary: Add an image in Publication/ Up to three images with a maximum weight of 524288 | 0.5 Mb/ Administrator and logged in user only
+ *     summary: Add an image for a publication
+ *     description: Adds an image in Publication. Just up to three images with a maximum weight of 524288 | 0.5 Mb. Administrator and Owner user only. Login required.
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -230,15 +236,11 @@
  *           schema:
  *             type: object
  *             properties:
- *               file1:
- *                 type: string
- *                 format: binary
- *               file2:
- *                 type: string
- *                 format: binary
- *               file3:
- *                 type: string
- *                 format: binary
+ *               image:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
  *     responses:
  *       201:
  *         description: OK
@@ -264,7 +266,8 @@
  *   delete:
  *     security:
  *       - bearerAuth: []
- *     summary: Delete an image in Publication/ The id of the publication and the order number of the image must be sent / Only user logged in or with administrator role
+ *     summary: Delete an image in Publication
+ *     description: The id of the publication and the order number of the image must be sent. Only Owner user logged in or administrator.
  *     tags:
  *       - [Publications]
  *     parameters:
@@ -302,7 +305,8 @@
  *   put:
  *     security:
  *       - bearerAuth: []
- *     summary: change order in Publication/ The image with the actual_order (if it exists) selected will change places with the next_order image (if it exists) / Only user logged in or with administrator role
+ *     summary: Change image order in Publication
+ *     description: The image with the actual_order (must exists) selected will change places with the next_order image (if it exists, no required). Only owner user or administrator. Login required.
  *     tags:
  *       - [Publications]
  *     parameters:
