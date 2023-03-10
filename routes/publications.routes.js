@@ -49,7 +49,7 @@ router.delete('/:id/remove-image/:order',
   destroyImageByPublication
 );
 router.put('/:id/image-order',
-passport.authenticate('jwt', { session: false }), 
+  passport.authenticate('jwt', { session: false }),
   checkRole,
   checkAdmin,
   changeImageOrder

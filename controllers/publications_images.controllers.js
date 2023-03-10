@@ -76,7 +76,7 @@ const destroyImageByPublication = async (request, response, next) => {
 
       let imagePublication = await imagesPublicationsService.getImageOr404(idPublication, order)
       console.log(imagePublication)
-      await deleteFile(imagePublication.image_url) 
+      await deleteFile(imagePublication.image_url)
 
       await imagesPublicationsService.removeImage(idPublication, order)
       return response.status(200).json({ message: 'Image Removed' })
@@ -87,24 +87,24 @@ const destroyImageByPublication = async (request, response, next) => {
 }
 
 
-  const changeImageOrder = async (req,res,next)=> {
-    const isSameUser = req.isSameUser;
-    const role = req.userRole;
-    const  idPublication = req.params.id
-    console.log(idPublication)
-    const {actual_order,next_order} = req.body;
-    
-    
+const changeImageOrder = async (req, res, next) => {
+  const isSameUser = req.isSameUser;
+  const role = req.userRole;
+  const idPublication = req.params.id
+  console.log(idPublication)
+  const { actual_order, next_order } = req.body;
 
-    try {
-      if (isSameUser || role === 2) {
-        let changeOrder = await imagesPublicationsService.changeOrderImage({actual_order,next_order},idPublication)
-        return res.status(200).json({ message: 'Order Change' })
-      }
-    } catch (error) {
-      next(error)
+
+
+  try {
+    if (isSameUser || role === 2) {
+      let changeOrder = await imagesPublicationsService.changeOrderImage({ actual_order, next_order }, idPublication)
+      return res.status(200).json({ message: 'Order Change' })
     }
+  } catch (error) {
+    next(error)
   }
+}
 
 
 
