@@ -33,12 +33,12 @@ const createPublication = async (req, res, next) => {
     if (!data.title) throw new CustomError('Not found title', 400, 'Required parameter');
     if (!data.publications_types_id) throw new CustomError('Not found publication type id', 400, 'Required parameter');
     if (data.tags <= 0 || !data.tags) throw new CustomError('Not found tags id', 400, 'Required parameter');
-    
-    const publication = await publicationsService.createPublication({...data, id: uuid.v4(), user_id: req.user.id, cities_id: 1})
-    
+
+    const publication = await publicationsService.createPublication({ ...data, id: uuid.v4(), user_id: req.user.id, cities_id: 1 })
+
     if (!publication) throw new CustomError('Not publication created', 400, 'Contact admin');
 
-    res.status(201).json({message: 'Publication created', publication_id: publication.id})
+    res.status(201).json({ message: 'Publication created', publication_id: publication.id })
   } catch (error) {
     next(error);
   }
@@ -98,5 +98,5 @@ module.exports = {
   getPublications,
   createPublication,
   getPublicationById,
-  
+
 }

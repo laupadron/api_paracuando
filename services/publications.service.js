@@ -1,6 +1,7 @@
 const models = require('../database/models')
 const Sequelize = require('sequelize')
 const { Op, cast, literal, fn, col } = require('sequelize')
+const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
 const { CustomError } = require('../utils/helpers');
 
 
@@ -15,6 +16,10 @@ class PublicationsService {
         {
           model: models.Users.scope('view_public'),
           as: 'user'
+        },
+        {
+          model: models.Publications_images.scope('view_public'),
+          as: 'images'
         }
       ],
       attributes: {
@@ -64,12 +69,17 @@ class PublicationsService {
 
     const publications = await models.Publications.scope('no_timestamps').findAndCountAll(options)
 
-    // const promises = publications.rows.map(async (element) => {
-    //   const votes = await this.countVotes(element.id)
-    //   return { ...element.toJSON(), votes }
-    // })
-    // const results = await Promise.all(promises)
+    const updatedPubications = await Promise.all(publications.rows.map(async publication => {
+      const images = await Promise.all(publication.images.map(async image => {
+        if (image.image_url) {
+          const image_url = await getObjectSignedUrl(image.image_url)
+          return {...image.toJSON(), image_url}
+        }
+      }))
+      return {...publication.toJSON(), images}
+    }))
 
+    publications.rows = updatedPubications
     return publications
   }
 
