@@ -103,6 +103,10 @@ class UsersService {
       }
     })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+    if (user.image_url) {
+      const imageURL = await getObjectSignedUrl(user.image_url)
+      user.image_url = imageURL
+    }
     return user
   }
 
