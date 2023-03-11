@@ -12,7 +12,6 @@ const userService = new UsersService();
 const uploadImageUsers = async (request, response, next) => {
   const userId = request.params.id
   const file = request.file
-  console.log(file);
   try {
     if (!request.isSameUser) throw new CustomError('User not authorized', 403, 'Forbbiden')
     if (file) {
@@ -23,8 +22,8 @@ const uploadImageUsers = async (request, response, next) => {
         .toBuffer()
       let fileKey = `user-image-${userId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      const imageURL = await getObjectSignedUrl(fileKey)
-      let result = await userService.updateUser(userId, { image_url: imageURL })
+      //const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await userService.updateUser(userId, { image_url: fileKey })
       await unlinkFile(file.path)
       return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
     } else {

@@ -11,7 +11,6 @@ const getCountries = async (req, res, next) => {
 
   try {
     const countries = await countriesService.findAndCount({ limit, offset })
-    //console.log(countries);
     res.json(countries);
 
   } catch (error) {

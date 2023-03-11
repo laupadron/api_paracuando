@@ -3,11 +3,7 @@ const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
-//images
-const { v4: uuid } = require('uuid')
-const sharp = require('sharp')
-const { uploadFile } = require('../libs/s3') // Importamos la función para subir archivos a AWS S3
-const { unlink } = require('fs/promises')
+const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
 
 class UsersService {
 
@@ -53,7 +49,18 @@ class UsersService {
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
 
-    const users = await models.Users.scope('auth_flow').findAndCountAll(options)
+    const users = await models.Users.scope('view_me').findAndCountAll(options)
+    
+    const promises = users.rows.map(async (user) => {
+      if (user.image_url) {
+        const imageURL = await getObjectSignedUrl(user.image_url)
+        user.image_url = imageURL
+      }
+      return user
+    })
+    
+    const updatedUsers = await Promise.all(promises)
+    users.rows = updatedUsers
     return users
   }
 
@@ -91,7 +98,7 @@ class UsersService {
         as: 'interests',
         include: {
           model: models.Tags.scope('no_timestamps'),
-          as : 'tags'
+          as: 'tags'
         }
       }
     })
@@ -99,7 +106,7 @@ class UsersService {
     return user
   }
 
-  async getUserVotes(userId, limit, offset){
+  async getUserVotes(userId, limit, offset) {
     const userVotes = await models.Votes.scope('no_timestamps').findAndCountAll({
       limit,
       offset,
@@ -110,7 +117,7 @@ class UsersService {
     return userVotes
   }
 
-  async getUserPublications(query){
+  async getUserPublications(query) {
     let options = {
       where: {},
     }
@@ -292,9 +299,9 @@ class UsersService {
       throw error;
     }
   }
-  
 
-  
+
+
 }
 
 
