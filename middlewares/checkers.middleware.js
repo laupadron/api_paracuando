@@ -20,7 +20,7 @@ const checkAdmin = async (req, res, next) => {
   if (req.userRole === 2) {
     next()
   } else {
-    const error = new CustomError('User not authorized', 401, 'Unauthorized')
+    const error = new CustomError('User not authorized', 403, 'Forbbiden')
     next(error)
   }
 }
@@ -42,14 +42,17 @@ const checkPublicationOwner = async (req, res, next) => {
   const publicationID = req.params.id
   const idFromToken = req.user.id
 
-  const { user } = await publicationsService.findById(publicationID)
-
-  if (user.id === idFromToken) {
-    req.publicationOwner = true
-    next();
-  } else {
-    req.publicationOwner = false
-    next();
+  try {
+    const { user } = await publicationsService.findById(publicationID)
+    if (user.id === idFromToken) {
+      req.publicationOwner = true
+      next();
+    } else {
+      req.publicationOwner = false
+      next();
+    }
+  } catch (error) {
+    next(error)
   }
 }
 
