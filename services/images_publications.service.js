@@ -8,19 +8,19 @@ const { unlink } = require('fs/promises')
 
 class ImagesPublicationsService {
 
-  async publicationExistAndQuantity(publication_id, imagesKeys) {
+  async publicationExistAndQuantity(publication_id, imagesLength) {
     const transaction = await models.sequelize.transaction()
     try {
       const publication = await models.Publications.findByPk(publication_id);
       if (!publication) {
         throw new CustomError('Not found publication', 404, 'Not Found');
       }
-      if (imagesKeys.length > 3) {
+      if (imagesLength > 3) {
         throw new CustomError('Too many files', 400, 'Bad Request');
       }
 
       const publicationImages = await models.Publications_images.findAll({where: {publication_id}});
-      if (publicationImages.length + imagesKeys > 3) {
+      if (publicationImages.length + imagesLength > 3) {
         throw new CustomError('Already 3 files in the publication', 400, 'Bad Request');
       }
 

@@ -6,12 +6,22 @@
  *       type:
  *         object
  *       properties:
- *         id:
+ *         tag_id:
  *           type: integer
  *           example: 1
- *         name:
+ *         user_id:
  *           type: string
- *           example: foodie
+ *           example: 6e621741-7c53-4088-b344-add42819d7de
+ *         tags:
+ *           type: 
+ *             object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 1
+ *             name:
+ *               type: string
+ *               example: Deportes
  *     tagsBody:
  *       type:
  *         object

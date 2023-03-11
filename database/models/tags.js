@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
     timestamps: true,
     scopes: {
-      no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } }
+      no_timestamps: { attributes: { exclude: ['created_at', 'updated_at'] } },
+      view_public: {attributes: ['id', 'name']},
     }
   });
   return Tags;

@@ -12,9 +12,8 @@ const userService = new UsersService();
 const uploadImageUsers = async (request, response, next) => {
   const userId = request.params.id
   const file = request.file
-  console.log(file);
   try {
-    if (!request.isSameUser) throw new CustomError('User not authorized', 401, 'Unauthorized')
+    if (!request.isSameUser) throw new CustomError('User not authorized', 403, 'Forbbiden')
     if (file) {
       await userService.getUser(userId)
       const idImage = uuid.v4()
@@ -23,10 +22,10 @@ const uploadImageUsers = async (request, response, next) => {
         .toBuffer()
       let fileKey = `user-image-${userId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      const imageURL = await getObjectSignedUrl(fileKey)
-      let result = await userService.updateUser(userId, { image_url: imageURL })
+      //const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await userService.updateUser(userId, { image_url: fileKey })
       await unlinkFile(file.path)
-      return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
+      return response.status(200).json({ results: { message: 'image added'} });
     } else {
       throw new CustomError('Image were not received', 400, 'Bad request')
     }
@@ -43,7 +42,7 @@ const destroyUserImage = async (request, response, next) => {
 
   try {
     if (!request.isSameUser){
-      if (request.role !== 2) throw new CustomError('Not authorized User', 401, 'Unauthorized')
+      if (request.role !== 2) throw new CustomError('Not authorized User', 403, 'Forbbiden')
     } 
     const { image_url } = await userService.getUser(userId)
     const imageKey = image_url.split('/').pop().split('?')[0]

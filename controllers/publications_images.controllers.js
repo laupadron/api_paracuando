@@ -6,12 +6,12 @@ const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('.
 const sharp = require('sharp')
 const CustomError = require('../utils/helpers')
 const { UUIDV4 } = require('sequelize')
-
+const PublicationsService=require('../services/publications.service')
 
 const unlinkFile = util.promisify(fs.unlink)
 
 const imagesPublicationsService = new ImagesPublicationsService();
-
+const publicationsService=new PublicationsService
 
 const uploadImagePublication = async (request, response, next) => {
   const idPublication = request.params.id
@@ -33,15 +33,14 @@ const uploadImagePublication = async (request, response, next) => {
           let fileKey = `${idImage}`
           await uploadFile(fileResize, fileKey, file.mimetype)
           const imageURL = await getObjectSignedUrl(fileKey)
-          let newImagePublication = await imagesPublicationsService.createImage(idPublication, imageURL)
-
-          imagesKeys.push(newImagePublication.image_url)
+          let newImagePublication = await imagesPublicationsService.createImage(idPublication, fileKey)
+          imagesKeys.push(imageURL)
         }))
-
+       
         await Promise.all(files.map(async (file) => {
           await unlinkFile(file.path)
         }))
-
+    
         return response
           .status(200)
           .json({ results: { message: 'Success Upload', images: imagesKeys } });
@@ -49,7 +48,7 @@ const uploadImagePublication = async (request, response, next) => {
         throw new CustomError('No images received', 400, 'Bad Request')
       }
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized')
+      throw new CustomError('Not authorized user', 403, 'Forbbiden')
     }
 
   } catch (error) {
@@ -93,7 +92,7 @@ const changeImageOrder = async (req, res, next) => {
       let changeOrder = await imagesPublicationsService.changeOrderImage({ actual_order, next_order }, idPublication)
       return res.status(200).json({ message: 'Order Change' })
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized')
+      throw new CustomError('Not authorized user', 403, 'Forbbiden')
     }
   } catch (error) {
     next(error)

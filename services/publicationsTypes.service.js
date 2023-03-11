@@ -1,18 +1,18 @@
 const models = require('../database/models')
-const  {CustomError}  = require('../utils/helpers');
+const { CustomError } = require('../utils/helpers');
 const { Op } = require('sequelize');
 
 
-class PublicationsTypesService{
+class PublicationsTypesService {
   constructor() {
-}
-
-async findPublicationsTypes(query) {
-  const options = {
-    where: {},
   }
 
-  const { limit, offset } = query
+  async findPublicationsTypes(query) {
+    const options = {
+      where: {},
+    }
+
+    const { limit, offset } = query
     if (limit && offset) {
       options.limit = limit
       options.offset = offset
@@ -42,19 +42,19 @@ async findPublicationsTypes(query) {
 
     const publicationsTypes = await models.Publications_types.findAndCountAll(options)
     return publicationsTypes;
-}
+  }
 
 
-  async getPublicationTypeById(id){
-    const result = await models.Publications_types.findOne({where: {id}})
+  async getPublicationTypeById(id) {
+    const result = await models.Publications_types.findOne({ where: { id } })
     if (!result) throw new CustomError('Not found Publication type', 404, 'Not Found')
     return result
   }
 
-  async updatePublicationTypeById(id, obj){
+  async updatePublicationTypeById(id, obj) {
     const transaction = await models.sequelize.transaction()
     try {
-      await models.Publications_types.update(obj,{where: {id}})
+      await models.Publications_types.update(obj, { where: { id } })
       await transaction.commit()
     } catch (error) {
       await transaction.rollback()

@@ -9,12 +9,19 @@ class PublicationsService {
   }
 
   async findAndCount(query) {
+    
     const options = {
       where: {},
       include: [
         {
           model: models.Users.scope('view_public'),
           as: 'user'
+        },
+        {
+          model: models.Publications_images,
+          as:'publications_images',
+          attributes: ['image_url'],
+          
         }
       ],
       attributes: {
@@ -24,7 +31,9 @@ class PublicationsService {
 						WHERE "votes"."publications_id" = "Publications"."id")`
           ), 'integer'), 'votes_count']
         ]
-      }
+      },
+      
+      
     }
 
     const { limit, offset } = query
@@ -58,48 +67,52 @@ class PublicationsService {
     const { description } = query
     if (description) {
       options.where.description = { [Op.iLike]: `%${description}%` }
+
     }
-    //Necesario para el findAndCountAll de Sequelize
+
+    
     options.distinct = true
 
     const publications = await models.Publications.scope('no_timestamps').findAndCountAll(options)
+    
+    
 
-    // const promises = publications.rows.map(async (element) => {
-    //   const votes = await this.countVotes(element.id)
-    //   return { ...element.toJSON(), votes }
-    // })
-    // const results = await Promise.all(promises)
+   
 
     return publications
   }
 
   async findById(id) {
-    const result = await models.Publications.scope('no_timestamps').findByPk(id, {
-      include: [
-        {
-          model: models.Users.scope('view_public'),
-          as: 'user'
-        },
-        {
-          model: models.Cities.scope('no_timestamps'),
-          as: 'city'
-        },
-        {
-          model: models.Publications_types.scope('no_timestamps'),
-          as: 'publications_type'
-        }
-      ],
-      attributes: {
+    try {
+      const result = await models.Publications.scope('no_timestamps').findByPk(id, {
         include: [
-          [cast(literal(
-            `(SELECT COUNT(*) FROM "votes" 
-              WHERE "votes"."publications_id" = "Publications"."id")`
-          ), 'integer'), 'votes_count']
-        ]
-      }
-    })
-    if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
-    return result
+          {
+            model: models.Users.scope('view_public'),
+            as: 'user'
+          },
+          {
+            model: models.Cities.scope('no_timestamps'),
+            as: 'city'
+          },
+          {
+            model: models.Publications_types.scope('no_timestamps'),
+            as: 'publications_type'
+          }
+        ],
+        attributes: {
+          include: [
+            [cast(literal(
+              `(SELECT COUNT(*) FROM "votes" 
+                WHERE "votes"."publications_id" = "Publications"."id")`
+            ), 'integer'), 'votes_count']
+          ]
+        }
+      })
+      if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
+      return result
+    } catch (error) {
+      throw error
+    }
   }
 
   async createPublication(data) {

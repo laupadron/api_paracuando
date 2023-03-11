@@ -7,15 +7,19 @@ const publicationsService = new PublicationsService
 
 
 const getPublications = async (req, res, next) => {
-  const query = req.query
+  const result = {
+    results: {}
+  }
   const { publicationsPerPage, currentPage } = { publicationsPerPage: 10, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, publicationsPerPage);
-  query.limit = limit
-  query.offset = offset
 
   try {
-    const publications = await publicationsService.findAndCount(query)
-    res.json(publications);
+    const publications = await publicationsService.findAndCount({ ...req.query, limit, offset })
+    result.results.count = publications.count
+    result.results.totalPages = Math.ceil(publications.count / publicationsPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = publications.rows
+    res.json(result);
 
   } catch (error) {
     next(error)
@@ -62,7 +66,7 @@ const deletePublication = async (req, res, next) => {
       await publicationsService.delete(id)
       res.json({ message: 'Publication removed' });
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized');
+      throw new CustomError('Not authorized user', 403, 'Forbbiden');
     }
   } catch (error) {
     next(error);
@@ -79,7 +83,7 @@ const addVote = async (req, res, next) => {
       await publicationsService.addAndDelete(publicationId, userId);
       res.json({ message: 'Add-delete Vote' });
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized');
+      throw new CustomError('Not authorized user', 403, 'Forbbiden');
     }
   } catch (error) {
     next(error);

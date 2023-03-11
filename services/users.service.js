@@ -3,11 +3,7 @@ const models = require('../database/models')
 const { Op } = require('sequelize')
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
-//images
-const { v4: uuid } = require('uuid')
-const sharp = require('sharp')
-const { uploadFile } = require('../libs/s3') // Importamos la función para subir archivos a AWS S3
-const { unlink } = require('fs/promises')
+const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
 
 class UsersService {
 
@@ -53,7 +49,18 @@ class UsersService {
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
 
-    const users = await models.Users.scope('auth_flow').findAndCountAll(options)
+    const users = await models.Users.scope('view_me').findAndCountAll(options)
+
+    const promises = users.rows.map(async (user) => {
+      if (user.image_url) {
+        const imageURL = await getObjectSignedUrl(user.image_url)
+        user.image_url = imageURL
+      }
+      return user
+    })
+
+    const updatedUsers = await Promise.all(promises)
+    users.rows = updatedUsers
     return users
   }
 
@@ -90,17 +97,18 @@ class UsersService {
         model: models.Users_tags.scope('no_timestamps'),
         as: 'interests',
         include: {
-          model: models.Tags.scope('no_timestamps'),
-          as : 'tags'
+          model: models.Tags.scope('view_public'),
+          as: 'tags'
         }
       }
     })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
+    if (user.image_url) user.image_url = await getObjectSignedUrl(user.image_url)
     return user
   }
 
-  async getUserVotes(userId, limit, offset){
-    const userVotes = await models.Votes.scope('no_timestamps').findAndCountAll({
+  async getUserVotes(userId, limit, offset) {
+    const userVotes = await models.Votes.findAndCountAll({
       limit,
       offset,
       where: {
@@ -110,7 +118,7 @@ class UsersService {
     return userVotes
   }
 
-  async getUserPublications(query){
+  async getUserPublications(query) {
     let options = {
       where: {},
     }
@@ -237,7 +245,7 @@ class UsersService {
         }
       })
       if (!user) throw new CustomError('The user associated with the token was not found', 400, 'Invalid Token')
-      if (Date.now() > exp * 1000) throw new CustomError('The token has expired, the 15min limit has been exceeded', 401, 'Unauthorized')
+      if (Date.now() > exp * 1000) throw new CustomError('The token has expired, the 15min limit has been exceeded', 403, 'Forbbiden')
       await user.update({ token: null }, { transaction })
       await transaction.commit()
       return user
@@ -292,9 +300,9 @@ class UsersService {
       throw error;
     }
   }
-  
 
-  
+
+
 }
 
 

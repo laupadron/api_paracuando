@@ -63,34 +63,6 @@
  *                 results:
  *                   type: array
  *                   $ref: '#/components/schema/publicationsUser'
- *                 belongs to:
- *                   type: object
- *                   $ref: '#/components/schema/updateUser'
- *                 page:
- *                   type: integer
- *                   example: 1
- *                   description: numero de pagina actual
- *                 pageCount:
- *                   type: integer
- *                   example: 10
- *                   description: numero total de paginas
- *                 totalCount:
- *                   type: integer
- *                   example: 100
- *                   description: numero total de objeros de la lista
- *             headers:
- *               x-pagination:
- *                 schema:
- *                   type: object
- *                   properties:
- *                     first:
- *                       type: string
- *                       example: https://api.example.com/items?page=1
- *                       description: URL de la primera página
- *                     last:
- *                       type: string
- *                       example: https://api.example.com/items?page=10
- *                       description: URL de la última página
  *       400:
  *         description: not found
  *         content:
@@ -125,7 +97,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "Publication Add"}
+ *                   example: {"message": "Publication created"}
  *       400:
  *         description: not found
  *         content:
@@ -153,17 +125,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 result:
- *                   type: string
- *                   example: {"count":5,"totalPages":1,"currentPages":1}
- *                 results:
- *                   type: array
- *                   $ref: '#/components/schema/publicationsUser'
- *                 belongs to:
- *                   type: object
- *                   $ref: '#/components/schema/updateUser'
+ *               $ref: '#/components/schema/onePublicationUser'
  *       400:
  *         description: not found
  *         content:
@@ -315,7 +277,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "image Remove"}
+ *                   example: {"message": "Image Removed"}
  *       400:
  *         description: not found
  *         content:

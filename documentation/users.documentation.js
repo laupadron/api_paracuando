@@ -22,7 +22,7 @@
  *         schema:
  *           type: string
  *           minimun: 1
- *         description: User User last_name
+ *         description: User last_name
  *       - name: email
  *         in: query
  *         required: false
@@ -54,7 +54,7 @@
  *               properties:
  *                 result:
  *                   type: string
- *                   example: {"count":5,"totalPages":1,"currentPages":1}
+ *                   example: {"count":5,"totalPages":1,"currentPage":1}
  *                 results:
  *                   type: array
  *                   $ref: '#/components/schema/responseMe'
@@ -94,7 +94,7 @@
  *                 result:
  *                   type: string
  *                   $ref: '#/components/schema/responseMe'
- *                 tags:
+ *                 interests:
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schema/tagsUser'
@@ -173,7 +173,7 @@
  *               properties:
  *                 result:
  *                   type: string
- *                   example: {"count":5,"totalPages":1,"currentPages":1}
+ *                   example: {"count":5,"totalPages":1,"currentPage":1}
  *                 results:
  *                   type: array
  *                   items:
@@ -222,7 +222,7 @@
  *               properties:
  *                 result:
  *                   type: string
- *                   example: {"count":5,"totalPages":1,"currentPages":1}
+ *                   example: {"count":5,"totalPages":1,"currentPage":1}
  *                 results:
  *                   type: array
  *                   items:
