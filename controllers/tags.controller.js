@@ -83,10 +83,10 @@ const uploadTagImage = async (request, response, next) => {
         .toBuffer()
       let fileKey = `tag-image-${tagId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      const imageURL = await getObjectSignedUrl(fileKey)
-      let result = await tagsService.updateTagById(tagId, { image_url: imageURL })
+      //const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await tagsService.updateTagById(tagId, { image_url: fileKey })
       await unlinkFile(file.path)
-      return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
+      return response.status(200).json({ results: { message: 'Success upload'}});
     } else {
       throw new CustomError('Image were not received', 400, 'Bad request')
     }

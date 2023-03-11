@@ -33,7 +33,18 @@ class TagsService {
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
 
-    const tags = await models.Tags.findAndCountAll(options)
+    const tags = await models.Tags.scope('no_timestamps').findAndCountAll(options)
+    const promises = tags.rows.map(async (tag) => {
+      if (tag.image_url) {
+        const imageURL = await getObjectSignedUrl(tag.image_url)
+        tag.image_url = imageURL
+      }
+      return tag
+    })
+
+    const updatedTags = await Promise.all(promises)
+    tags.rows = updatedTags
+    
     return tags;
   }
 
@@ -49,8 +60,9 @@ class TagsService {
   }
 
   async getDetailTag(id) {
-    const tagDetail = await models.Tags.findByPk(id)
+    const tagDetail = await models.Tags.scope('no_timestamps').findByPk(id)
     if (!tagDetail) throw new CustomError('Not found Tag', 404, 'Not Found')
+    if (tagDetail.image_url) tagDetail.image_url = await getObjectSignedUrl(tagDetail.image_url)
     return tagDetail
   }
 

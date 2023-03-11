@@ -82,9 +82,6 @@
  *         reference_link:
  *           type: text
  *           example: www.facebook.com/123
- *         cities_id:
- *           type: integer
- *           example: 1
  *         publications_types_id:
  *           type: integer
  *           example: 2
