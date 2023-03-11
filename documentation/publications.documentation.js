@@ -63,9 +63,6 @@
  *                 results:
  *                   type: array
  *                   $ref: '#/components/schema/publicationsUser'
- *                 belongs to:
- *                   type: object
- *                   $ref: '#/components/schema/updateUser'
  *       400:
  *         description: not found
  *         content:
@@ -100,7 +97,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "Publication Add"}
+ *                   example: {"message": "Publication created"}
  *       400:
  *         description: not found
  *         content:
@@ -128,17 +125,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 result:
- *                   type: string
- *                   example: {"count":5,"totalPages":1,"currentPages":1}
- *                 results:
- *                   type: array
- *                   $ref: '#/components/schema/publicationsUser'
- *                 belongs to:
- *                   type: object
- *                   $ref: '#/components/schema/updateUser'
+ *               $ref: '#/components/schema/onePublicationUser'
  *       400:
  *         description: not found
  *         content:
@@ -290,7 +277,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "image Remove"}
+ *                   example: {"message": "Image Removed"}
  *       400:
  *         description: not found
  *         content:

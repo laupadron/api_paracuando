@@ -67,7 +67,8 @@
    *           type: string
    *           example: lauthvalladares@gmail.com
    *         image_url:
-   *           type: null
+   *           type: string
+   *           example: https://paracuando.s3.sa-east-1.amazonaws.com/user-image-6e621741-7c53-4088-b344-add42819d7de-3c52eaf5-c7c3-4b55-8970-d4da5a2e2ec4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZPEQWT3PYDA672WW%2F20230311%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230311T155035Z&X-Amz-Expires=518400&X-Amz-Signature=b063cc32b711dd479c8b29e6e404752639afb40c870fc99fac8d4eed4825e1aa&X-Amz-SignedHeaders=host&x-id=GetObject
    *     updateUser:
    *       type:
    *         object
@@ -87,8 +88,6 @@
    *         country_id:
    *           type: integer
    *           example: 3
-   *         image_url:
-   *           type: null
    *   securitySchemes:
    *       bearerAuth:
    *         type: http
