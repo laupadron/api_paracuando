@@ -5,7 +5,7 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Publications_images extends Model {
     static associate(models) {
-      Publications_images.belongsTo(models.Publications, { as: 'publications', foreignKey: 'publication_id' })
+      Publications_images.belongsTo(models.Publications, { as: 'publication', foreignKey: 'publication_id' })
     }
   }
   Publications_images.init({
@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'publications_images',
     underscored: true,
     timestamps: true,
+    scopes :{
+      view_public: {attributes: ['image_url', 'order']}
+    }
   });
   return Publications_images;
 };

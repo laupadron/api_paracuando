@@ -100,14 +100,7 @@
  *           content:
  *             application/json:
  *               schema:
- *                 type: object
- *                 properties:
- *                   result:
- *                     type: string
- *                     example: {"count":5,"totalPages":1,"currentPages":1}
- *                   results:
- *                     type: array
- *                     $ref: '#/components/schema/tagsBody'
+ *                 $ref: '#/components/schema/tagsBody'
  *         400:
  *           description: not found
  *           content:
@@ -147,7 +140,7 @@
  *                 properties:
  *                   message:
  *                     type: string
- *                     example: {"message": "Succes Update"}
+ *                     example: {"message": "Succesfully Updated"}
  *         400:
  *           description: not found
  *           content:
@@ -224,7 +217,7 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: {"message": "image added", "image": "https://paracuando.s3.sa-east-1.amazonaws.com/tag-image-9-71f5e94e-b035-46d6-a7e3-1cbc0481cd84?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAZPEQWT3PYDA672WW%2F20230310%2Fsa-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230310T232812Z&X-Amz-Expires=518400&X-Amz-Signature=04ab7ddd2ed9b5c9bcf78e342d671429ee00b2ae4208b25f7d86b8ffd07e73bd&X-Amz-SignedHeaders=host&x-id=GetObject"}
+ *                   example: {"message": "Success Upload"}
  *       400:
  *         description: not found
  *         content:

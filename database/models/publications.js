@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       Publications.belongsTo(models.Users, { as: 'user', foreignKey: 'user_id' })
       Publications.belongsTo(models.Cities, { as: 'city', foreignKey: 'cities_id' })
       Publications.belongsTo(models.Publications_types, { as: 'publications_type', foreignKey: 'publications_types_id' })
-      Publications.hasMany(models.Publications_images, { as: 'publications_images', foreignKey: 'publication_id' })
+      Publications.hasMany(models.Publications_images, { as: 'images', foreignKey: 'publication_id' })
       Publications.hasMany(models.Votes, { as: 'votes', foreignKey: 'publications_id' })
       Publications.hasMany(models.Publications_tags, { as: 'publication_tags', foreignKey: 'publication_id' })
     }

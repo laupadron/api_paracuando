@@ -11,7 +11,7 @@ const getRoles = async (req, res, next) => {
 
   try {
     const roles = await rolesService.findAndCount({ limit, offset })
-    res.json(roles);
+    return res.json(roles);
 
   } catch (error) {
     next(error)

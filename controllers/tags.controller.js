@@ -54,7 +54,7 @@ const updateTagById = async (req, res, next) => {
   const obj = req.body
   try {
     await tagsService.updateTagById(id, obj)
-    res.json({ message: 'Successfully updated' });
+    return res.json({ message: 'Successfully updated' });
   } catch (error) {
     next(error)
   }
@@ -64,7 +64,7 @@ const deleteTagById = async (req, res, next) => {
   const id = req.params.id
   try {
     await tagsService.deleteTagById(id)
-    res.json({ message: 'Tag removed' });
+    return res.json({ message: 'Tag removed' });
   } catch (error) {
     next(error)
   }
@@ -83,10 +83,10 @@ const uploadTagImage = async (request, response, next) => {
         .toBuffer()
       let fileKey = `tag-image-${tagId}-${idImage}`
       await uploadFile(fileResize, fileKey, file.mimetype)
-      const imageURL = await getObjectSignedUrl(fileKey)
-      let result = await tagsService.updateTagById(tagId, { image_url: imageURL })
+      //const imageURL = await getObjectSignedUrl(fileKey)
+      let result = await tagsService.updateTagById(tagId, { image_url: fileKey })
       await unlinkFile(file.path)
-      return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
+      return response.status(200).json({ results: { message: 'Success upload'}});
     } else {
       throw new CustomError('Image were not received', 400, 'Bad request')
     }
