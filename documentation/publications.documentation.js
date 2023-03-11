@@ -66,6 +66,31 @@
  *                 belongs to:
  *                   type: object
  *                   $ref: '#/components/schema/updateUser'
+ *                 page:
+ *                   type: integer
+ *                   example: 1
+ *                   description: numero de pagina actual
+ *                 pageCount:
+ *                   type: integer
+ *                   example: 10
+ *                   description: numero total de paginas
+ *                 totalCount:
+ *                   type: integer
+ *                   example: 100
+ *                   description: numero total de objeros de la lista
+ *             headers:
+ *               x-pagination:
+ *                 schema:
+ *                   type: object
+ *                   properties:
+ *                     first:
+ *                       type: string
+ *                       example: https://api.example.com/items?page=1
+ *                       description: URL de la primera página
+ *                     last:
+ *                       type: string
+ *                       example: https://api.example.com/items?page=10
+ *                       description: URL de la última página
  *       400:
  *         description: not found
  *         content:
