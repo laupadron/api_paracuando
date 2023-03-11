@@ -7,15 +7,19 @@ const publicationsService = new PublicationsService
 
 
 const getPublications = async (req, res, next) => {
-  const query = req.query
+  const result = {
+    results: {}
+  }
   const { publicationsPerPage, currentPage } = { publicationsPerPage: 10, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, publicationsPerPage);
-  query.limit = limit
-  query.offset = offset
 
   try {
-    const publications = await publicationsService.findAndCount(query)
-    res.json(publications);
+    const publications = await publicationsService.findAndCount({ ...req.query, limit, offset })
+    result.results.count = publications.count
+    result.results.totalPages = Math.ceil(publications.count / publicationsPerPage)
+    result.results.CurrentPage = currentPage
+    result.results.results = publications.rows
+    res.json(result);
 
   } catch (error) {
     next(error)

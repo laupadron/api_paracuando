@@ -28,17 +28,20 @@ const getUserById = async (req, res, next) => {
   const isSameUser = req.isSameUser
   const idFromParams = req.params.id
   const role = req.userRole
+  let results = {
+    result: {}
+  }
 
   try {
-    let result = await usersService.getUser(idFromParams)
+    const user= await usersService.getUser(idFromParams)
+    results.result = user
     if (isSameUser || role === 2) {
-      return res.status(200).json(result)
+      return res.status(200).json(results)
     } else {
-      return res.status(200).json({
-        first_name: result.first_name,
-        last_name: result.last_name,
-        image_url: result.image_url
-      })
+      results.result.first_name = user.first_name
+      results.result.last_name = user.last_name,
+      results.result.image_url = user.image_url
+      return res.status(200).json(results)
     }
   } catch (error) {
     next(error)

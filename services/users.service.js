@@ -50,7 +50,7 @@ class UsersService {
     options.distinct = true
 
     const users = await models.Users.scope('view_me').findAndCountAll(options)
-    
+
     const promises = users.rows.map(async (user) => {
       if (user.image_url) {
         const imageURL = await getObjectSignedUrl(user.image_url)
@@ -58,7 +58,7 @@ class UsersService {
       }
       return user
     })
-    
+
     const updatedUsers = await Promise.all(promises)
     users.rows = updatedUsers
     return users
@@ -97,21 +97,18 @@ class UsersService {
         model: models.Users_tags.scope('no_timestamps'),
         as: 'interests',
         include: {
-          model: models.Tags.scope('no_timestamps'),
+          model: models.Tags.scope('view_public'),
           as: 'tags'
         }
       }
     })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
-    if (user.image_url) {
-      const imageURL = await getObjectSignedUrl(user.image_url)
-      user.image_url = imageURL
-    }
+    if (user.image_url) user.image_url = await getObjectSignedUrl(user.image_url)
     return user
   }
 
   async getUserVotes(userId, limit, offset) {
-    const userVotes = await models.Votes.scope('no_timestamps').findAndCountAll({
+    const userVotes = await models.Votes.findAndCountAll({
       limit,
       offset,
       where: {

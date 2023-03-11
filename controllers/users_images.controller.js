@@ -25,7 +25,7 @@ const uploadImageUsers = async (request, response, next) => {
       //const imageURL = await getObjectSignedUrl(fileKey)
       let result = await userService.updateUser(userId, { image_url: fileKey })
       await unlinkFile(file.path)
-      return response.status(200).json({ results: { message: 'success upload', image: result.image_url } });
+      return response.status(200).json({ results: { message: 'image added'} });
     } else {
       throw new CustomError('Image were not received', 400, 'Bad request')
     }

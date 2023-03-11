@@ -4,14 +4,19 @@ const { getPagination, CustomError } = require('../utils/helpers');
 const publicationsTypesService = new PublicationsTypesService;
 
 const getFilteredPublicationType = async(req,res,next)=>{
-  const query = req.query
+  const result = {
+    results: {}
+  }
   const { publicationsTypesPerPage, currentPage } = { publicationsTypesPerPage: 10, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, publicationsTypesPerPage);
-  query.limit = limit;
-  query.offset = offset;
+
   try {
-    const publicationsTypes = await publicationsTypesService.findPublicationsTypes(query);
-    res.json(publicationsTypes)
+    const publicationsTypes = await publicationsTypesService.findPublicationsTypes({ ...req.query, limit, offset });
+    result.results.count = publicationsTypes.count
+    result.results.totalPages = Math.ceil(publicationsTypes.count / publicationsTypesPerPage)
+    result.results.currentPage = currentPage
+    result.results.results = publicationsTypes.rows
+    res.json(result)
   } catch (error) {
     next(error)
   }
@@ -19,8 +24,9 @@ const getFilteredPublicationType = async(req,res,next)=>{
 
 const getPublicationTypeById = async(request, response, next) => {
   const id = request.params.id;
+  const result = {result: {}}
   try {
-    const result = await publicationsTypesService.getPublicationTypeById(id)
+    result.result = await publicationsTypesService.getPublicationTypeById(id)
     return response.json(result);
   } catch (error) {
     next(error)

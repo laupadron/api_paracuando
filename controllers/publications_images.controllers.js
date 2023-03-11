@@ -33,9 +33,8 @@ const uploadImagePublication = async (request, response, next) => {
           let fileKey = `${idImage}`
           await uploadFile(fileResize, fileKey, file.mimetype)
           const imageURL = await getObjectSignedUrl(fileKey)
-          let newImagePublication = await imagesPublicationsService.createImage(idPublication, imageURL)
-
-          imagesKeys.push(newImagePublication.image_url)
+          let newImagePublication = await imagesPublicationsService.createImage(idPublication, fileKey)
+          imagesKeys.push(imageURL)
         }))
 
         await Promise.all(files.map(async (file) => {

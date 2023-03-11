@@ -1,17 +1,16 @@
 const express = require('express');
 const passport = require('../libs/passport');
 const router = express.Router()
-const {checkRole, checkAdmin} = require('../middlewares/checkers.middleware');
-const { getPublicationTypeById,updatePublicationTypeById,getFilteredPublicationType } = require('../controllers/publicationsTypes.controller')
+const { checkRole, checkAdmin } = require('../middlewares/checkers.middleware');
+const { getPublicationTypeById, updatePublicationTypeById, getFilteredPublicationType } = require('../controllers/publicationsTypes.controller')
 
 router.get('/',
-  
- getFilteredPublicationType
+  getFilteredPublicationType
 );
 
 router.get('/:id',
   passport.authenticate('jwt', { session: false }),
-  getPublicationTypeById 
+  getPublicationTypeById
 )
 
 router.put('/:id',
