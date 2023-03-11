@@ -62,7 +62,7 @@ const deletePublication = async (req, res, next) => {
       await publicationsService.delete(id)
       res.json({ message: 'Publication removed' });
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized');
+      throw new CustomError('Not authorized user', 403, 'Forbbiden');
     }
   } catch (error) {
     next(error);
@@ -79,7 +79,7 @@ const addVote = async (req, res, next) => {
       await publicationsService.addAndDelete(publicationId, userId);
       res.json({ message: 'Add-delete Vote' });
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized');
+      throw new CustomError('Not authorized user', 403, 'Forbbiden');
     }
   } catch (error) {
     next(error);

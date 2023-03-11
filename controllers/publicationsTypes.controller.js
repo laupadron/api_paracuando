@@ -14,8 +14,8 @@ const getFilteredPublicationType = async(req,res,next)=>{
     res.json(publicationsTypes)
   } catch (error) {
     next(error)
-  };
-;}
+  }
+}
 
 const getPublicationTypeById = async(request, response, next) => {
   const id = request.params.id;

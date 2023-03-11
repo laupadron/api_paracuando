@@ -88,7 +88,7 @@ const restorePassword = async (request, response, next) => {
     try {
       tokenInfo = JSON.parse(atob((request.params.token).split('.')[1]))
     } catch (error) {
-      throw new CustomError('Something went wrong deserializing the token', 401, 'Unauthorized')
+      throw new CustomError('Something went wrong deserializing the token', 403, 'Forbbiden')
     }
     await authService.changePassword(tokenInfo, password, request.params.token)
     response.status(200).json({results: {message: 'update success'} })

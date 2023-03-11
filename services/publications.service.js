@@ -74,32 +74,36 @@ class PublicationsService {
   }
 
   async findById(id) {
-    const result = await models.Publications.scope('no_timestamps').findByPk(id, {
-      include: [
-        {
-          model: models.Users.scope('view_public'),
-          as: 'user'
-        },
-        {
-          model: models.Cities.scope('no_timestamps'),
-          as: 'city'
-        },
-        {
-          model: models.Publications_types.scope('no_timestamps'),
-          as: 'publications_type'
-        }
-      ],
-      attributes: {
+    try {
+      const result = await models.Publications.scope('no_timestamps').findByPk(id, {
         include: [
-          [cast(literal(
-            `(SELECT COUNT(*) FROM "votes" 
-              WHERE "votes"."publications_id" = "Publications"."id")`
-          ), 'integer'), 'votes_count']
-        ]
-      }
-    })
-    if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
-    return result
+          {
+            model: models.Users.scope('view_public'),
+            as: 'user'
+          },
+          {
+            model: models.Cities.scope('no_timestamps'),
+            as: 'city'
+          },
+          {
+            model: models.Publications_types.scope('no_timestamps'),
+            as: 'publications_type'
+          }
+        ],
+        attributes: {
+          include: [
+            [cast(literal(
+              `(SELECT COUNT(*) FROM "votes" 
+                WHERE "votes"."publications_id" = "Publications"."id")`
+            ), 'integer'), 'votes_count']
+          ]
+        }
+      })
+      if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
+      return result
+    } catch (error) {
+      throw error
+    }
   }
 
   async createPublication(data) {

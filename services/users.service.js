@@ -237,7 +237,7 @@ class UsersService {
         }
       })
       if (!user) throw new CustomError('The user associated with the token was not found', 400, 'Invalid Token')
-      if (Date.now() > exp * 1000) throw new CustomError('The token has expired, the 15min limit has been exceeded', 401, 'Unauthorized')
+      if (Date.now() > exp * 1000) throw new CustomError('The token has expired, the 15min limit has been exceeded', 403, 'Forbbiden')
       await user.update({ token: null }, { transaction })
       await transaction.commit()
       return user

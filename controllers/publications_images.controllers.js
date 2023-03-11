@@ -49,7 +49,7 @@ const uploadImagePublication = async (request, response, next) => {
         throw new CustomError('No images received', 400, 'Bad Request')
       }
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized')
+      throw new CustomError('Not authorized user', 403, 'Forbbiden')
     }
 
   } catch (error) {
@@ -93,7 +93,7 @@ const changeImageOrder = async (req, res, next) => {
       let changeOrder = await imagesPublicationsService.changeOrderImage({ actual_order, next_order }, idPublication)
       return res.status(200).json({ message: 'Order Change' })
     } else {
-      throw new CustomError('Not authorized user', 401, 'Unauthorized')
+      throw new CustomError('Not authorized user', 403, 'Forbbiden')
     }
   } catch (error) {
     next(error)

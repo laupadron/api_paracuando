@@ -94,7 +94,7 @@ const updateUserById = async (req, res, next) => {
     if (isSameUser) {
       await usersService.updateUser(idFromParams, req.body)
       return res.json({ message: 'Success Update' });
-    } throw new CustomError('Not authorized user', 401, 'Unauthorized')
+    } throw new CustomError('Not authorized user', 403, 'Forbbiden')
   } catch (error) {
     next(error)
   }
@@ -109,7 +109,7 @@ const addInterest = async (req, res, next) => {
     if (isSameUser) {
       await usersService.addInterestUser(user_id, tag_id);
       return res.json({ message: 'Interest Added' });
-    } throw new CustomError('Not authorized user', 401, 'Unauthorized');
+    } throw new CustomError('Not authorized user', 403, 'Forbbiden');
 
   } catch (error) {
     next(error);
@@ -125,7 +125,7 @@ const removeInterest = async (req, res, next) => {
     if (isSameUser) {
       await usersService.removeInterestUser(user_id, tag_id);
       return res.json({ message: 'Interest removed' });
-    } throw new CustomError('Not authorized user', 401, 'Unauthorized');
+    } throw new CustomError('Not authorized user', 403, 'Forbbiden');
   } catch (error) {
     next(error);
   }
