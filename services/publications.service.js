@@ -135,66 +135,66 @@ class PublicationsService {
         publications_types_id: data.publications_types_id
       }, { transaction })
 
-  //     data.tags.forEach(async tag => {
-  //       await this.createPublicationTags(tag, result.id)
-  //       //await this.userPublicationTags(tag, result.user_id)
-  //     })
-  //     await transaction.commit();
-  //     await this.addAndDelete(result.id, result.user_id)
-  //     return result
-  //   } catch (error) {
-  //     await transaction.rollback();
-  //     throw error;
-  //   }
-  // }
-  
-      await Promise.all(data.tags.map(async tag => {
-        try {
-          await this.createPublicationTags(tag, result.id, transaction);
-        } catch (error) {
-          
-          throw error;
-        }
-      }));
-  
+      data.tags.forEach(async tag => {
+        await this.createPublicationTags(tag, result.id,transaction)
+        //await this.userPublicationTags(tag, result.user_id)
+      })
       await transaction.commit();
-      await this.addAndDelete(result.id, result.user_id);
-      await Promise.all(data.tags.map(async tag => {
-        try {
-          await this.createPublicationTags(tag, result.id, transaction);
-        } catch (error) {
-          
-          throw error;
-        }
-      }));
-  
-      await transaction.commit();
-      try { 
-        await this.addAndDelete(result.id, result.user_id); 
-      } catch (error) { 
-        throw error; 
-      }
-    return result;
-    } catch (error) { 
-    await transaction.rollback(); 
-    throw error; 
+      await this.addAndDelete(result.id, result.user_id)
+      return result
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
   }
+  
+  //     await Promise.all(data.tags.map(async tag => {
+  //       try {
+  //         await this.createPublicationTags(tag, result.id, transaction);
+  //       } catch (error) {
+          
+  //         throw error;
+  //       }
+  //     }));
+  
+  //     await transaction.commit();
+  //     await this.addAndDelete(result.id, result.user_id);
+  //     await Promise.all(data.tags.map(async tag => {
+  //       try {
+  //         await this.createPublicationTags(tag, result.id, transaction);
+  //       } catch (error) {
+          
+  //         throw error;
+  //       }
+  //     }));
+  
+  //     await transaction.commit();
+  //     try { 
+  //       await this.addAndDelete(result.id, result.user_id); 
+  //     } catch (error) { 
+  //       throw error; 
+  //     }
+  //   return result;
+  //   } catch (error) { 
+  //   await transaction.rollback(); 
+  //   throw error; 
+  //   }
+  // }
 
     
     
   
 
-  async createPublicationTags(tag_id, publication_id) {
-    const transaction = await models.sequelize.transaction();
+  async createPublicationTags(tag_id, publication_id,transaction) {
+   
     const tag = models.Tags.findByPk(tag_id)
     if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
     
     try {
       await models.Publications_tags.create({ tag_id, publication_id }, { transaction })
-      await transaction.commit();
+      
     } catch (error) {
-      await transaction.rollback();
+   
       throw error;
     }
   }

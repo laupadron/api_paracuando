@@ -34,10 +34,7 @@ module.exports = {
   production: {
       use_env_variable: 'DATABASE_URI_PROD',
       dialectOptions: {
-          ssl: {
-              require: true,
-              rejectUnauthorized: false,
-          },
+          
           useUTC: true,
       },
       define: {
