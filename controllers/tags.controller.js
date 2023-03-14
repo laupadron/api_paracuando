@@ -54,7 +54,7 @@ const updateTagById = async (req, res, next) => {
   const obj = req.body
   try {
     await tagsService.updateTagById(id, obj)
-    res.json({ message: 'Successfully updated' });
+    return res.json({ message: 'Successfully updated' });
   } catch (error) {
     next(error)
   }
@@ -64,7 +64,7 @@ const deleteTagById = async (req, res, next) => {
   const id = req.params.id
   try {
     await tagsService.deleteTagById(id)
-    res.json({ message: 'Tag removed' });
+    return res.json({ message: 'Tag removed' });
   } catch (error) {
     next(error)
   }

@@ -48,7 +48,7 @@ const destroyUserImage = async (request, response, next) => {
     const imageKey = image_url.split('/').pop().split('?')[0]
     await deleteFile(imageKey)
     await userService.updateUser(userId, { image_url: null })
-    response.status(200).json({message: 'Image Removed'})
+    return response.status(200).json({message: 'Image Removed'})
   } catch (error) {
     next(error)
   }

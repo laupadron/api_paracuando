@@ -63,7 +63,7 @@ const getUserVotes = async (req, res, next) => {
     result.results.totalPages = Math.ceil(userVotes.count / votesPerPage)
     result.results.CurrentPage = currentPage
     result.results.results = userVotes.rows
-    res.json(result)
+    return res.json(result)
   } catch (error) {
     next(error)
   }
@@ -84,7 +84,7 @@ const getUserPublications = async (req, res, next) => {
     result.results.totalPages = Math.ceil(userPublications.count / publicationsPerPage)
     result.results.CurrentPage = currentPage
     result.results.results = userPublications.rows
-    res.json(result)
+    return res.json(result)
   } catch (error) {
     next(error)
   }

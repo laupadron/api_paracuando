@@ -6,12 +6,12 @@ const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('.
 const sharp = require('sharp')
 const CustomError = require('../utils/helpers')
 const { UUIDV4 } = require('sequelize')
-
+const PublicationsService=require('../services/publications.service')
 
 const unlinkFile = util.promisify(fs.unlink)
 
 const imagesPublicationsService = new ImagesPublicationsService();
-
+const publicationsService=new PublicationsService
 
 const uploadImagePublication = async (request, response, next) => {
   const idPublication = request.params.id
@@ -36,11 +36,11 @@ const uploadImagePublication = async (request, response, next) => {
           let newImagePublication = await imagesPublicationsService.createImage(idPublication, fileKey)
           imagesKeys.push(imageURL)
         }))
-
+       
         await Promise.all(files.map(async (file) => {
           await unlinkFile(file.path)
         }))
-
+    
         return response
           .status(200)
           .json({ results: { message: 'Success Upload', images: imagesKeys } });

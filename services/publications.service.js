@@ -10,6 +10,7 @@ class PublicationsService {
   }
 
   async findAndCount(query) {
+    
     const options = {
       where: {},
       include: [
@@ -29,7 +30,9 @@ class PublicationsService {
 						WHERE "votes"."publications_id" = "Publications"."id")`
           ), 'integer'), 'votes_count']
         ]
-      }
+      },
+      
+      
     }
 
     const { limit, offset } = query
@@ -63,8 +66,10 @@ class PublicationsService {
     const { description } = query
     if (description) {
       options.where.description = { [Op.iLike]: `%${description}%` }
+
     }
-    //Necesario para el findAndCountAll de Sequelize
+
+    
     options.distinct = true
 
     const publications = await models.Publications.scope('no_timestamps').findAndCountAll(options)
@@ -130,32 +135,32 @@ class PublicationsService {
         publications_types_id: data.publications_types_id
       }, { transaction })
 
-      data.tags.forEach(async tag => {
-        await this.createPublicationTags(tag, result.id)
-        //await this.userPublicationTags(tag, result.user_id)
-      })
-      await transaction.commit();
-      await this.addAndDelete(result.id, result.user_id)
-      return result
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
-  }
+     const tagPromises = data.tags.map(tag => this.createPublicationTags(tag, result.id, transaction));
+    await Promise.all(tagPromises);
 
-  async createPublicationTags(tag_id, publication_id) {
-    const tag = models.Tags.findByPk(tag_id)
-    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
-    const transaction = await models.sequelize.transaction();
-    try {
-      await models.Publications_tags.create({ tag_id, publication_id }, { transaction })
-      await transaction.commit();
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    await transaction.commit();
+    await this.addAndDelete(result.id, result.user_id);
+    return result;
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
   }
+}
 
+async createPublicationTags(tag_id, publication_id, transaction ) {
+  const tag = await models.Tags.findByPk(tag_id);
+  if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
+
+  try {
+    if (transaction && transaction instanceof Sequelize.Transaction) {
+    await models.Publications_tags.create({ tag_id, publication_id }, { transaction });
+    }else{
+      await models.Publications_tags.create({ tag_id, publication_id,transaction});
+     }
+  } catch (error) {
+    throw error;
+  }
+}
   async userPublicationTags(tag_id, user_id) {
     const transaction = await models.sequelize.transaction();
     try {

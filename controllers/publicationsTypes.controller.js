@@ -16,7 +16,7 @@ const getFilteredPublicationType = async(req,res,next)=>{
     result.results.totalPages = Math.ceil(publicationsTypes.count / publicationsTypesPerPage)
     result.results.currentPage = currentPage
     result.results.results = publicationsTypes.rows
-    res.json(result)
+    return res.json(result)
   } catch (error) {
     next(error)
   }

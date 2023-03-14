@@ -11,7 +11,7 @@ const getStates = async (req, res, next) => {
 
   try {
     const states = await statesService.findAndCount({ limit, offset })
-    res.json(states);
+    return res.json(states);
 
   } catch (error) {
     next(error)

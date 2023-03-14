@@ -11,7 +11,7 @@ const getCities = async (req, res, next) => {
 
   try {
     const cities = await citiesService.findAndCount({ limit, offset })
-    res.json(cities);
+    return res.json(cities);
 
   } catch (error) {
     next(error)
