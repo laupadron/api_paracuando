@@ -180,13 +180,19 @@ async createPublicationTags(tag_id, publication_id, transaction ) {
       try {
         await models.Publications_tags.destroy({ where: { publication_id: id } }, { transaction })
       } catch (error) {
-        await transaction.rollback();
+        
         throw error;
       }
       try {
         await models.Votes.destroy({ where: { publications_id: id } }, { transaction })
       } catch (error) {
-        await transaction.rollback();
+        
+        throw error;
+      }
+      try {
+        await models.Publications_images.destroy({ where: { publication_id: id } }, { transaction })
+      } catch (error) {
+        
         throw error;
       }
       await publication.destroy({ transaction });
