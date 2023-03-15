@@ -3,14 +3,16 @@ const Sequelize = require('sequelize')
 const { Op, cast, literal, fn, col } = require('sequelize')
 const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
 const { CustomError } = require('../utils/helpers');
+const ImagesPublicationsService = require('../services/images_publications.service')
 
+const imagesPublicationsService = new ImagesPublicationsService();
 
 class PublicationsService {
   constructor() {
   }
 
   async findAndCount(query) {
-    
+
     const options = {
       where: {},
       include: [
@@ -31,8 +33,8 @@ class PublicationsService {
           ), 'integer'), 'votes_count']
         ]
       },
-      
-      
+
+
     }
 
     const { limit, offset } = query
@@ -69,7 +71,7 @@ class PublicationsService {
 
     }
 
-    
+
     options.distinct = true
 
     const publications = await models.Publications.scope('no_timestamps').findAndCountAll(options)
@@ -78,10 +80,10 @@ class PublicationsService {
       const images = await Promise.all(publication.images.map(async image => {
         if (image.image_url) {
           const image_url = await getObjectSignedUrl(image.image_url)
-          return {...image.toJSON(), image_url}
+          return { ...image.toJSON(), image_url }
         }
       }))
-      return {...publication.toJSON(), images}
+      return { ...publication.toJSON(), images }
     }))
 
     publications.rows = updatedPubications
@@ -135,40 +137,49 @@ class PublicationsService {
         publications_types_id: data.publications_types_id
       }, { transaction })
 
-     const tagPromises = data.tags.map(tag => this.createPublicationTags(tag, result.id, transaction));
-    await Promise.all(tagPromises);
+      const tagPromises = data.tags.map(async tag => {
+        await this.createPublicationTags(tag, result.id, transaction)
+        await this.userPublicationTags(tag, result.user_id, transaction)
+      });
+      await Promise.all(tagPromises);
 
-    await transaction.commit();
-    await this.addAndDelete(result.id, result.user_id);
-    return result;
-  } catch (error) {
-    await transaction.rollback();
-    throw error;
-  }
-}
-
-async createPublicationTags(tag_id, publication_id, transaction ) {
-  const tag = await models.Tags.findByPk(tag_id);
-  if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
-
-  try {
-    if (transaction && transaction instanceof Sequelize.Transaction) {
-    await models.Publications_tags.create({ tag_id, publication_id }, { transaction });
-    }else{
-      await models.Publications_tags.create({ tag_id, publication_id,transaction});
-     }
-  } catch (error) {
-    throw error;
-  }
-}
-  async userPublicationTags(tag_id, user_id) {
-    const transaction = await models.sequelize.transaction();
-    try {
-      await models.Users_tags.create({ tag_id, user_id }, { transaction })
       await transaction.commit();
+      await this.addAndDelete(result.id, result.user_id);
+      return result;
     } catch (error) {
       await transaction.rollback();
       throw error;
+    }
+  }
+
+  async createPublicationTags(tag_id, publication_id, transaction) {
+    const tag = await models.Tags.findByPk(tag_id);
+    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
+
+    try {
+      if (transaction && transaction instanceof Sequelize.Transaction) {
+        await models.Publications_tags.create({ tag_id, publication_id }, { transaction });
+      } else {
+        //const transaction = await models.sequelize.transaction();
+        await models.Publications_tags.create({ tag_id, publication_id, transaction });
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async userPublicationTags(tag_id, user_id, transaction) {
+    const user = models.Users_tags.findOne({ where: { tag_id, user_id } })
+    if (!user) {
+      try {
+        if (transaction && transaction instanceof Sequelize.Transaction) {
+          await models.Users_tags.create({ tag_id, user_id }, { transaction })
+        } else {
+          await models.Publications_tags.create({ tag_id, publication_id, transaction });
+        }
+      } catch (error) {
+        throw error;
+      }
     }
   }
 
@@ -189,6 +200,15 @@ async createPublicationTags(tag_id, publication_id, transaction ) {
         await transaction.rollback();
         throw error;
       }
+      const images = await models.Publications_images.findAll({ where: { publication_id: id } }, { transaction })
+      if (images.length > 0) {
+        const imagesPromises = images.map(async image => {
+          await deleteFile(image.image_url)
+          await imagesPublicationsService.removeImage(id, image.order)
+        })
+        await Promise.all(imagesPromises)
+      }
+      
       await publication.destroy({ transaction });
       await transaction.commit();
     } catch (error) {
