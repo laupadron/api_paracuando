@@ -85,9 +85,6 @@
    *         phone:
    *           type: integer
    *           example: 4181695
-   *         country_id:
-   *           type: integer
-   *           example: 3
    *   securitySchemes:
    *       bearerAuth:
    *         type: http

@@ -123,7 +123,8 @@ class PublicationsService {
     }
   }
 
-  async createPublication(data) {
+  async createPublication(data,tag_ids) {
+    console.log(tag_ids)
     const transaction = await models.sequelize.transaction();
     try {
       const result = await models.Publications.create({
@@ -136,46 +137,43 @@ class PublicationsService {
         user_id: data.user_id,
         publications_types_id: data.publications_types_id
       }, { transaction })
-
-      const tagPromises = data.tags.map(async tag => {
-        await this.createPublicationTags(tag, result.id, transaction)
-        await this.userPublicationTags(tag, result.user_id, transaction)
-      });
-      await Promise.all(tagPromises);
-
-      await transaction.commit();
-      await this.addAndDelete(result.id, result.user_id);
-      return result;
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
-  }
-
-  async createPublicationTags(tag_id, publication_id, transaction) {
-    const tag = await models.Tags.findByPk(tag_id);
-    if (!tag) throw new CustomError('Not found tag', 400, 'Bad request');
-
-    try {
-      if (transaction && transaction instanceof Sequelize.Transaction) {
-        await models.Publications_tags.create({ tag_id, publication_id }, { transaction });
-      } else {
-        //const transaction = await models.sequelize.transaction();
-        await models.Publications_tags.create({ tag_id, publication_id, transaction });
+      
+      
+      if (tag_ids && tag_ids.length > 0  ){
+       
+       
+	    let findedTags = await models.Tags.findAll({
+	      where: { id: tag_ids },
+				attributes: ['id'],
+        raw: true,
+	    })
+      
+console.log(findedTags)
+		
+   
+			if (findedTags.length > 0) {
+				let tags_ids = findedTags.map(tag => tag.id)
+		    await result.setTags(tags_ids, { transaction })
+			} else {
+        throw new Error('Tag not found');
       }
-    } catch (error) {
-      throw error;
     }
-  }
 
-  async userPublicationTags(tag_id, user_id, transaction) {
-    const user = models.Users_tags.findOne({ where: { tag_id, user_id } })
+    await transaction.commit();
+    return result;
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+}
+
+
+async userPublicationTags(tag_ids, user_id, transaction) {
+    const user = models.Users_tags.findOne({ where: { tag_id:tag_ids, user_id } })
     if (!user) {
       try {
         if (transaction && transaction instanceof Sequelize.Transaction) {
-          await models.Users_tags.create({ tag_id, user_id }, { transaction })
-        } else {
-          await models.Publications_tags.create({ tag_id, publication_id, transaction });
+          await models.Users_tags.create({ tag_id:tag_ids, user_id }, { transaction })
         }
       } catch (error) {
         throw error;
