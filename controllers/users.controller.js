@@ -75,7 +75,7 @@ const getUserPublications = async (req, res, next) => {
   }
   const user_id = req.params.id
   
-  const { publicationsPerPage, currentPage } = { publicationsPerPage: 4, currentPage: 1 };
+  const { publicationsPerPage, currentPage } = { publicationsPerPage: 10, currentPage: 1 };
   const { limit, offset } = getPagination(currentPage, publicationsPerPage);
   try {
     await usersService.getAuthUserOr404(user_id);

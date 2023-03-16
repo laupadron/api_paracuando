@@ -33,8 +33,6 @@ class PublicationsService {
           ), 'integer'), 'votes_count']
         ]
       },
-
-
     }
 
     const { limit, offset } = query
@@ -76,7 +74,7 @@ class PublicationsService {
 
     const publications = await models.Publications.scope('no_timestamps').findAndCountAll(options)
 
-    const updatedPubications = await Promise.all(publications.rows.map(async publication => {
+    const updatedPublications = await Promise.all(publications.rows.map(async publication => {
       const images = await Promise.all(publication.images.map(async image => {
         if (image.image_url) {
           const image_url = await getObjectSignedUrl(image.image_url)
@@ -86,11 +84,12 @@ class PublicationsService {
       return { ...publication.toJSON(), images }
     }))
 
-    publications.rows = updatedPubications
+    publications.rows = updatedPublications
     return publications
   }
 
   async findById(id) {
+    const transaction = await models.sequelize.transaction();
     try {
       const result = await models.Publications.scope('no_timestamps').findByPk(id, {
         include: [
@@ -105,6 +104,10 @@ class PublicationsService {
           {
             model: models.Publications_types.scope('no_timestamps'),
             as: 'publications_type'
+          },
+          {
+            model: models.Publications_images.scope('view_public'),
+            as: 'images'
           }
         ],
         attributes: {
@@ -115,19 +118,29 @@ class PublicationsService {
             ), 'integer'), 'votes_count']
           ]
         }
-      })
+      }, { transaction })
       if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
-      return result
+
+      const images = await Promise.all(result.images.map(async image => {
+        if (image.image_url) {
+          const image_url = await getObjectSignedUrl(image.image_url)
+          return { ...image.toJSON(), image_url }
+        }
+      }))
+      await transaction.commit();
+      return { ...result.toJSON(), images: images }
+
     } catch (error) {
+      await transaction.rollback();
       throw error
     }
   }
 
-  async createPublication(data,tag_ids) {
+  async createPublication(data, tag_ids) {
     console.log(tag_ids)
     const transaction = await models.sequelize.transaction();
     try {
-      const result = await models.Publications.create({
+      const newPublication = await models.Publications.create({
         id: data.id,
         title: data.title,
         description: data.description,
@@ -137,43 +150,37 @@ class PublicationsService {
         user_id: data.user_id,
         publications_types_id: data.publications_types_id
       }, { transaction })
-      
-      
-      if (tag_ids && tag_ids.length > 0  ){
-       
-       
-	    let findedTags = await models.Tags.findAll({
-	      where: { id: tag_ids },
-				attributes: ['id'],
-        raw: true,
-	    })
-      
-console.log(findedTags)
-		
-   
-			if (findedTags.length > 0) {
-				let tags_ids = findedTags.map(tag => tag.id)
-		    await result.setTags(tags_ids, { transaction })
-			} else {
-        throw new Error('Tag not found');
+
+      if (tag_ids && tag_ids.length > 0) {
+        let findedTags = await models.Tags.findAll({
+          where: { id: tag_ids },
+          attributes: ['id'],
+          raw: true,
+        })
+
+        if (findedTags.length > 0) {
+          let tags_ids = findedTags.map(tag => tag.id)
+          await newPublication.setTags(tags_ids, { transaction })
+        } else {
+          throw new Error('Tag not found');
+        }
       }
+
+      await transaction.commit();
+      return newPublication;
+    } catch (error) {
+      await transaction.rollback();
+      throw error;
     }
-
-    await transaction.commit();
-    return result;
-  } catch (error) {
-    await transaction.rollback();
-    throw error;
   }
-}
 
 
-async userPublicationTags(tag_ids, user_id, transaction) {
-    const user = models.Users_tags.findOne({ where: { tag_id:tag_ids, user_id } })
+  async userPublicationTags(tag_ids, user_id, transaction) {
+    const user = models.Users_tags.findOne({ where: { tag_id: tag_ids, user_id } })
     if (!user) {
       try {
         if (transaction && transaction instanceof Sequelize.Transaction) {
-          await models.Users_tags.create({ tag_id:tag_ids, user_id }, { transaction })
+          await models.Users_tags.create({ tag_id: tag_ids, user_id }, { transaction })
         }
       } catch (error) {
         throw error;
@@ -206,7 +213,7 @@ async userPublicationTags(tag_ids, user_id, transaction) {
         })
         await Promise.all(imagesPromises)
       }
-      
+
       await publication.destroy({ transaction });
       await transaction.commit();
     } catch (error) {
