@@ -24,7 +24,7 @@ class ImagesPublicationsService {
         throw new CustomError('Too many files for this publication', 400, 'Bad Request');
       }
 
-
+      await transaction.commit();
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -60,6 +60,7 @@ class ImagesPublicationsService {
     try {
       const publicationImage = await models.Publications_images.findOne({ where: { publication_id, order }}, {transaction});
       if (!publicationImage) throw new CustomError('Not image founded', 404, 'Not Found');
+      await transaction.commit();
       return publicationImage
     } catch (error) {
       await transaction.rollback();

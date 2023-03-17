@@ -44,7 +44,7 @@ class TagsService {
 
     const updatedTags = await Promise.all(promises)
     tags.rows = updatedTags
-    
+
     return tags;
   }
 
@@ -60,16 +60,18 @@ class TagsService {
   }
 
   async getDetailTag(id) {
-    try{
-    const tagDetail = await models.Tags.scope('no_timestamps').findByPk(id)
-    if (!tagDetail) {
-      throw new CustomError('Not found Tag', 404, 'Not Found')}
-    if (tagDetail.image_url){
-       tagDetail.image_url = await getObjectSignedUrl(tagDetail.image_url)}
-    return tagDetail
-  } catch (error) {
-    throw error
-  }
+    try {
+      const tagDetail = await models.Tags.scope('no_timestamps').findByPk(id)
+      if (!tagDetail) {
+        throw new CustomError('Not found Tag', 404, 'Not Found')
+      }
+      if (tagDetail.image_url) {
+        tagDetail.image_url = await getObjectSignedUrl(tagDetail.image_url)
+      }
+      return tagDetail
+    } catch (error) {
+      throw error
+    }
   }
 
   async updateTagById(id, obj) {
@@ -95,8 +97,8 @@ class TagsService {
         const imageKey = tag.image_url.split('/').pop().split('?')[0]
         await deleteFile(imageKey)
       }
-      await models.Users_tags.destroy({where: {tag_id: id}})
-      await models.Publications_tags.destroy({where: {tag_id: id}})
+      await models.Users_tags.destroy({ where: { tag_id: id } })
+      await models.Publications_tags.destroy({ where: { tag_id: id } })
       const deletedTag = await tag.destroy()
       await transaction.commit()
       return deletedTag
