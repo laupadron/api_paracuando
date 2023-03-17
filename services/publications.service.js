@@ -159,7 +159,7 @@ class PublicationsService {
         })
 
         if (findedTags.length > 0) {
-          let tags_ids = findedTags.map(tag => tag.id)
+          let tags_ids = await Promise.all( findedTags.map(tag => tag.id))
           await newPublication.setTags(tags_ids, { transaction })
         } else {
           throw new Error('Tag not found');
@@ -168,7 +168,7 @@ class PublicationsService {
 
       await transaction.commit();
       return newPublication;
-    } catch (error) {
+    }catch (error) {
       await transaction.rollback();
       throw error;
     }
