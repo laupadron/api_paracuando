@@ -116,6 +116,17 @@ class PublicationsService {
           ]
         }
       })
+      const publications = await models.Publications.scope('no_timestamps').findByPk(result)
+      const updatedPubications = await Promise.all(publications.rows.map(async publication => {
+        const images = await Promise.all(publication.images.map(async image => {
+          if (image.image_url) {
+            const image_url = await getObjectSignedUrl(image.image_url)
+            return { ...image.toJSON(), image_url }
+          }
+        }))
+        return { ...publication.toJSON(), images }
+      }))
+      publications.rows = updatedPubications
       if (!result) throw new CustomError('Not found Publication', 400, 'Publication not registered');
       return result
     } catch (error) {
@@ -124,7 +135,7 @@ class PublicationsService {
   }
 
   async createPublication(data,tag_ids) {
-    console.log(tag_ids)
+   
     const transaction = await models.sequelize.transaction();
     try {
       const result = await models.Publications.create({
@@ -148,10 +159,7 @@ class PublicationsService {
         raw: true,
 	    })
       
-console.log(findedTags)
-		
-   
-			if (findedTags.length > 0) {
+      if (findedTags.length > 0) {
 				let tags_ids = findedTags.map(tag => tag.id)
 		    await result.setTags(tags_ids, { transaction })
 			} else {
