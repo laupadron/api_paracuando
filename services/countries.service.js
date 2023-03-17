@@ -51,16 +51,24 @@ class CountriesService {
   }
   //Return Instance if we do not converted to json (or raw:true)
   async getCountryOr404(id) {
-    let country = await models.Countries.findByPk(id, { raw: true })
-    if (!country) throw new CustomError('Not found Country', 404, 'Not Found')
-    return country
+    try {
+      let country = await models.Countries.findByPk(id, { raw: true })
+      if (!country) throw new CustomError('Not found Country', 404, 'Not Found')
+      return country
+    } catch (error) {
+      throw error
+    }
   }
 
   //Return not an Instance raw:true | we also can converted to Json instead
   async getCountry(id) {
-    let country = await models.Countries.findByPk(id)
-    if (!country) throw new CustomError('Not found Country', 404, 'Not Found')
-    return country
+    try {
+      let country = await models.Countries.findByPk(id)
+      if (!country) throw new CustomError('Not found Country', 404, 'Not Found')
+      return country
+    } catch (error) {
+      throw error
+    }
   }
 
   async updateCountry(id, obj) {

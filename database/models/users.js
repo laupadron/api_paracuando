@@ -9,7 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       Users.hasMany(models.Profiles, { as: 'profiles', foreignKey: 'user_id' })
       Users.hasMany(models.Publications,{as:'publications',foreignKey:'user_id'})
       Users.hasMany(models.Votes,{as:'votes',foreignKey:'user_id'})
-      Users.hasMany(models.Users_tags,{as:'interests',foreignKey:'user_id'})
+      Users.belongsToMany(models.Tags, {
+        as: 'interests',
+        through: models.Users_tags,
+        foreignKey: 'user_id'
+      })      
     }
   }
   Users.init({

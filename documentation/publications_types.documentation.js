@@ -62,8 +62,6 @@
  *                   example: not found / something wrong
  * /api/v1/publications-types/{id}:
  *   get:
- *     security:
- *       - bearerAuth: []
  *     summary: Get Publications-type by id
  *     description: Get Detail Publications-types. Login required.
  *     tags:

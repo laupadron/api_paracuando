@@ -60,10 +60,16 @@ class TagsService {
   }
 
   async getDetailTag(id) {
+    try{
     const tagDetail = await models.Tags.scope('no_timestamps').findByPk(id)
-    if (!tagDetail) throw new CustomError('Not found Tag', 404, 'Not Found')
-    if (tagDetail.image_url) tagDetail.image_url = await getObjectSignedUrl(tagDetail.image_url)
+    if (!tagDetail) {
+      throw new CustomError('Not found Tag', 404, 'Not Found')}
+    if (tagDetail.image_url){
+       tagDetail.image_url = await getObjectSignedUrl(tagDetail.image_url)}
     return tagDetail
+  } catch (error) {
+    throw error
+  }
   }
 
   async updateTagById(id, obj) {

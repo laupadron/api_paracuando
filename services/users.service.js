@@ -94,12 +94,8 @@ class UsersService {
   async getUser(id) {
     let user = await models.Users.scope('view_same_user').findByPk(id, {
       include: {
-        model: models.Users_tags.scope('no_timestamps'),
-        as: 'interests',
-        include: {
-          model: models.Tags.scope('view_public'),
-          as: 'tags'
-        }
+        model: models.Tags.scope('view_public'),
+        as: 'interests'
       }
     })
     if (!user) throw new CustomError('Not found User', 404, 'Not Found')
@@ -121,6 +117,12 @@ class UsersService {
   async getUserPublications(query) {
     let options = {
       where: {},
+      include: [
+        {
+          model: models.Publications_images.scope('view_public'),
+          as: 'images'
+        }
+      ]
     }
 
     const { limit, offset } = query
@@ -162,6 +164,17 @@ class UsersService {
     //Necesario para el findAndCountAll de Sequelize
     options.distinct = true
     const userPublications = await models.Publications.findAndCountAll(options)
+
+    const updatedPublications = await Promise.all(userPublications.rows.map(async publication => {
+      const images = await Promise.all(publication.images.map(async image => {
+        if (image.image_url) {
+          const image_url = await getObjectSignedUrl(image.image_url)
+          return { ...image.toJSON(), image_url }
+        }
+      }))
+      return { ...publication.toJSON(), images }
+    }))
+    userPublications.rows = updatedPublications
     return userPublications
   }
 

@@ -9,7 +9,7 @@ router.get('/',
 );
 
 router.get('/:id',
-  passport.authenticate('jwt', { session: false }),
+  
   getPublicationTypeById
 )
 
