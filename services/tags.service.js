@@ -97,9 +97,9 @@ class TagsService {
         const imageKey = tag.image_url.split('/').pop().split('?')[0]
         await deleteFile(imageKey)
       }
-      await models.Users_tags.destroy({ where: { tag_id: id } })
-      await models.Publications_tags.destroy({ where: { tag_id: id } })
-      const deletedTag = await tag.destroy()
+      await models.Users_tags.destroy({ where: { tag_id: id } }, { transaction })
+      await models.Publications_tags.destroy({ where: { tag_id: id } }, { transaction })
+      const deletedTag = await tag.destroy({ transaction })
       await transaction.commit()
       return deletedTag
     } catch (error) {
