@@ -33,18 +33,18 @@ const uploadImagePublication = async (request, response, next) => {
            
             if (!files[index]) return
   
-            let fileKey = `public/publications/images/image-${publicationID}-${spot}`;
+            let fileKey = `publication-image-${publicationID}-${spot}`;
     
             if (files[index].mimetype == 'image/png') {
-              fileKey = `public/publications/images/image-${publicationID}-${spot}.png`;
+              fileKey = `publication-image-${publicationID}-${spot}.png`;
             }
     
             if (files[index].mimetype == 'image/jpg') {
-              fileKey = `public/publications/images/image-${publicationID}-${spot}.jpg`;
+              fileKey = `publication-image-${publicationID}-${spot}.jpg`;
             }
     
             if (files[index].mimetype == 'image/jpeg') {
-              fileKey = `public/publications/images/image-${publicationID}-${spot}.jpeg`;
+              fileKey = `publication-image-${publicationID}-${spot}.jpeg`;
             }
     
             await uploadFile(files[index], fileKey);
