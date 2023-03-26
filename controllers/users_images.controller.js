@@ -17,12 +17,10 @@ const uploadImageUsers = async (request, response, next) => {
     if (file) {
       await userService.getUser(userId)
       const idImage = uuid.v4()
-      const fileResize = await sharp(file.path)
-        .resize({ height: 1080, width: 1440, fit: 'contain' })
-        .toBuffer()
+      
       let fileKey = `user-image-${userId}-${idImage}`
-      await uploadFile(fileResize, fileKey, file.mimetype)
-      //const imageURL = await getObjectSignedUrl(fileKey)
+      await uploadFile(file, fileKey, file.mimetype)
+      const imageURL = await getObjectSignedUrl(fileKey)
       let result = await userService.updateUser(userId, { image_url: fileKey })
       await unlinkFile(file.path)
       return response.status(200).json({ results: { message: 'image added'} });

@@ -1,6 +1,6 @@
 const { S3Client, PutObjectCommand, DeleteObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3')
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
-
+const fs = require('fs')
 const S3 = require('aws-sdk/clients/s3')// TEMPORAL
 
 require('dotenv').config()
@@ -24,18 +24,30 @@ const s3 = new S3({ //TEMPORAL
   secretAccessKey
 })
 
+const uploadFile = (fileMulterObject, fileName) => {
+  const fileStream = fs.createReadStream(fileMulterObject.path)
 
-const uploadFile = (fileBuffer, fileName, mimetype) => {
-  // const fileStream = fs.createReadStream(fileBuffer.path)
   const uploadParams = {
     Bucket: bucketName,
-    Body: fileBuffer,
+    Body: fileStream,
     Key: fileName,
-    ContentType: mimetype
+    ContentType: fileMulterObject.mimetype,
   }
 
   return s3Client.send(new PutObjectCommand(uploadParams))
 }
+
+// const uploadFile = (fileBuffer, fileName, mimetype) => {
+//   // const fileStream = fs.createReadStream(fileBuffer.path)
+//   const uploadParams = {
+//     Bucket: bucketName,
+//     Body: fileBuffer,
+//     Key: fileName,
+//     ContentType: mimetype
+//   }
+
+//   return s3Client.send(new PutObjectCommand(uploadParams))
+// }
 
 const deleteFile = (fileName) => {
   const deleteParams = {
