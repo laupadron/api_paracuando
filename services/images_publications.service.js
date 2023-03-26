@@ -2,53 +2,41 @@ const { v4: uuid4 } = require('uuid');
 const models = require('../database/models')
 const { CustomError } = require('../utils/helpers');
 const { hashPassword } = require('../libs/bcrypt');
-const sharp = require('sharp')
-const { uploadFile } = require('../libs/s3') // Importamos la función para subir archivos a AWS S3
+const { uploadFile } = require('../libs/s3') 
 const { unlink } = require('fs/promises')
 
 class ImagesPublicationsService {
+constructor () {}
 
-  async publicationExistAndQuantity(publication_id, imagesLength) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const publication = await models.Publications.findByPk(publication_id);
-      if (!publication) {
-        throw new CustomError('Not found publication', 404, 'Not Found');
-      }
-      if (imagesLength > 3) {
-        throw new CustomError('Too many files', 400, 'Bad Request');
-      }
+  async getAvailableImageOrders(publication_id) {
+    
+    let availableValues = [1,2,3]
+    
+    let images = await models.Publications_images.findAll({
+      attributes: {exclude:['created_at','updated_at']},
+      where: {publication_id}, 
+      raw: true
+    })
 
-      const publicationImages = await models.Publications_images.findAll({where: {publication_id}});
-      if (publicationImages.length + imagesLength > 3) {
-        throw new CustomError('Too many files for this publication', 400, 'Bad Request');
-      }
+    if (!images) return availableValues
+    if (images.length == 0) return availableValues
+    if (images.length >= availableValues.length) throw new CustomError('Not available spots for images for this publication. First, remove a image',409, 'No Spots Available')
 
-      await transaction.commit();
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    
+    let existedOrders = images.map( (image) =>  image['order'])
+    
+    let availableSpots = availableValues.filter(spot => !existedOrders.includes(spot))
+    
+    return availableSpots
   }
 
-
-  async createImage(idPublication,fileKey) {
+  async createImage(publication_id,image_url,order) {
     const transaction = await models.sequelize.transaction()
-    try {
-      let order;
-      let existingImage;
-      do {
-        order = Math.floor(Math.random() * 3) + 1;
-        existingImage = await models.Publications_images.findOne({
-          where: {
-            publication_id: idPublication,
-            order: order
-          }
-        });
-      } while (existingImage);
-      let addImage = await models.Publications_images.create({ publication_id: idPublication, image_url: fileKey, order: order }, { transaction })
+    
+    try {  
+      let newImage = await models.Publications_images.create({ publication_id, image_url, order }, { transaction })
       await transaction.commit();
-      return addImage
+      return newImage
     } catch (error) {
       await transaction.rollback();
       throw error;
@@ -56,26 +44,24 @@ class ImagesPublicationsService {
 
   }
   async getImageOr404(publication_id, order) {
-    const transaction = await models.sequelize.transaction()
-    try {
-      const publicationImage = await models.Publications_images.findOne({ where: { publication_id, order }}, {transaction});
-      if (!publicationImage) throw new CustomError('Not image founded', 404, 'Not Found');
-      await transaction.commit();
-      return publicationImage
-    } catch (error) {
-      await transaction.rollback();
-      throw error;
-    }
+    const publicationImage = await models.Publications_images.findOne({ where: { publication_id, order: parseInt(order) }});
+    if (!publicationImage) throw new CustomError('Not Found Publication Image with this order', 404, 'Not Found');
+    return publicationImage
+
   }
 
   async removeImage(publication_id, order) {
     const transaction = await models.sequelize.transaction()
     try {
-      await models.Publications_images.destroy({
-        where: { publication_id, order },
-        transaction,
-      });
+
+      let publication = await models.Publications_images.findOne({
+        where: { publication_id, order: parseInt(order) },
+      }, { transaction });
+
+      await publication.destroy({transaction})
       await transaction.commit();
+
+      return publication
     } catch (error) {
       await transaction.rollback();
       throw error;

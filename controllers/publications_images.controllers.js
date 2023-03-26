@@ -2,84 +2,123 @@ const ImagesPublicationsService = require('../services/images_publications.servi
 const fs = require('fs')
 const util = require('util')
 const uuid = require('uuid')
-const { uploadFile, getObjectSignedUrl, deleteFile, getFileStream } = require('../libs/s3')
-const sharp = require('sharp')
+const { uploadFile, deleteFile } = require('../libs/s3')
 const CustomError = require('../utils/helpers')
 const { UUIDV4 } = require('sequelize')
-const PublicationsService=require('../services/publications.service')
-
 const unlinkFile = util.promisify(fs.unlink)
-
 const imagesPublicationsService = new ImagesPublicationsService();
-const publicationsService=new PublicationsService
+
+
 
 const uploadImagePublication = async (request, response, next) => {
-  const idPublication = request.params.id
-  const files = request.files
+  
+  const publicationID = request.params.id;
+  const files = request.files;
   const publicationOwner = request.publicationOwner;
-  const role = request.userRole;
-
+ const role = request.userRole;
   try {
     if (publicationOwner || role === 2) {
-      if (files.length) {
-        let imagesKeys = []
-        await imagesPublicationsService.publicationExistAndQuantity(idPublication, files.length)
 
-        await Promise.all(files.map(async (file) => {
-          const idImage = uuid.v4()
-          const fileResize = await sharp(file.path)
-            .resize({ height: 1080, width: 1440, fit: 'contain' })
-            .toBuffer()
-          let fileKey = `${idImage}`
-          await uploadFile(fileResize, fileKey, file.mimetype)
-          const imageURL = await getObjectSignedUrl(fileKey)
-          let newImagePublication = await imagesPublicationsService.createImage(idPublication, fileKey)
-          imagesKeys.push(imageURL)
-        }))
-       
-        await Promise.all(files.map(async (file) => {
-          await unlinkFile(file.path)
-        }))
+      if (files.length < 1) throw new CustomError('No images received', 400, 'Bad Request');
+
+      let imagesKeys = [];
+      let imagesErrors = [];
+  
+      let openSpots = await imagesPublicationsService.getAvailableImageOrders(publicationID)
+  
+      await Promise.all(
+  
+        openSpots.map(async (spot, index) => {
+          try {
+           
+            if (!files[index]) return
+  
+            let fileKey = `public/publications/images/image-${publicationID}-${spot}`;
     
-        return response
-          .status(200)
-          .json({ results: { message: 'Success Upload', images: imagesKeys } });
-      } else {
-        throw new CustomError('No images received', 400, 'Bad Request')
+            if (files[index].mimetype == 'image/png') {
+              fileKey = `public/publications/images/image-${publicationID}-${spot}.png`;
+            }
+    
+            if (files[index].mimetype == 'image/jpg') {
+              fileKey = `public/publications/images/image-${publicationID}-${spot}.jpg`;
+            }
+    
+            if (files[index].mimetype == 'image/jpeg') {
+              fileKey = `public/publications/images/image-${publicationID}-${spot}.jpeg`;
+            }
+    
+            await uploadFile(files[index], fileKey);
+    
+            let bucketURL = process.env.AWS_DOMAIN + fileKey;
+    
+            let newImagePublication = await imagesPublicationsService.createImage(
+              publicationID,
+              bucketURL,
+              spot
+            );
+  
+            imagesKeys.push(bucketURL)
+  
+          } catch (error) {
+            imagesErrors.push(error.message)
+          }
+        })
+      );
+  
+      
+      await Promise.all(
+        files.map(async (file) => {
+          try {
+            await unlinkFile(file.path);
+          } catch (error) {
+            
+          }
+        })
+      );
+  
+      return response
+        .status(200)
+        .json({ results: { message: `Count of uploaded images: ${imagesKeys.length} `, imagesUploaded: imagesKeys , imageErrors: imagesErrors} });
       }
-    } else {
-      throw new CustomError('Not authorized user', 403, 'Forbbiden')
+    } catch (error) {
+      if (files) {
+        await Promise.all(
+          files.map(async (file) => {
+            try {
+              await unlinkFile(file.path);
+            } catch (error) {
+              //
+            }
+          })
+        );
+      }
+      return next(error);
     }
-
-  } catch (error) {
-    if (files) {
-      await Promise.all(files.map(async (file) => {
-        await unlinkFile(file.path)
-      }))
-    }
-    next(error)
-  }
-}
-
-
-const destroyImageByPublication = async (request, response, next) => {
-  const publicationOwner = request.publicationOwner;
-  const order = request.params.order
-  const role = request.userRole;
-  const idPublication = request.params.id;
-
-  try {
-    if (publicationOwner || role === 2) {
-      let {image_url} = await imagesPublicationsService.getImageOr404(idPublication, order)
-      const imageKey = image_url.split('/').pop().split('?')[0]
+  };
+  
+  
+  const removePublicationImage = async (request, response, next) => {
+    const publicationOwner = request.publicationOwner;
+    const role = request.userRole;
+    const publicationID = request.params.id
+    const order = request.params.order
+    try {
+      if (publicationOwner || role === 2) {
+      let {image_url} = await imagesPublicationsService.getImageOr404(publicationID, order)
+      let awsDomain = process.env.AWS_DOMAIN
+      const imageKey = image_url.replace(awsDomain, '')
       await deleteFile(imageKey)
-      await imagesPublicationsService.removeImage(idPublication, order)
-      return response.status(200).json({ message: 'Image Removed' })
+      let publicationImage = await imagesPublicationsService.removeImage(publicationID, order)
+  
+      return response.status(200).json({ message: 'Removed', image: publicationImage })
+      }
+    } catch (error) {
+      next(error)
     }
-  } catch (error) {
-    next(error)
   }
-}
+
+  
+
 
 const changeImageOrder = async (req, res, next) => {
   const publicationOwner = req.publicationOwner;
@@ -102,6 +141,6 @@ const changeImageOrder = async (req, res, next) => {
 
 module.exports = {
   uploadImagePublication,
-  destroyImageByPublication,
+  removePublicationImage,
   changeImageOrder
 }
