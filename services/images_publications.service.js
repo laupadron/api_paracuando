@@ -30,11 +30,12 @@ constructor () {}
     return availableSpots
   }
 
-  async createImage(publication_id,image_url,order) {
+  async createImage(publication_id,bucketURL,order) {
+    
     const transaction = await models.sequelize.transaction()
     
     try {  
-      let newImage = await models.Publications_images.create({ publication_id, image_url, order }, { transaction })
+      let newImage = await models.Publications_images.create({ publication_id, image_url:bucketURL, order }, { transaction })
       await transaction.commit();
       return newImage
     } catch (error) {

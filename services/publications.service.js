@@ -79,7 +79,10 @@ class PublicationsService {
         if (image.image_url) {
           const image_url = await getObjectSignedUrl(image.image_url)
           return { ...image.toJSON(), image_url }
-        }
+        
+      } else {
+        return image.toJSON()
+      }
       }))
       return { ...publication.toJSON(), images }
     }))
@@ -87,7 +90,6 @@ class PublicationsService {
     publications.rows = updatedPublications
     return publications
   }
-
   async findById(id) {
     const transaction = await models.sequelize.transaction();
     try {
@@ -126,6 +128,7 @@ class PublicationsService {
           const image_url = await getObjectSignedUrl(image.image_url)
           return { ...image.toJSON(), image_url }
         }
+        return image.toJSON()
       }))
       await transaction.commit();
       return { ...result.toJSON(), images: images }

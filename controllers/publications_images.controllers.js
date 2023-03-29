@@ -49,22 +49,23 @@ const uploadImagePublication = async (request, response, next) => {
     
             await uploadFile(files[index], fileKey);
     
-            let bucketURL = process.env.AWS_DOMAIN + fileKey;
-    
+            let bucketURL =  fileKey;
+            
             let newImagePublication = await imagesPublicationsService.createImage(
               publicationID,
               bucketURL,
               spot
             );
-  
+            
             imagesKeys.push(bucketURL)
-  
+            
+              console.log(imagesKeys)
           } catch (error) {
             imagesErrors.push(error.message)
           }
         })
       );
-  
+        
       
       await Promise.all(
         files.map(async (file) => {
@@ -75,11 +76,12 @@ const uploadImagePublication = async (request, response, next) => {
           }
         })
       );
-  
+        
       return response
         .status(200)
-        .json({ results: { message: `Count of uploaded images: ${imagesKeys.length} `, imagesUploaded: imagesKeys , imageErrors: imagesErrors} });
+        .json({ results: { message: `Count of uploaded images: ${imagesKeys.length}`, imagesUploaded: imagesKeys, imageErrors: imagesErrors} });
       }
+      
     } catch (error) {
       if (files) {
         await Promise.all(

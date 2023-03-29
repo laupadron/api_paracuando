@@ -109,7 +109,8 @@ class UsersService {
       offset,
       where: {
         user_id: userId
-      }
+      },
+      
     })
     return userVotes
   }
