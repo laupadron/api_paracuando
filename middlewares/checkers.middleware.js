@@ -16,7 +16,6 @@ const checkRole = async (req, res, next) => {
 }
 
 const checkAdmin = async (req, res, next) => {
-  //console.log(req.userRole);
   if (req.userRole === 2) {
     next()
   } else {

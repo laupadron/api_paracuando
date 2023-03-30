@@ -110,9 +110,32 @@ class UsersService {
       where: {
         user_id: userId
       },
-      
+      include: {
+        model: models.Publications,
+        as: 'publications',
+        include: {
+          model: models.Publications_images.scope('view_public'),
+          as: 'images'
+        }
+      }      
     })
+
+    const updateduserVotes = await Promise.all(userVotes.rows.map(async vote => {
+      const images = await Promise.all(vote.publications.images.map(async image => {
+        if (image.image_url) {
+          const image_url = await getObjectSignedUrl(image.image_url)
+          return { ...image.toJSON(), image_url }
+
+        } else {
+          return image.toJSON()
+        }
+      }))
+      return { ...vote.publications.toJSON(), images }
+    }))
+
+    userVotes.rows = updateduserVotes
     return userVotes
+
   }
 
   async getUserPublications(query) {

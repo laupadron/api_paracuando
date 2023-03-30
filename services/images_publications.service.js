@@ -20,7 +20,7 @@ constructor () {}
 
     if (!images) return availableValues
     if (images.length == 0) return availableValues
-    if (images.length >= availableValues.length) throw new CustomError('Not available spots for images for this publication. First, remove a image',409, 'No Spots Available')
+    if (images.length >= availableValues.length) throw new CustomError('Not available spots for images for this publication. First, remove an image',409, 'No Spots Available')
 
     
     let existedOrders = images.map( (image) =>  image['order'])
