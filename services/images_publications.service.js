@@ -20,7 +20,7 @@ constructor () {}
 
     if (!images) return availableValues
     if (images.length == 0) return availableValues
-    if (images.length >= availableValues.length) throw new CustomError('Not available spots for images for this publication. First, remove a image',409, 'No Spots Available')
+    if (images.length >= availableValues.length) throw new CustomError('Not available spots for images for this publication. First, remove an image',409, 'No Spots Available')
 
     
     let existedOrders = images.map( (image) =>  image['order'])
@@ -30,11 +30,12 @@ constructor () {}
     return availableSpots
   }
 
-  async createImage(publication_id,image_url,order) {
+  async createImage(publication_id,bucketURL,order) {
+    
     const transaction = await models.sequelize.transaction()
     
     try {  
-      let newImage = await models.Publications_images.create({ publication_id, image_url, order }, { transaction })
+      let newImage = await models.Publications_images.create({ publication_id, image_url:bucketURL, order }, { transaction })
       await transaction.commit();
       return newImage
     } catch (error) {

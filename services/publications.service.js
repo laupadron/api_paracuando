@@ -79,6 +79,9 @@ class PublicationsService {
         if (image.image_url) {
           const image_url = await getObjectSignedUrl(image.image_url)
           return { ...image.toJSON(), image_url }
+
+        } else {
+          return image.toJSON()
         }
       }))
       return { ...publication.toJSON(), images }
@@ -87,7 +90,6 @@ class PublicationsService {
     publications.rows = updatedPublications
     return publications
   }
-
   async findById(id) {
     const transaction = await models.sequelize.transaction();
     try {
@@ -126,6 +128,7 @@ class PublicationsService {
           const image_url = await getObjectSignedUrl(image.image_url)
           return { ...image.toJSON(), image_url }
         }
+        return image.toJSON()
       }))
       await transaction.commit();
       return { ...result.toJSON(), images: images }
@@ -137,7 +140,7 @@ class PublicationsService {
   }
 
   async createPublication(data, tag_ids) {
-    
+
     const transaction = await models.sequelize.transaction();
     try {
       const newPublication = await models.Publications.create({
@@ -159,7 +162,7 @@ class PublicationsService {
         })
 
         if (findedTags.length > 0) {
-          let tags_ids = await Promise.all( findedTags.map(tag => tag.id))
+          let tags_ids = await Promise.all(findedTags.map(tag => tag.id))
           await newPublication.setTags(tags_ids, { transaction })
         } else {
           throw new Error('Tag not found');
@@ -168,16 +171,16 @@ class PublicationsService {
 
       await transaction.commit();
       return newPublication;
-    }catch (error) {
+    } catch (error) {
       await transaction.rollback();
       throw error;
     }
   }
 
 
- 
-  
-  
+
+
+
   async delete(id) {
     const transaction = await models.sequelize.transaction();
     try {
@@ -215,7 +218,7 @@ class PublicationsService {
   async addAndDelete(publicationId, userId) {
     const transaction = await models.sequelize.transaction();
     try {
-     
+
       const vote = await models.Votes.findOne({ where: { user_id: userId, publications_id: publicationId } });
       if (vote) {
         const deleteVote = await models.Votes.destroy({ where: { user_id: userId, publications_id: publicationId } }, { transaction });
